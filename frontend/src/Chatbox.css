@@ -76,7 +76,8 @@ html {
   margin-top: auto;
   display: flex;
   overflow-y: scroll;
-  flex-direction: column-reverse;
+  max-height: 400px;
+  flex-direction: column;
 }
 
 .messages__item {

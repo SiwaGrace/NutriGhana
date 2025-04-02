@@ -12,10 +12,10 @@ body {
 }
 
 *, html {
-    --primaryGradient: linear-gradient(93.12deg, #fec91c 0.52%, #e71d1d 100%); 
-    --secondaryGradient: linear-gradient(268.91deg, #fec91c -2.14%, #e71d1d 99.69%);
+    --primaryGradient: linear-gradient(93.12deg, #fec91c 0.52%, #f6d083 100%); 
+    --secondaryGradient: linear-gradient(268.91deg, #fec91c -2.14%, #f6d083 99.69%);
     --primaryBoxShadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
-    --secondaryBoxShadow: 0px -10px 15px rgba(0, 0, 0, 0.1);
+    --secondaryBoxShadow: 0px -10px 15px rgba(10, 8, 0, 0.1);
     --primary: #581B98;
 }
 

@@ -31,8 +31,19 @@ function Chatbox() {
 
     // Check if user wants to end the chat
     if (["bye", "quit", "exit"].includes(inputText.toLowerCase())) {
-      setMessages([
-        ...messages,
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { name: "User", message: inputText },
+        { name: "Lica", message: "Are you sure you want to end the chat? Type 'yes' to confirm." },
+      ]);
+      setInputText("");
+      return;
+    }
+    
+    // Confirm ending chat
+    if (inputText.toLowerCase() === "yes") {
+      setMessages((prevMessages) => [
+        ...prevMessages,
         { name: "User", message: inputText },
         { name: "Lica", message: "Chatbot session ended. Goodbye!" },
       ]);
@@ -42,8 +53,7 @@ function Chatbox() {
     }
 
     // Add user message to chat
-    const updatedMessages = [...messages, { name: "User", message: inputText }];
-    setMessages(updatedMessages);
+    setMessages((prevMessages) => [...prevMessages, { name: "User", message: inputText }]);
 
     // Send message to backend
     fetch("http://localhost:5000/predict", {
@@ -55,11 +65,20 @@ function Chatbox() {
     })
       .then((response) => response.json())
       .then((data) => {
-        // Handle response...
+        if (data && data.reply) {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            { name: "Lica", message: data.reply },
+          ]);
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
-      });
+        setMessages((prevMessages) => [
+        ...prevMessages,
+        { name: "Lica", message: "Sorry, I couldn't process that request." },
+      ]);
+    });
 
     setInputText("");
   };
@@ -111,13 +130,14 @@ function Chatbox() {
               placeholder="Write a message..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
               ref={inputRef}
               disabled={isEnded}
             />
             <button
               className="chatbox__send--footer send__button"
               onClick={handleSendMessage}
+              aria-label="Send message"
             >
               Send
             </button>
@@ -125,10 +145,21 @@ function Chatbox() {
         </div>
 
         <div className="chatbox__button">
-          <button onClick={toggleChatbox}>
+          <button onClick={toggleChatbox} aria-label="Toggle chatbox">
             <img src={picture} alt="Chatbox Icon" />
           </button>
         </div>
+        {isEnded && (
+          <button 
+            className="chatbox__reset--footer reset__button" 
+            onClick={() => {
+              setMessages([]);
+              setIsEnded(false);
+            }}
+          >
+            Restart Chat
+          </button>
+        )}
       </div>
     </div>
   );

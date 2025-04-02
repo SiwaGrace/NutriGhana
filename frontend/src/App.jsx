@@ -15,7 +15,7 @@ import ProfileDishes from "./pages/ProfileDishes";
 import ProfileStats from "./pages/ProfileStats";
 import ProfileUser from "./pages/ProfileUser";
 import SelectedFood from "./component/SelectedFood";
-// import Chatbox from "./component/Chatbox";
+import Chatbox from "./component/Chatbox";
 
 const App = () => {
   const myRoute = createBrowserRouter(
@@ -35,7 +35,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signIn" element={<SignIn />} />
 
-          {/* <Route path="/chatbox" element={<Chatbox />} /> */}
+          <Route path="/chatbox" element={<Chatbox />} /> 
         </Route>
       </>
     )
