@@ -6,7 +6,7 @@ const Footer = () => {
     <div>
       {" "}
       {/* Logo */}
-      <div className="fixed bottom-10 right-2 transform -translate-x-1/2 bg-white p-2 rounded-full shadow-md">
+      <div className="fixed bottom-10 right-2 transform -translate-x-1/2 bg-white p-2 rounded-full shadow-md animate-bounce">
         <img src={MyLogo} alt="Nutri Ghana logo" className="w-10 h-10" />
       </div>
     </div>
