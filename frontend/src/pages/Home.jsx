@@ -32,7 +32,7 @@ const Home = () => {
     if (progress < foodItems.length - 1) {
       setProgress(progress + 1);
     } else {
-      navigate("/SignIn");
+      navigate("/login");
     }
   };
 
