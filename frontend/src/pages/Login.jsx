@@ -70,7 +70,7 @@ const authForms = [
   },
 ];
 
-const AuthPage = () => {
+const Login = () => {
   const [authType, setAuthType] = useState("signIn");
   const [formData, setFormData] = useState({
     email: "",
@@ -104,15 +104,15 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center overflow-hidden ">
-      <div className="flex flex-col items-center text-center w-full sm:w-4/5 md:w-1/2 lg:w-1/3 p-6 space-y-6 font-Manrope">
-        <h1 className="text-5xl sm:text-5xl font-bold mb-4 ">NutriGhana</h1>
-        <h2 className="text-3xl sm:text-3xl font-semibold text-gray-800">
+    <div className="h-screen flex justify-center items-center overflow-hidden  ">
+      <div className="flex flex-col items-center text-center w-full sm:w-4/5 md:w-1/2 lg:w-1/3 p-6 space-y-2 font-Manrope">
+        <h1 className="text-4xl sm:text-3xl font-bold  ">NutriGhana</h1>
+        <h2 className="text-xl sm:text-xl font-bold text-gray-800 text-nowrap">
           {currentForm.title}
         </h2>
 
         {/* Social Login Buttons */}
-        <div className="w-full space-y-4">
+        <div className="w-full space-y-4 ">
           <button className="flex items-center justify-center w-full bg-yellow-500 text-white font-semibold py-6 sm:py-5 rounded-full shadow-md space-x-3">
             <SlSocialGoogle className="h-5 w-5" />
             <span>{currentForm.buttonText} with Google</span>
@@ -168,4 +168,4 @@ const AuthPage = () => {
   );
 };
 
-export default AuthPage;
+export default Login;
