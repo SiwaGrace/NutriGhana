@@ -1,10 +1,30 @@
-from django.contrib.auth.models import User
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import status
+from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated
+from .serializers import RegisterSerializer
 
+
+# create registration for user
+class RegisterView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({
+                "token": token.key,
+                "user_id": user.id,
+                "username": user.username,
+                "email": user.email
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# receive login details
 class CustomLoginView(APIView):
     def post(self, request, *args, **kwargs):
         login_input = request.data.get("username")
@@ -14,17 +34,18 @@ class CustomLoginView(APIView):
             return Response({"detail": "Please provide username/email and password."},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        # Try to find a user by username OR email
         try:
+            # receive regular user input
             user = User.objects.get(username=login_input)
         except User.DoesNotExist:
             try:
+                # Then try to find user by email
                 user = User.objects.get(email=login_input)
             except User.DoesNotExist:
                 return Response({"detail": "Invalid login credentials."},
                                 status=status.HTTP_401_UNAUTHORIZED)
 
-        # Authenticate using username
+        # Now authenticate using the username (even if found by email)
         user = authenticate(username=user.username, password=password)
 
         if user:
@@ -33,8 +54,26 @@ class CustomLoginView(APIView):
                 "token": token.key,
                 "user_id": user.id,
                 "username": user.username,
-                "email": user.email
+                "email": user.email,
+                "is_admin": user.is_staff or user.groups.filter(name="Admin").exists()
             })
         else:
             return Response({"detail": "Invalid login credentials."},
                             status=status.HTTP_401_UNAUTHORIZED)
+
+
+# logout from the system
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            # Get the token associated with the authenticated user
+            token = request.user.auth_token
+            if token:
+                token.delete()  # Delete the token from the database
+                return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+            else:
+                return Response({"detail": "No token associated with user."}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)

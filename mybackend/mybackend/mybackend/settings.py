@@ -56,7 +56,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5000",  # frontend port
+    "http://localhost:5175",  # frontend port
 ]
 
 REST_FRAMEWORK = {
