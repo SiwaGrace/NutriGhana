@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { IoMdCheckmarkCircle } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 import "../index.css";
 
 export default function ProfileSetup() {
@@ -9,10 +10,12 @@ export default function ProfileSetup() {
   const [weight, setWeight] = useState("");
   const [step, setStep] = useState(1);
   const [age, setAge] = useState("");
-  const [activityLevel, setActivityLevel] = useState(""); // For step 3
-  const [dietaryGoal, setDietaryGoal] = useState(""); // For step 4
-  const [cureentWeight, setcurrentWeight] = useState("");
-  const [currentWeightGoal, setcurrentWeightGoal] = useState("");
+  const [activityLevel, setActivityLevel] = useState("");
+  const [dietaryGoal, setDietaryGoal] = useState("");
+  const [currentWeight, setCurrentWeight] = useState("");
+  const [currentWeightGoal, setCurrentWeightGoal] = useState("");
+
+  const navigate = useNavigate();
 
   const years = Array.from({ length: 26 }, (_, i) => 1995 + i);
   const heightOptions = [
@@ -42,133 +45,78 @@ export default function ProfileSetup() {
     "Muscle gain",
     "Maintenance",
   ];
-  const currentWeightOptions = [
-    "4'6\"",
-    "5'0\"",
-    "5'4\"",
-    "5'8\"",
-    "6'0\"",
-    "6'4\"",
-    "6'8\"",
-  ];
-  const CurrentWeightGoalOptions = [
-    "Under 100 lbs",
-    "100-120 lbs",
-    "121-140 lbs",
-    "141-160 lbs",
-    "161-180 lbs",
-    "181+ lbs",
-    "181-200 lbs",
-    "201-220 lbs",
-    "220+ lbs",
-  ];
+  const currentWeightOptions = weightOptions;
+  const CurrentWeightGoalOptions = weightOptions;
 
-  // Initialize the profile if it's already saved in localStorage
   useEffect(() => {
-    const savedProfile = JSON.parse(localStorage.getItem("userProfile"));
-    if (savedProfile) {
-      setGender(savedProfile.gender);
-      setYear(savedProfile.year);
-      setHeight(savedProfile.height);
-      setWeight(savedProfile.weight);
-      setAge(savedProfile.age);
-      setActivityLevel(savedProfile.activityLevel);
-      setDietaryGoal(savedProfile.dietaryGoal);
-      setcurrentWeight(savedProfile.cureentWeight);
-      setcurrentWeight(savedProfile.currentWeightGoal);
-    }
-  }, []);
+    if (step === 6) {
+      const timer = setTimeout(() => {
+        navigate("/ProfileHome");
+      }, 10000);
 
-  // Function to handle saving the profile data in localStorage
-  const saveProfile = () => {
-    const userProfile = {
-      gender,
-      year,
-      height,
-      weight,
-      age,
-      activityLevel,
-      dietaryGoal,
-      cureentWeight,
-      currentWeightGoal,
-    };
-    localStorage.setItem("userProfile", JSON.stringify(userProfile));
-    console.log("Profile saved:", userProfile);
+      return () => clearTimeout(timer);
+    }
+  }, [step, navigate]);
+
+  const resetForm = () => {
+    setGender("");
+    setYear("");
+    setHeight("");
+    setWeight("");
+    setAge("");
+    setActivityLevel("");
+    setDietaryGoal("");
+    setCurrentWeight("");
+    setCurrentWeightGoal("");
+    setStep(1);
   };
 
   const handleNext = () => {
-    // Check if any fields are not selected
     if (
       !gender ||
       !year ||
       (step === 2 && (!height || !weight)) ||
       (step === 3 && !activityLevel) ||
       (step === 4 && !dietaryGoal) ||
-      (step === 5 && (!cureentWeight || !currentWeightGoal))
+      (step === 5 && (!currentWeight || !currentWeightGoal))
     ) {
       alert("Please fill out all fields.");
       return;
     }
 
     if (step === 5) {
-      saveProfile();
+      setStep(6);
+      return;
     }
 
-    // Ensure step progresses correctly beyond step 5
     if (step < 6) {
       setStep(step + 1);
     }
   };
 
-  const handleBack = () => {
-    setStep(step - 1);
-  };
-
-  const handleDelete = () => {
-    localStorage.removeItem("userProfile");
-    console.log("Profile deleted.");
-    setGender("");
-    setYear("");
-    setHeight("");
-    setWeight("");
-    setAge("");
-    setActivityLevel(""); // Reset activityLevel
-    setDietaryGoal(""); // Reset dietaryGoal
-    setcurrentWeight(""); // Reset currentWeight
-    setcurrentWeightGoal(""); // Reset currentGoalWeight
-  };
-
   return (
     <div className="flex flex-col items-center p-6 h-screen justify-center space-y-12">
-      {step === 1 ? (
+      {step === 1 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
             Let’s set your profile!
           </h2>
-
           <div className="w-full mb-6">
             <p className="text-lg font-bold mb-2">Gender</p>
             <div className="flex gap-6 items-center justify-center">
-              <button
-                className={`px-14 py-6 rounded-full text-sm font-bold border transition duration-200 ${
-                  gender === "Male"
-                    ? "bg-yellow-500 text-white"
-                    : "border-gray-300"
-                } hover:border-yellow-500`}
-                onClick={() => setGender("Male")}
-              >
-                Male
-              </button>
-              <button
-                className={`px-14 py-6 rounded-full text-sm font-bold border transition duration-200 ${
-                  gender === "Female"
-                    ? "bg-yellow-500 text-white"
-                    : "border-gray-300"
-                } hover:border-yellow-500`}
-                onClick={() => setGender("Female")}
-              >
-                Female
-              </button>
+              {["Male", "Female"].map((g) => (
+                <button
+                  key={g}
+                  className={`px-14 py-6 rounded-full text-sm font-bold border transition duration-200 cursor-pointer ${
+                    gender === g
+                      ? "bg-yellow-500 text-white"
+                      : "border-gray-300 hover:border-yellow-500"
+                  }`}
+                  onClick={() => setGender(g)}
+                >
+                  {g}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -178,7 +126,7 @@ export default function ProfileSetup() {
               {years.map((yr) => (
                 <button
                   key={yr}
-                  className={`w-full py-5 px-6 text-lg font-bold transition duration-200 ${
+                  className={`w-full py-5 px-6 text-lg font-bold transition duration-200 cursor-pointer${
                     year === yr ? "bg-gray-300" : "text-black hover:bg-gray-200"
                   }`}
                   onClick={() => setYear(yr)}
@@ -190,13 +138,15 @@ export default function ProfileSetup() {
           </div>
 
           <button
-            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6"
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer"
             onClick={handleNext}
           >
             Next
           </button>
         </>
-      ) : step === 2 ? (
+      )}
+
+      {step === 2 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
             Height and Weight
@@ -208,7 +158,7 @@ export default function ProfileSetup() {
               {heightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-5 rounded-md text-lg font-bold transition duration-200 ${
+                  className={`w-full py-5 rounded-md text-lg font-bold transition duration-200 cursor-pointer ${
                     height === option
                       ? "bg-gray-300"
                       : "text-black hover:bg-gray-200"
@@ -227,7 +177,7 @@ export default function ProfileSetup() {
               {weightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-5 rounded-md text-sm font-medium transition duration-200 ${
+                  className={`w-full py-5 rounded-md text-sm font-medium transition duration-200 cursor-pointer ${
                     weight === option
                       ? "bg-gray-300"
                       : "text-black hover:bg-gray-200"
@@ -242,14 +192,16 @@ export default function ProfileSetup() {
 
           <div className="flex justify-between w-full mt-6">
             <button
-              className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 sm:w-auto"
+              className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 sm:w-auto cursor-pointer"
               onClick={handleNext}
             >
               Next
             </button>
           </div>
         </>
-      ) : step === 3 ? (
+      )}
+
+      {step === 3 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">
             How active are you
@@ -259,12 +211,12 @@ export default function ProfileSetup() {
             {howActive.map((preference) => (
               <button
                 key={preference}
-                className={`w-[284px] h-[68px] py-4 rounded-full text-lg font-bold transition bg-white justify-center items-center flex border border-gray-300 ${
+                className={`w-[284px] h-[68px] py-4 rounded-full text-lg font-bold transition bg-white justify-center items-center flex border border-gray-300 cursor-pointer${
                   activityLevel === preference
                     ? "bg-yellow-500 text-white"
                     : "text-black"
-                } `}
-                onClick={() => setActivityLevel(preference)} // Set activityLevel
+                }`}
+                onClick={() => setActivityLevel(preference)}
               >
                 {preference}
               </button>
@@ -273,29 +225,31 @@ export default function ProfileSetup() {
 
           <div className="flex justify-between w-full mt-10">
             <button
-              className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 sm:w-auto"
+              className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 sm:w-auto cursor-pointer"
               onClick={handleNext}
             >
               Next
             </button>
           </div>
         </>
-      ) : step === 4 ? (
+      )}
+
+      {step === 4 && (
         <>
-          <h2 className="text-3xl font-bold text-center mb-10 text-gray-800 ">
-            What is your dietary goal ?
+          <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">
+            What is your dietary goal?
           </h2>
 
           <div className="w-full flex flex-col items-center gap-4">
             {dietaryGoals.map((preference) => (
               <button
                 key={preference}
-                className={`w-[284px] h-[68px] py-4 rounded-full text-lg font-bold transition bg-white justify-center items-center flex border border-gray-300 ${
+                className={`w-[284px] h-[68px] py-4 rounded-full text-lg font-bold transition bg-white justify-center items-center flex border border-gray-300  cursor-pointer${
                   dietaryGoal === preference
                     ? "bg-yellow-500 text-white"
                     : "text-black"
-                } `}
-                onClick={() => setDietaryGoal(preference)} // Set dietaryGoal
+                }`}
+                onClick={() => setDietaryGoal(preference)}
               >
                 {preference}
               </button>
@@ -304,31 +258,33 @@ export default function ProfileSetup() {
 
           <div className="flex justify-between w-full mt-10">
             <button
-              className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 sm:w-auto"
+              className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 sm:w-auto cursor-pointer"
               onClick={handleNext}
             >
               Next
             </button>
           </div>
         </>
-      ) : step === 5 ? (
+      )}
+
+      {step === 5 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
-            Let us know your current goal!
+            Current and Goal Weight
           </h2>
 
           <div className="w-full mb-6">
-            <p className="text-lg font-bold mb-2">Current weight</p>
+            <p className="text-lg font-bold mb-2">Current Weight</p>
             <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-40 overflow-y-auto">
               {currentWeightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-5 rounded-md text-lg font-bold transition duration-200 ${
-                    cureentWeight === option
+                  className={`w-full py-5 rounded-md text-sm font-medium transition duration-200 cursor-pointer ${
+                    currentWeight === option
                       ? "bg-gray-300"
                       : "text-black hover:bg-gray-200"
                   }`}
-                  onClick={() => setcurrentWeight(option)}
+                  onClick={() => setCurrentWeight(option)}
                 >
                   {option}
                 </button>
@@ -337,17 +293,17 @@ export default function ProfileSetup() {
           </div>
 
           <div className="w-full mb-6">
-            <p className="text-lg font-bold mb-2">Weight goal</p>
+            <p className="text-lg font-bold mb-2">Weight Goal</p>
             <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-40 overflow-y-auto">
               {CurrentWeightGoalOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-5 rounded-md text-sm font-medium transition duration-200 ${
+                  className={`w-full py-5 rounded-md text-sm font-medium transition duration-200 cursor-pointer${
                     currentWeightGoal === option
                       ? "bg-gray-300"
                       : "text-black hover:bg-gray-200"
                   }`}
-                  onClick={() => setcurrentWeightGoal(option)}
+                  onClick={() => setCurrentWeightGoal(option)}
                 >
                   {option}
                 </button>
@@ -355,25 +311,33 @@ export default function ProfileSetup() {
             </div>
           </div>
 
-          <div className="flex justify-between w-full mt-6">
-            <button
-              className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 sm:w-auto"
-              onClick={handleNext}
-            >
-              Next
-            </button>
-          </div>
+          <button
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer"
+            onClick={handleNext}
+          >
+            Submit
+          </button>
         </>
-      ) : (
+      )}
+
+      {step === 6 && (
         <>
           <IoMdCheckmarkCircle className="text-green-500 text-[180px]" />
-
-          <h2 className="text-4xl font-medium text-center flex justify-center text-black break-words">
-            Profile successfully created !
+          <h2 className="text-4xl font-medium text-center text-black">
+            Profile successfully created!
           </h2>
-          {/* <button onClick={handleDelete} className=" border">
-            delate
-          </button> */}
+          <p className="mt-2 text-gray-600 text-sm text-center">
+            Redirecting to your dashboard in 10 seconds...
+          </p>
+          <button
+            onClick={() => {
+              resetForm();
+              setStep(1);
+            }}
+            className="mt-6 bg-yellow-500 px-12 py-4 rounded-full text-lg font-semibold text-white hover:bg-yellow-600 cursor-pointer"
+          >
+            Start Over
+          </button>
         </>
       )}
     </div>
