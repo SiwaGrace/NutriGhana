@@ -118,6 +118,7 @@ export default function ProfileSetup() {
                 </button>
               ))}
             </div>
+            []
           </div>
 
           <div className="w-full mb-8">
@@ -126,10 +127,12 @@ export default function ProfileSetup() {
               {years.map((yr) => (
                 <button
                   key={yr}
-                  className={`w-full py-5 px-6 text-lg font-bold transition duration-200 cursor-pointer${
-                    year === yr ? "bg-gray-300" : "text-black hover:bg-gray-200"
+                  className={`w-full py-5 px-6 text-lg font-bold transition duration-200 cursor-pointer ${
+                    year === String(yr)
+                      ? "bg-gray-300 text-black"
+                      : "text-black hover:bg-gray-400"
                   }`}
-                  onClick={() => setYear(yr)}
+                  onClick={() => setYear(String(yr))}
                 >
                   {yr}
                 </button>
@@ -161,7 +164,7 @@ export default function ProfileSetup() {
                   className={`w-full py-5 rounded-md text-lg font-bold transition duration-200 cursor-pointer ${
                     height === option
                       ? "bg-gray-300"
-                      : "text-black hover:bg-gray-200"
+                      : "text-black hover:bg-gray-400"
                   }`}
                   onClick={() => setHeight(option)}
                 >
@@ -213,8 +216,8 @@ export default function ProfileSetup() {
                 key={preference}
                 className={`w-[284px] h-[68px] py-4 rounded-full text-lg font-bold transition bg-white justify-center items-center flex border border-gray-300 cursor-pointer${
                   activityLevel === preference
-                    ? "bg-yellow-500 text-white"
-                    : "text-black"
+                    ? " bg-yellow-500 text-white"
+                    : " text-black"
                 }`}
                 onClick={() => setActivityLevel(preference)}
               >
@@ -244,10 +247,10 @@ export default function ProfileSetup() {
             {dietaryGoals.map((preference) => (
               <button
                 key={preference}
-                className={`w-[284px] h-[68px] py-4 rounded-full text-lg font-bold transition bg-white justify-center items-center flex border border-gray-300  cursor-pointer${
+                className={`w-[284px] h-[68px] py-4 rounded-full text-lg font-bold transition bg-white justify-center items-center flex border border-gray-300 cursor-pointer${
                   dietaryGoal === preference
-                    ? "bg-yellow-500 text-white"
-                    : "text-black"
+                    ? " bg-yellow-500 text-white"
+                    : " text-black"
                 }`}
                 onClick={() => setDietaryGoal(preference)}
               >
@@ -279,10 +282,10 @@ export default function ProfileSetup() {
               {currentWeightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-5 rounded-md text-sm font-medium transition duration-200 cursor-pointer ${
+                  className={`w-full py-5 rounded-md text-sm font-medium transition duration-200 cursor-pointer${
                     currentWeight === option
-                      ? "bg-gray-300"
-                      : "text-black hover:bg-gray-200"
+                      ? " bg-gray-300"
+                      : " text-black hover:bg-gray-200"
                   }`}
                   onClick={() => setCurrentWeight(option)}
                 >
@@ -300,8 +303,8 @@ export default function ProfileSetup() {
                   key={option}
                   className={`w-full py-5 rounded-md text-sm font-medium transition duration-200 cursor-pointer${
                     currentWeightGoal === option
-                      ? "bg-gray-300"
-                      : "text-black hover:bg-gray-200"
+                      ? " bg-gray-300"
+                      : " text-black hover:bg-gray-200"
                   }`}
                   onClick={() => setCurrentWeightGoal(option)}
                 >
