@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
-from .serializers import RegisterSerializer
+from .serializers import RegisterSerializer, UserProfileSerializer
 
 
 # create registration for user
@@ -66,6 +66,7 @@ class CustomLoginView(APIView):
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
+    # logout from the system
     def post(self, request, *args, **kwargs):
         try:
             # Get the token associated with the authenticated user
@@ -77,3 +78,17 @@ class LogoutView(APIView):
                 return Response({"detail": "No token associated with user."}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+class UpdateProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # Update user profile
+    def put(self, request):
+        profile = request.user.profile
+        serializer = UserProfileSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Profile updated successfully'})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,4 @@
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 # Create your models here.
 class User(models.Model):
@@ -9,6 +7,12 @@ class User(models.Model):
     password = models.CharField(max_length=100)
 
 class UserProfile(models.Model):
+    GOAL_CHOICES = [
+        ('lose_weight', 'Lose Weight'),
+        ('gain_weight', 'Gain Weight'),
+        ('maintain_weight', 'Maintain Weight'),
+    ]
+    goal = models.CharField(max_length=20, choices=GOAL_CHOICES)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
@@ -23,9 +27,5 @@ class UserProfile(models.Model):
     goal_weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username}'s Profile"
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
