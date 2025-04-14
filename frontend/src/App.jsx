@@ -5,13 +5,13 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import { ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 
 // Pages and Components
 import Home from "./pages/Home";
 import RootLayout from "./layout/RootLayout";
-
+import Chatbox from "./component/Chatbox";
 import ProfileHome from "./pages/ProfileHome";
 import ProfileDishes from "./pages/ProfileDishes";
 import ProfileStats from "./pages/ProfileStats";
@@ -30,6 +30,7 @@ const App = () => {
           <Route path="stats" element={<ProfileStats />} />
           <Route path="userprofile" element={<ProfileUser />} />
           <Route path="/selectedfood" element={<SelectedFood />} />
+          <Route path="/chatbox" element={<Chatbox />} />
         </Route>
         <Route>
           <Route index element={<Home />} />
@@ -43,7 +44,7 @@ const App = () => {
   return (
     <>
       <RouterProvider router={myRoute} />
-      <ToastContainer position="top-right" autoClose={3000} />
+      {/* <ToastContainer position="top-right" autoClose={3000} /> */}
     </>
   );
 };

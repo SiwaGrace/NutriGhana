@@ -3,12 +3,12 @@ import { FaApple, FaLock, FaUser } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { toast } from "react-toastify"; // ✅ Toastify import
-import { auth } from "../component/firebase";
+// import {
+//   createUserWithEmailAndPassword,
+//   signInWithEmailAndPassword,
+// } from "firebase/auth";
+// import { toast } from "react-toastify"; // ✅ Toastify import
+// import { auth } from "../component/firebase";
 
 const authForms = [
   {
