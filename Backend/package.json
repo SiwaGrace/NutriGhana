@@ -1,0 +1,13 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "missesenam <moneyesenam@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon ."
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
