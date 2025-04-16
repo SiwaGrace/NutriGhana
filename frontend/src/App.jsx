@@ -5,8 +5,8 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import { ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 
 // Pages and Components
 import Home from "./pages/Home";
@@ -43,7 +43,7 @@ const App = () => {
   return (
     <>
       <RouterProvider router={myRoute} />
-      <ToastContainer position="top-right" autoClose={3000} />
+      {/* <ToastContainer position="top-right" autoClose={3000} /> */}
     </>
   );
 };
