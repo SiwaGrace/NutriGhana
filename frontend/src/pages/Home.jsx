@@ -5,19 +5,19 @@ import { useNavigate } from "react-router-dom";
 
 const foodItems = [
   {
-    image: "/src/assets/food1.jpg",
+    image: "/src/assets/img/food1.jpg",
     name: "Spaghetti Bolognese",
     description:
       "A classic Italian pasta dish with a rich and savory meat sauce.",
   },
   {
-    image: "/src/assets/food2.webp",
+    image: "/src/assets/img/food2.webp",
     name: "Chicken Curry",
     description:
       "A flavorful and aromatic curry made with tender chicken and a blend of spices.",
   },
   {
-    image: "/src/assets/food3.jpg",
+    image: "/src/assets/img/food3.jpg",
     name: "Vegetable Stir-Fry",
     description:
       "A healthy and colorful stir-fry with fresh vegetables and a light soy sauce.",
