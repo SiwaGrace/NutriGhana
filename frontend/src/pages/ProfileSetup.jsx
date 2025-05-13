@@ -118,7 +118,6 @@ export default function ProfileSetup() {
                 </button>
               ))}
             </div>
-            []
           </div>
 
           <div className="w-full mb-8">

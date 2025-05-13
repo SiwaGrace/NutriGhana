@@ -1,7 +1,7 @@
 import React from "react";
 import { Flame } from "lucide-react";
 
-import Kenkey from "../assets/img/Kenkey.jpg";
+import Kenkey from "../assets/img/kenkey.jpg";
 
 const DishesSuggestion = () => {
   return (
