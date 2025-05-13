@@ -11,12 +11,12 @@ import {
 // Pages and Components
 import Home from "./pages/Home";
 import RootLayout from "./layout/RootLayout";
-import Chatbox from "./component/Chatbox";
+import Chatbox from "./components/Chatbox";
 import ProfileHome from "./pages/ProfileHome";
 import ProfileDishes from "./pages/ProfileDishes";
 import ProfileStats from "./pages/ProfileStats";
 import ProfileUser from "./pages/ProfileUser";
-import SelectedFood from "./component/SelectedFood";
+import SelectedFood from "./components/SelectedFood";
 import ProfileSetup from "./pages/ProfileSetup";
 import Login from "./pages/Login";
 

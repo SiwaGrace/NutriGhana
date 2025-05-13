@@ -3,7 +3,7 @@ import FishIcon from "../assets/logo&icons/fa-solid_fish.svg";
 import CarbIcon from "../assets/logo&icons/fluent_food-grains-20-filled.svg";
 import FatIcon from "../assets/logo&icons/game-icons_fat.svg";
 import StreakIcon from "../assets/logo&icons/Vector.svg";
-import FoodLog from "../component/FoodLogCard";
+import FoodLog from "../components/FoodLogCard";
 
 const ProfileHome = () => {
   return (

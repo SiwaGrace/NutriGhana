@@ -1,5 +1,5 @@
 import React from "react";
-import SplashScreen from "../component/SplashScreen";
+import SplashScreen from "../components/SplashScreen";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

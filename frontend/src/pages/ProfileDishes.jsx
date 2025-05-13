@@ -1,4 +1,4 @@
-import DishesSuggestion from "../component/DishesSuggestion";
+import DishesSuggestion from "../components/DishesSuggestion";
 
 export default function ProfileDishes() {
   return (
