@@ -11,7 +11,7 @@ import {
 // Pages and Components
 import Home from "./pages/Home";
 import RootLayout from "./layout/RootLayout";
-import Chatbox from "./components/Chatbox";
+import NutriPalChat from "./components/NutriPalChat";
 import ProfileHome from "./pages/ProfileHome";
 import ProfileDishes from "./pages/ProfileDishes";
 import ProfileStats from "./pages/ProfileStats";
@@ -30,9 +30,9 @@ const App = () => {
           <Route path="stats" element={<ProfileStats />} />
           <Route path="userprofile" element={<ProfileUser />} />
           <Route path="/selectedfood" element={<SelectedFood />} />
-          <Route path="/chatbox" element={<Chatbox />} />
         </Route>
         <Route>
+          <Route path="/chatbox" element={<NutriPalChat />} />
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/ProfileSetup" element={<ProfileSetup />} />
