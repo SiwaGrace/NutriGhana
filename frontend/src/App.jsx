@@ -8,29 +8,32 @@ import {
 // import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 
+import RootLayout from "./layout/RootLayout";
+// main Profile Page
+import HomePage from "./pages/HomePage";
+import Dishes from "./pages/Dishes";
+import Stats from "./pages/Stats";
+import UserProfile from "./pages/UserProfile";
 // Pages and Components
 import Home from "./pages/Home";
-import RootLayout from "./layout/RootLayout";
 import NutriPalChat from "./components/NutriPalChat";
-import ProfileHome from "./pages/ProfileHome";
-import ProfileDishes from "./pages/ProfileDishes";
-import ProfileStats from "./pages/ProfileStats";
-import ProfileUser from "./pages/ProfileUser";
-import SelectedFood from "./components/SelectedFood";
-import ProfileSetup from "./pages/ProfileSetup";
 import Login from "./pages/Login";
+import ProfileSetup from "./pages/ProfileSetup";
+import SelectedFood from "./components/SelectedFood";
 
 const App = () => {
   const myRoute = createBrowserRouter(
     createRoutesFromElements(
       <>
+        {/* with navbar */}
         <Route element={<RootLayout />}>
-          <Route path="/profilehome" element={<ProfileHome />} />
-          <Route path="/dishes" element={<ProfileDishes />} />
-          <Route path="stats" element={<ProfileStats />} />
-          <Route path="userprofile" element={<ProfileUser />} />
+          <Route path="/HomePage" element={<HomePage />} />
+          <Route path="/dishes" element={<Dishes />} />
+          <Route path="stats" element={<Stats />} />
+          <Route path="userprofile" element={<UserProfile />} />
           <Route path="/selectedfood" element={<SelectedFood />} />
         </Route>
+        {/* no navbar */}
         <Route>
           <Route path="/chatbox" element={<NutriPalChat />} />
           <Route index element={<Home />} />
