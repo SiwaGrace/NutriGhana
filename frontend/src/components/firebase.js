@@ -3,14 +3,15 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDIztMkrzW_L-V7aqtb4lrBd8_RXdyk1uU",
-  authDomain: "signin-auth-1049d.firebaseapp.com",
-  projectId: "signin-auth-1049d",
-  storageBucket: "signin-auth-1049d.appspot.com",
-  messagingSenderId: "572253088082",
-  appId: "1:572253088082:web:fe77a5c1a056e542ff328b",
+  apiKey: "AIzaSyCi3JarsLMN3CQ6Lh54Pjc6S7xtE0eXlh8",
+  authDomain: "login1-c931f.firebaseapp.com",
+  projectId: "login1-c931f",
+  storageBucket: "login1-c931f.firebasestorage.app",
+  messagingSenderId: "933527804042",
+  appId: "1:933527804042:web:b439c98d16396ebf013573",
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export default app;

@@ -1,9 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 import Woman from "../assets/img/woman1.jpg";
 
 export default function ProfileUser() {
   const [mealReminders, setMealReminders] = useState(true);
   const [weeklyTips, setWeeklyTips] = useState(true);
+  const [email, setEmail] = useState(""); // <-- add state for email
+
+  // On mount, get email from localStorage
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("userEmail");
+    if (storedEmail) {
+      setEmail(storedEmail);
+    }
+  }, []);
 
   // Basic goals data
   const basicGoals = [
@@ -43,7 +53,8 @@ export default function ProfileUser() {
         className="w-24 h-24 rounded-full border-4 border-gray-300 cursor-pointer"
       />
       <h3 className="text-lg font-semibold mt-2">Pokuaa</h3>
-      <p className="text-gray-500">pokuaa88@gmail.com</p>
+      {/* Replace hardcoded email with dynamic email */}
+      <p className="text-gray-500">{email || "No email found"}</p>
       <button className="text-red-500 text-sm mt-1 cursor-pointer">
         change email
       </button>

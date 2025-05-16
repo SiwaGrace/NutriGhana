@@ -1,8 +1,15 @@
-// src/pages/Login.js
 import { SlSocialGoogle } from "react-icons/sl";
 import { FaApple } from "react-icons/fa6";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  GoogleAuthProvider,
+  OAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth } from "../components/firebase";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const authForms = {
   signUp: {
@@ -26,34 +33,75 @@ const authForms = {
 };
 
 const Login = () => {
-  const [authType, setAuthType] = useState("signIn");
+  const [authType, setAuthType] = useState("signUp"); // signUp first as you wanted
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const current = authForms[authType];
 
+  // Function to block back navigation after login
+  const blockBackNavigation = () => {
+    window.history.pushState(null, "", window.location.href);
+    window.onpopstate = () => {
+      window.history.go(1);
+    };
+  };
+
   const handleGoogleAuth = async () => {
     const provider = new GoogleAuthProvider();
+    setLoading(true);
+
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+      const isNewUser = result.additionalUserInfo?.isNewUser;
 
+      localStorage.setItem("userEmail", user.email);
       toast.success(
         `Signed ${authType === "signUp" ? "up" : "in"} with Google!`
       );
       console.log("Google user:", user);
 
-      // Redirect based on auth type
-      navigate(authType === "signUp" ? "/ProfileSetup" : "/ProfileHome");
+      if (isNewUser) {
+        navigate("/ProfileSetup", { replace: true });
+        blockBackNavigation();
+      } else {
+        navigate("/home", { replace: true });
+        blockBackNavigation();
+      }
     } catch (error) {
       console.error("Google sign-in error:", error.message);
+      toast.error(error.message || "Google sign-in failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      // Improved error handling
-      if (error.code === "auth/popup-closed-by-user") {
-        toast.error("The popup was closed before sign-in was completed.");
-      } else if (error.code === "auth/cancelled-popup-request") {
-        toast.error("The sign-in popup was cancelled.");
+  const handleAppleAuth = async () => {
+    const provider = new OAuthProvider("apple.com");
+    setLoading(true);
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const isNewUser = result.additionalUserInfo?.isNewUser;
+
+      toast.success(
+        `Signed ${authType === "signUp" ? "up" : "in"} with Apple!`
+      );
+      console.log("Apple user:", user);
+
+      if (isNewUser) {
+        navigate("/ProfileSetup", { replace: true });
+        blockBackNavigation();
       } else {
-        toast.error(error.message || "Google sign-in failed");
+        navigate("/home", { replace: true });
+        blockBackNavigation();
       }
+    } catch (error) {
+      console.error("Apple sign-in error:", error.message);
+      toast.error(error.message || "Apple sign-in failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,25 +113,35 @@ const Login = () => {
 
         <button
           onClick={handleGoogleAuth}
-          className="flex items-center justify-center w-full bg-yellow-500 text-white font-semibold py-6 rounded-full shadow-md space-x-3"
+          aria-label="Sign in with Google"
+          className="flex items-center justify-center w-full bg-yellow-500 text-white font-semibold py-6 rounded-full shadow-md space-x-3 disabled:opacity-50 cursor-pointer "
+          disabled={loading}
         >
           <SlSocialGoogle className="h-5 w-5" />
-          <span>{current.buttonText} with Google</span>
+          <span>
+            {loading ? "Processing..." : `${current.buttonText} with Google`}
+          </span>
         </button>
 
         <button
-          disabled
-          className="flex items-center justify-center w-full border border-gray-300 py-6 rounded-full shadow-md space-x-3 opacity-50 cursor-not-allowed"
+          onClick={handleAppleAuth}
+          aria-label="Sign in with Apple"
+          className={`flex items-center justify-center w-full border border-gray-300 py-6 rounded-full shadow-md space-x-3 cursor-pointer ${
+            loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={loading}
         >
           <FaApple className="h-5 w-5" />
-          <span>{current.buttonText} with Apple (coming soon)</span>
+          <span>
+            {loading ? "Processing..." : `${current.buttonText} with Apple`}
+          </span>
         </button>
 
         <div className="text-lg text-gray-700 mt-4">
           <p>{current.alternate.text}</p>
           <button
             onClick={() => setAuthType(current.alternate.actionType)}
-            className="text-blue-600 font-medium"
+            className="text-blue-600 font-medium cursor-pointer "
           >
             {current.alternate.actionText}
           </button>
