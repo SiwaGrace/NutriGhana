@@ -15,7 +15,7 @@ import Dishes from "./pages/Dishes";
 import Stats from "./pages/Stats";
 import UserProfile from "./pages/UserProfile";
 // Pages and Components
-import Home from "./pages/Home";
+import LandingPage from "./pages/LandingPage";
 import NutriPalChat from "./components/NutriPalChat";
 import Login from "./pages/Login";
 import ProfileSetup from "./pages/ProfileSetup";
@@ -27,7 +27,7 @@ const App = () => {
       <>
         {/* with navbar */}
         <Route element={<RootLayout />}>
-          <Route path="/HomePage" element={<HomePage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/dishes" element={<Dishes />} />
           <Route path="stats" element={<Stats />} />
           <Route path="userprofile" element={<UserProfile />} />
@@ -35,11 +35,11 @@ const App = () => {
         </Route>
         {/* no navbar */}
         <Route>
-          <Route path="/chatbox" element={<NutriPalChat />} />
-          <Route index element={<Home />} />
+          <Route index element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/ProfileSetup" element={<ProfileSetup />} />
         </Route>
+        <Route path="/chatbox" element={<NutriPalChat />} />
       </>
     )
   );

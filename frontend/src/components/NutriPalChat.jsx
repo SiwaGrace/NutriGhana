@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { FiSend } from "react-icons/fi";
-import { MessageCircle, ArrowLeft } from "lucide-react";
+import { MessageCircle, ArrowLeft, X } from "lucide-react";
 
-const NutriPalChat = () => {
+const NutriPalChat = ({ onClose }) => {
   const [messages, setMessages] = useState([]);
-
   const [inputValue, setInputValue] = useState("");
 
   const handleSend = (e) => {
@@ -20,7 +19,6 @@ const NutriPalChat = () => {
     setMessages([...messages, newMessage]);
     setInputValue("");
 
-    // Simulate bot response after a delay
     setTimeout(() => {
       const botResponse = {
         id: messages.length + 2,
@@ -32,17 +30,27 @@ const NutriPalChat = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <div className="flex flex-col h-full bg-gray-100">
       {/* Header */}
       <div className="px-5 py-3 flex flex-col">
-        <ArrowLeft className="w-9 h-9 text-black p-2 bg-white rounded-full cursor-pointer" />
-        <div className=" text-black flex flex-col items-center border-b border-gray-300 gap-1">
+        <div className="flex justify-between items-center">
+          <ArrowLeft
+            className="w-9 h-9 text-black p-2 bg-white rounded-full cursor-pointer"
+            onClick={onClose}
+          />
+          <X
+            className="w-9 h-9 text-black p-2 bg-white rounded-full cursor-pointer"
+            onClick={onClose}
+          />
+        </div>
+        <div className="text-black flex flex-col items-center border-b border-gray-300 gap-1">
           <MessageCircle className="w-9 h-9 text-white p-1 bg-green-600 rounded-full" />
           <h1 className="text-xl font-bold">NutriPal</h1>
           <p className="text-sm opacity-80 pb-2">Your nutrition assistant</p>
         </div>
       </div>
 
+      {/* Chat messages and input area remain the same */}
       {/* Chat messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (

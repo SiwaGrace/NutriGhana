@@ -6,7 +6,7 @@ export default function Navbar() {
     <nav className="fixed top-0 w-full shadow-md py-2 flex justify-around items-center border-b bg-white border-gray-300 h-14  z-50">
       {/* Navigation Items */}
       <NavLink
-        to="/profilehome"
+        to="/home"
         title="Home"
         className={({ isActive }) =>
           isActive ? "text-black" : "text-gray-400"
