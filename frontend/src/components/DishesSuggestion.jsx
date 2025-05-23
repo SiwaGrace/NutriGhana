@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Flame } from "lucide-react";
 import Kenkey from "../assets/img/kenkey.jpg";
 import axios from "axios";
-const apiKey = import.meta.env.VITE_SPOON_API_KEY;
+// const apiKey = import.meta.env.VITE_SPOON_API_KEY;
+// https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}
 
 const DishesSuggestion = () => {
   //
@@ -10,7 +11,7 @@ const DishesSuggestion = () => {
   const getDishes = async () => {
     try {
       const response = await axios.get(
-        `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}`
+        `http://localhost:5000/api/dishes/getall`
       );
       console.log(response.data.results);
       setDish(response.data.results);

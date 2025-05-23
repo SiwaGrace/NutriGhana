@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const cors = require("cors");
 const PORT = process.env.PORT || 5000;
-const axios = require("axios");
 // imported routers
 const dishRouter = require("./routes/dishesRouter");
 
@@ -26,7 +25,7 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // Routers
-app.use("/api/users", userRouter);
+app.use("/api/dishes", dishRouter);
 
 // connection
 // mongoose
