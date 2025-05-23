@@ -24,9 +24,7 @@ export default function ProfileDishes() {
       <div>
         <h3 className="text-lg font-semibold mb-2">Suggestions</h3>
         <div className="grid gap-4">
-          {Array.from({ length: 7 }).map((_, index) => (
-            <DishesSuggestion key={index} />
-          ))}
+          <DishesSuggestion />
         </div>
       </div>
     </div>

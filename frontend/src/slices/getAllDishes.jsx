@@ -1,5 +1,6 @@
 // src/features/counter/counterSlice.js
 import { createSlice } from "@reduxjs/toolkit";
+// http://localhost:5000/api/dishes
 
 const initialState = {
   dishesbox: [],
