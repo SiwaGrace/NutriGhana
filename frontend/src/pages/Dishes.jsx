@@ -20,7 +20,7 @@ export default function ProfileDishes() {
         <button>Saved scans</button>
       </div>
 
-      {/* Suggestions List */}
+      {/* Dish Suggestion List */}
       <div>
         <h3 className="text-lg font-semibold mb-2">Suggestions</h3>
         <div className="grid gap-4">

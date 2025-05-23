@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Flame } from "lucide-react";
-
 import Kenkey from "../assets/img/kenkey.jpg";
 
 const DishesSuggestion = () => {
+  // https://api.spoonacular.com/recipes/complexSearch
+  const getDishes = async () => {
+    try {
+      // const foods = await
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {}, []);
   return (
     <div>
       {/* Dish Item with View Button */}
@@ -35,7 +43,7 @@ const DishesSuggestion = () => {
             className="w-12 h-12 rounded-md object-cover"
           />
           <div>
-            <p className="font-semibold">Kenkey with pepper</p>
+            <p className="font-semibold">Kenkey with pepp</p>
             <p className="text-sm text-gray-500 flex items-center gap-1">
               <Flame size={14} /> 106 cal
             </p>
