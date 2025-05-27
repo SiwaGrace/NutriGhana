@@ -4,7 +4,7 @@ require("dotenv").config();
 const getDishes = async (req, res) => {
   try {
     const response = await axios.get(
-      `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.VITE_SPOON_API_KEY}`
+      `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.VITE_SPOON_API_KEY}&addRecipeNutrition=true`
     );
     res.json(response.data);
   } catch (error) {
