@@ -3,13 +3,23 @@ import { Flame } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDishes } from "../slices/getAllDishes";
 
-const DishesSuggestion = () => {
+const DishesSuggestion = ({ searchTerm, filter }) => {
   const { dishes, isLoading, error } = useSelector((state) => state.dishes);
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getDishes());
   }, [dispatch]);
+
+  const filteredDishes = dishes
+    .filter((recipe) =>
+      recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter((recipe) => {
+      if (filter === "favorite") return recipe.favorite;
+      if (filter === "saved") return recipe.saved;
+      return true; // all
+    });
   return (
     <div>
       {/* Dish Item with View Button */}
@@ -68,7 +78,7 @@ const DishesSuggestion = () => {
         </p>
       )}
       {/* Dish Item with Add Button */}
-      {dishes.map((recipe) => {
+      {filteredDishes.map((recipe) => {
         const calories = recipe.nutrition?.nutrients?.find(
           (n) => n.name === "Calories"
         );

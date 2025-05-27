@@ -4,8 +4,12 @@ import axios from "axios";
 
 export const getDishes = createAsyncThunk("dishes/getDishes", async () => {
   const response = await axios.get(`http://localhost:5000/api/dishes/getall`);
+  // Alphabetically sort by recipe title
+  const sortedDishes = response.data.results.sort((a, b) =>
+    a.title.localeCompare(b.title)
+  );
   console.log(response.data.results);
-  return response.data.results;
+  return sortedDishes;
 });
 
 const initialState = {
