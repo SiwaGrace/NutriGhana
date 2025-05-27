@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import { IoIosArrowForward } from "react-icons/io";
 import Woman from "../assets/img/woman1.jpg";
 
 export default function ProfileUser() {
@@ -70,12 +70,17 @@ export default function ProfileUser() {
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Goals</h2>
 
         <div className="bg-white p-4 shadow-xl rounded-2xl space-y-4">
-          {/* Basic goals */}
           {basicGoals.map((goal, index) => (
-            <div key={index} className={`${goal.bdClass} p-4 `}>
+            <div key={index} className={`${goal.bdClass} p-4`}>
               <div className="flex justify-between items-center">
                 <span className="font-medium text-gray-700">{goal.label}</span>
-                <span className="font-bold text-gray-900">{goal.value}</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-gray-900">{goal.value}</span>
+                  <IoIosArrowForward
+                    className="text-gray-900 mt-0.5 cursor-pointer"
+                    aria-hidden="true"
+                  />
+                </div>
               </div>
             </div>
           ))}
@@ -87,18 +92,20 @@ export default function ProfileUser() {
             {macros.map((macro, index) => (
               <div
                 key={index}
-                className={`flex justify-between items-center ${macro.bdClass} p-3 `}
+                className={`flex justify-between items-center ${macro.bdClass} p-3`}
               >
                 <div>
                   <span className="font-medium text-gray-900">
                     {macro.label}
                   </span>
                 </div>
-                <div className="text-right">
+                <div className="text-right flex items-center gap-2">
                   <span className="font-bold text-gray-400">{macro.value}</span>
-                  <span className={`text-gray-700 ml-2`}>
-                    · {macro.percentage}
-                  </span>
+                  <span className="text-gray-700">· {macro.percentage}</span>
+                  <IoIosArrowForward
+                    aria-hidden="true"
+                    className="cursor-pointer"
+                  />
                 </div>
               </div>
             ))}

@@ -51,7 +51,7 @@ export default function ProfileSetup() {
   useEffect(() => {
     if (step === 6) {
       const timer = setTimeout(() => {
-        navigate("/ProfileHome");
+        navigate("/home");
       }, 10000);
 
       return () => clearTimeout(timer);
