@@ -94,6 +94,39 @@ export default function ProfileSetup() {
     }
   };
 
+  const handleSubmit = async () => {
+    const userData = {
+      gender,
+      year,
+      height,
+      weight,
+      activityLevel,
+      dietaryGoal,
+      currentWeight,
+      currentWeightGoal,
+    };
+
+    try {
+      const response = await fetch("http://localhost:5000/api/profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        alert("Submitted success!");
+        setStep(6); // move to success page or reset
+      } else {
+        alert("Failed to submit. Try again.");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Server error. Try again later.");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center p-6 h-screen justify-center space-y-12">
       {step === 1 && (
@@ -315,7 +348,10 @@ export default function ProfileSetup() {
 
           <button
             className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer"
-            onClick={handleNext}
+            onClick={() => {
+              handleNext();
+              handleSubmit();
+            }}
           >
             Submit
           </button>

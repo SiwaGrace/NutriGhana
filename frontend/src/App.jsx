@@ -20,6 +20,7 @@ import NutriPalChat from "./components/NutriPalChat";
 import Login from "./pages/Login";
 import ProfileSetup from "./pages/ProfileSetup";
 import SelectedFood from "./components/SelectedFood";
+import ProfilesList from "./pages/ProfilesList";
 
 const App = () => {
   const myRoute = createBrowserRouter(
@@ -38,6 +39,7 @@ const App = () => {
           <Route index element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/ProfileSetup" element={<ProfileSetup />} />
+          <Route path="/see" element={<ProfilesList />} />
         </Route>
         <Route path="/chatbox" element={<NutriPalChat />} />
       </>

@@ -1,4 +1,5 @@
 const axios = require("axios");
+const Profile = require("../models/Profile");
 require("dotenv").config();
 
 const getDishes = async (req, res) => {

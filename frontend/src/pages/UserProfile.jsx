@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import Woman from "../assets/img/woman1.jpg";
+import axios from "axios";
 
 export default function ProfileUser() {
   const [mealReminders, setMealReminders] = useState(true);
   const [weeklyTips, setWeeklyTips] = useState(true);
   const [email, setEmail] = useState(""); // <-- add state for email
+  const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // On mount, get email from localStorage
   useEffect(() => {
@@ -13,35 +17,47 @@ export default function ProfileUser() {
     if (storedEmail) {
       setEmail(storedEmail);
     }
+    const fetchProfiles = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:5000/api/profile");
+        setProfiles(data);
+      } catch (err) {
+        setError("Failed to fetch profiles.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfiles();
   }, []);
 
   // Basic goals data
-  const basicGoals = [
-    { label: "Weight goal", value: "130kg", bdClass: "border-b" },
-    { label: "Calories goal", value: "13000 Kcal", bdClass: "border-b" },
-  ];
+  // const basicGoals = [
+  //   { label: "Weight goal", value: "130kg", bdClass: "border-b" },
+  //   { label: "Calories goal", value: "13000 Kcal", bdClass: "border-b" },
+  // ];
 
   // Macronutrients data
-  const macros = [
-    {
-      label: "Protein",
-      value: "124 g",
-      percentage: "30%",
-      bdClass: "border-b",
-    },
-    {
-      label: "Carbs",
-      value: "120 g",
-      percentage: "30%",
-      bdClass: "border-b",
-    },
-    {
-      label: "Fat",
-      value: "124 g",
-      percentage: "30%",
-      bdClass: "border-b",
-    },
-  ];
+  // const macros = [
+  //   {
+  //     label: "Protein",
+  //     value: "124 g",
+  //     percentage: "30%",
+  //     bdClass: "border-b",
+  //   },
+  //   {
+  //     label: "Carbs",
+  //     value: "120 g",
+  //     percentage: "30%",
+  //     bdClass: "border-b",
+  //   },
+  //   {
+  //     label: "Fat",
+  //     value: "124 g",
+  //     percentage: "30%",
+  //     bdClass: "border-b",
+  //   },
+  // ];
 
   return (
     <div className="py-24 px-6 flex flex-col items-center">
@@ -70,23 +86,55 @@ export default function ProfileUser() {
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Goals</h2>
 
         <div className="bg-white p-4 shadow-xl rounded-2xl space-y-4">
-          {basicGoals.map((goal, index) => (
-            <div key={index} className={`${goal.bdClass} p-4`}>
-              <div className="flex justify-between items-center">
-                <span className="font-medium text-gray-700">{goal.label}</span>
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-gray-900">{goal.value}</span>
-                  <IoIosArrowForward
-                    className="text-gray-900 mt-0.5 cursor-pointer"
-                    aria-hidden="true"
-                  />
-                </div>
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-4">All Profiles</h2>
+
+            {profiles.length === 0 ? (
+              <p>No profiles found.</p>
+            ) : (
+              <div className="grid gap-4">
+                {profiles.map((p, idx) => (
+                  <div
+                    key={idx}
+                    className="border rounded-lg p-4 shadow-sm hover:shadow-md transition"
+                  >
+                    <p>
+                      <span className="font-semibold">Gender:</span> {p.gender}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Year of Birth:</span>{" "}
+                      {p.year}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Height:</span> {p.height}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Weight:</span> {p.weight}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Activity Level:</span>{" "}
+                      {p.activityLevel}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Dietary Goal:</span>{" "}
+                      {p.dietaryGoal}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Current Weight:</span>{" "}
+                      {p.currentWeight}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Weight Goal:</span>{" "}
+                      {p.currentWeightGoal}
+                    </p>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))}
+            )}
+          </div>
 
           {/* Macronutrients section */}
-          <div className="space-y-3">
+          {/* <div className="space-y-3">
             <h3 className="font-semibold text-gray-700">Macronutrients</h3>
 
             {macros.map((macro, index) => (
@@ -109,7 +157,7 @@ export default function ProfileUser() {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
 
