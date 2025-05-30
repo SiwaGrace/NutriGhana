@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import FishIcon from "../assets/logo&icons/fa-solid_fish.svg";
 import CarbIcon from "../assets/logo&icons/fluent_food-grains-20-filled.svg";
 import FatIcon from "../assets/logo&icons/game-icons_fat.svg";
@@ -6,10 +6,11 @@ import StreakIcon from "../assets/logo&icons/Vector.svg";
 import FoodLog from "../components/FoodLogCard";
 
 const ProfileHome = () => {
+  const [selectedDay, setSelectedDay] = useState("today");
   return (
     <div className="pt-24 px-4 bg-gray-100 min-h-screen">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      {/* <div className="flex justify-between items-center">
         <h2 className="text-lg font-semibold text-gray-500">
           Good morning, <span className="font-bold text-black">Pokuaa</span>
         </h2>
@@ -17,6 +18,20 @@ const ProfileHome = () => {
           <img src={StreakIcon} alt="Fire" className="w-5 h-5" />
           <span className="text-gray-500 text-sm">0</span>
         </div>
+      </div> */}
+      {/* days */}
+      <div className="flex gap-4 text-gray-500 mb-4">
+        {["today", "yesterday"].map((day) => (
+          <button
+            key={day}
+            className={`font-semibold capitalize cursor-pointer ${
+              selectedDay === day ? "text-black underline" : ""
+            }`}
+            onClick={() => setSelectedDay(day)}
+          >
+            {day}
+          </button>
+        ))}
       </div>
 
       {/* Tabs */}
@@ -24,8 +39,7 @@ const ProfileHome = () => {
         <button className="bg-yellow-400 text-white px-3 py-1 rounded-full text-sm">
           Today
         </button>
-        <button className="text-gray-500 text-sm">Weekly</button>
-        <button className="text-gray-500 text-sm">Monthly</button>
+        <button className="text-gray-500 text-sm">yesterday</button>
       </div>
 
       {/* Calories Card */}

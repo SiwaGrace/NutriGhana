@@ -18,7 +18,7 @@ export default function ProfileDishes() {
         {["all", "favorite", "saved"].map((type) => (
           <button
             key={type}
-            className={`font-semibold capitalize ${
+            className={`font-semibold capitalize cursor-pointer ${
               filter === type ? "text-black underline" : ""
             }`}
             onClick={() => setFilter(type)}
