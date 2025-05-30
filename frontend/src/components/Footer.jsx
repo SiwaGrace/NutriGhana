@@ -3,7 +3,7 @@ import MyLogo from "../assets/logo&icons/nutrighanaLogo.svg";
 
 const Footer = ({ onLogoClick }) => {
   return (
-    <footer className="fixed bottom-10 right-2 transform -translate-x-1/2 rounded-full ">
+    <footer className="fixed bottom-20 right-2 transform -translate-x-1/2 rounded-full ">
       <div className="container mx-auto flex justify-between items-center">
         {/* Other footer content if any */}
 

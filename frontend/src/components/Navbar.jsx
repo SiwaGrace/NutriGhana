@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className="fixed top-0 w-full shadow-md py-2 flex justify-around items-center border-b bg-white border-gray-300 h-14  z-50">
+    <nav className="fixed bottom-0 w-full shadow-md py-2 flex justify-around items-center border-b bg-white border-gray-300 h-14  z-50">
       {/* Navigation Items */}
       <NavLink
         to="/home"

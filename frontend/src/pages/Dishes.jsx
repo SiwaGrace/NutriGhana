@@ -1,5 +1,5 @@
-import DishesSuggestion from "../components/DishesSuggestion";
-import SearchBar from "../components/SearchBar";
+import DishesSuggestion from "../components/dishesComponents/DishesSuggestion";
+import SearchBar from "../components/dishesComponents/SearchBar";
 import { useState } from "react";
 
 export default function ProfileDishes() {
@@ -31,7 +31,7 @@ export default function ProfileDishes() {
       {/* Dish Suggestion List */}
       <div>
         <h3 className="text-lg font-semibold mb-2">Suggestions</h3>
-        <div className="grid gap-4">
+        <div className="">
           <DishesSuggestion searchTerm={searchTerm} filter={filter} />
         </div>
       </div>
