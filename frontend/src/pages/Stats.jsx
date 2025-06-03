@@ -24,7 +24,7 @@ export default function ProfileStats() {
   ];
 
   return (
-    <div className="py-18 px-4">
+    <div className="py-18 px-4 bg-white">
       {/* Title */}
       <h2 className="text-xl font-semibold text-center mb-2">Insights</h2>
 
@@ -63,7 +63,7 @@ export default function ProfileStats() {
 
       {/* Nutrition Tips */}
       <h3 className="text-lg font-semibold mt-3">Nutrition Tips</h3>
-      <div className="mt-2 space-y-2">
+      <div className="mt-2 space-y-2 text-black font-semibold ">
         {[
           "You're low on protein, try adding more beans this week!",
           "Your carbs are high, swap some rice for boiled yam.",

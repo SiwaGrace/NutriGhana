@@ -8,7 +8,7 @@ import FoodLog from "../components/FoodLogCard";
 const ProfileHome = () => {
   const [selectedDay, setSelectedDay] = useState("today");
   return (
-    <div className="pt-24 px-4 bg-gray-100 min-h-screen">
+    <div className="pt-24 px-4 bg-white min-h-screen text-black">
       {/* Header */}
       {/* <div className="flex justify-between items-center">
         <h2 className="text-lg font-semibold text-gray-500">

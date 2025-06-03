@@ -7,7 +7,7 @@ export default function ProfileSetup() {
   const [gender, setGender] = useState("");
   const [year, setYear] = useState("");
   const [height, setHeight] = useState("");
-  const [weight, setWeight] = useState("");
+
   const [step, setStep] = useState(1);
   const [age, setAge] = useState("");
   const [activityLevel, setActivityLevel] = useState("");
@@ -19,24 +19,38 @@ export default function ProfileSetup() {
 
   const years = Array.from({ length: 26 }, (_, i) => 1995 + i);
   const heightOptions = [
-    "4'6\"",
-    "5'0\"",
-    "5'4\"",
-    "5'8\"",
-    "6'0\"",
-    "6'4\"",
-    "6'8\"",
+    "100 cm",
+    "105 cm",
+    "110 cm",
+    "115 cm",
+    "120 cm",
+    "125 cm",
+    "130 cm",
+    "135 cm",
+    "140 cm",
+    "145 cm",
+    "150 cm",
+    "155 cm",
+    "160 cm",
+    "165 cm",
+    "170 cm",
   ];
   const weightOptions = [
-    "Under 100 lbs",
-    "100-120 lbs",
-    "121-140 lbs",
-    "141-160 lbs",
-    "161-180 lbs",
-    "181+ lbs",
-    "181-200 lbs",
-    "201-220 lbs",
-    "220+ lbs",
+    "10kg",
+    "50 kg",
+    "60 kg",
+    "70 kg",
+    "80 kg",
+    "90 kg",
+    "100 kg",
+    "110 kg",
+    "120 kg",
+    "130 kg",
+    "140 kg",
+    "150 kg",
+    "160 kg",
+    "170 kg",
+    "180 kg",
   ];
   const howActive = ["Not active", "Lightly Active", "Active", "Very Active"];
   const dietaryGoals = [
@@ -62,7 +76,7 @@ export default function ProfileSetup() {
     setGender("");
     setYear("");
     setHeight("");
-    setWeight("");
+
     setAge("");
     setActivityLevel("");
     setDietaryGoal("");
@@ -75,7 +89,7 @@ export default function ProfileSetup() {
     if (
       !gender ||
       !year ||
-      (step === 2 && (!height || !weight)) ||
+      (step === 2 && !height) ||
       (step === 3 && !activityLevel) ||
       (step === 4 && !dietaryGoal) ||
       (step === 5 && (!currentWeight || !currentWeightGoal))
@@ -96,12 +110,8 @@ export default function ProfileSetup() {
 
   const handleSubmit = async () => {
     const userData = {
-      gender,
-      year,
-      height,
-      weight,
       activityLevel,
-      dietaryGoal,
+      dietaryGoals,
       currentWeight,
       currentWeightGoal,
     };
@@ -128,7 +138,7 @@ export default function ProfileSetup() {
   };
 
   return (
-    <div className="flex flex-col items-center p-6 h-screen justify-center space-y-12">
+    <div className="flex flex-col items-center p-6 h-screen justify-center space-y-12 bg-white text-black">
       {step === 1 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
@@ -199,25 +209,6 @@ export default function ProfileSetup() {
                       : "text-black hover:bg-gray-400"
                   }`}
                   onClick={() => setHeight(option)}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="w-full mb-6">
-            <p className="text-lg font-bold mb-2">Weight</p>
-            <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-40 overflow-y-auto">
-              {weightOptions.map((option) => (
-                <button
-                  key={option}
-                  className={`w-full py-5 rounded-md text-sm font-medium transition duration-200 cursor-pointer ${
-                    weight === option
-                      ? "bg-gray-300"
-                      : "text-black hover:bg-gray-200"
-                  }`}
-                  onClick={() => setWeight(option)}
                 >
                   {option}
                 </button>

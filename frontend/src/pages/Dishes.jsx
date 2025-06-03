@@ -7,9 +7,11 @@ export default function ProfileDishes() {
   const [filter, setFilter] = useState("all");
 
   return (
-    <div className="pt-18 px-4">
+    <div className="pt-18 px-4 bg-white">
       {/* Title */}
-      <h2 className="text-xl font-semibold mb-2 text-center">Dish</h2>
+      <h2 className="text-xl font-semibold mb-2 text-center text-black">
+        Dish
+      </h2>
 
       {/* Search Bar */}
       <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
@@ -30,7 +32,7 @@ export default function ProfileDishes() {
 
       {/* Dish Suggestion List */}
       <div>
-        <h3 className="text-lg font-semibold mb-2">Suggestions</h3>
+        <h3 className="text-lg font-semibold mb-2 text-black">Suggestions</h3>
         <div className="">
           <DishesSuggestion searchTerm={searchTerm} filter={filter} />
         </div>

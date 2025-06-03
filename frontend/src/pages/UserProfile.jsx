@@ -3,6 +3,11 @@ import { IoIosArrowForward } from "react-icons/io";
 import Woman from "../assets/img/woman1.jpg";
 import axios from "axios";
 
+import { toast } from "react-toastify";
+import { auth } from "../components/firebase";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+
 export default function ProfileUser() {
   const [mealReminders, setMealReminders] = useState(true);
   const [weeklyTips, setWeeklyTips] = useState(true);
@@ -59,8 +64,24 @@ export default function ProfileUser() {
   //   },
   // ];
 
+  //logout
+
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      localStorage.removeItem("userEmail");
+      toast.success("Logged out successfully!");
+      navigate("/login", { replace: true });
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Failed to log out. Please try again.");
+    }
+  };
+
   return (
-    <div className="py-24 px-6 flex flex-col items-center">
+    <div className="py-24 px-6 flex flex-col items-center bg-white">
       {/* Profile Section */}
       <h2 className="text-xl font-semibold mb-4">Profile</h2>
       <img
@@ -85,7 +106,7 @@ export default function ProfileUser() {
       <div className="p-5 w-full">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Goals</h2>
 
-        <div className="bg-white p-4 shadow-xl rounded-2xl space-y-4">
+        <div className="bg-white p-4 shadow-xl rounded-2xl space-y-4 text-green-500">
           <div className="p-6">
             <h2 className="text-2xl font-bold mb-4">All Profiles</h2>
 
@@ -93,39 +114,35 @@ export default function ProfileUser() {
               <p>No profiles found.</p>
             ) : (
               <div className="grid gap-4">
-                {profiles.map((p, idx) => (
+                {profiles.map((p, id) => (
                   <div
-                    key={idx}
-                    className="border rounded-lg p-4 shadow-sm hover:shadow-md transition"
+                    key={id}
+                    className=" rounded-lg p-4 shadow-sm hover:shadow-md transition"
                   >
-                    <p>
+                    {/* <p>
                       <span className="font-semibold">Gender:</span> {p.gender}
-                    </p>
-                    <p>
+                    </p> */}
+                    {/* <p>
                       <span className="font-semibold">Year of Birth:</span>{" "}
                       {p.year}
+                    </p> */}
+                    <p className="flex flex-row justify-between">
+                      <span className="font-semibold">Weight Goal:</span>{" "}
+                      {p.currentWeightGoal}
                     </p>
-                    <p>
-                      <span className="font-semibold">Height:</span> {p.height}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Weight:</span> {p.weight}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Activity Level:</span>{" "}
-                      {p.activityLevel}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Dietary Goal:</span>{" "}
-                      {p.dietaryGoal}
-                    </p>
-                    <p>
+
+                    <p className="flex flex-row justify-between">
                       <span className="font-semibold">Current Weight:</span>{" "}
                       {p.currentWeight}
                     </p>
-                    <p>
-                      <span className="font-semibold">Weight Goal:</span>{" "}
-                      {p.currentWeightGoal}
+
+                    <p className="flex flex-row justify-between">
+                      <span className="font-semibold">Activity Level:</span>{" "}
+                      {p.activityLevel}
+                    </p>
+                    <p className="flex flex-row justify-between">
+                      <span className="font-semibold">Dietary Goal:</span>{" "}
+                      {p.dietaryGoal}
                     </p>
                   </div>
                 ))}
@@ -205,7 +222,10 @@ export default function ProfileUser() {
       </div>
 
       {/* Logout Button */}
-      <button className="bg-yellow-400 text-white w-full py-3 rounded-lg text-lg font-semibold mt-8">
+      <button
+        onClick={handleLogout}
+        className="bg-yellow-400 text-white w-full py-3 rounded-lg text-lg font-semibold mt-8 cursor-pointer"
+      >
         Log out
       </button>
     </div>

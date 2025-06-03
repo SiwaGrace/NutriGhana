@@ -114,12 +114,12 @@ const Login = () => {
         <button
           onClick={handleAppleAuth}
           aria-label="Sign in with Apple"
-          className={`flex items-center justify-center w-full border border-gray-300 py-6 rounded-full shadow-md space-x-3 cursor-pointer ${
+          className={`flex items-center justify-center w-full border border-gray-300 font-bold py-6 rounded-full shadow-md space-x-3 cursor-pointer text-black ${
             loading ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={loading}
         >
-          <FaApple className="h-5 w-5" />
+          <FaApple className="h-5 w-5 text-black" />
           <span>
             {loading ? "Processing..." : `${current.buttonText} with Apple`}
           </span>
