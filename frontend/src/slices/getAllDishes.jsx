@@ -16,13 +16,17 @@ const initialState = {
   dishes: [],
   isLoading: true,
   error: null,
+  selectedDish: null,
 };
 
 const dishesSlice = createSlice({
   name: "dishes",
   initialState,
   reducers: {
-    increment: (state) => {},
+    setSelectedDish: (state, action) => {
+      state.selectedDish = action.payload;
+      console.log(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -42,7 +46,7 @@ const dishesSlice = createSlice({
 });
 
 // Export generated action creators
-// export const {} = dishesSlice.actions;
+export const { setSelectedDish } = dishesSlice.actions;
 
 // Export the reducer to be added to the store
 export default dishesSlice.reducer;

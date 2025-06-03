@@ -19,7 +19,7 @@ import LandingPage from "./pages/LandingPage";
 import NutriPalChat from "./components/NutriPalChat";
 import Login from "./pages/Login";
 import ProfileSetup from "./pages/ProfileSetup";
-import SelectedFood from "./components/SelectedFood";
+import FoodCard from "./components/dishesComponents/FoodCard";
 import ProfilesList from "./pages/ProfilesList";
 
 const App = () => {
@@ -32,7 +32,7 @@ const App = () => {
           <Route path="/dishes" element={<Dishes />} />
           <Route path="stats" element={<Stats />} />
           <Route path="userprofile" element={<UserProfile />} />
-          <Route path="/selectedfood" element={<SelectedFood />} />
+          <Route path="/food" element={<FoodCard />} />
         </Route>
         {/* no navbar */}
         <Route>

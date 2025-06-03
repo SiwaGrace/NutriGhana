@@ -1,12 +1,17 @@
 import React, { useEffect } from "react";
 import { Flame } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { getDishes } from "../../slices/getAllDishes";
+import { getDishes, setSelectedDish } from "../../slices/getAllDishes";
 import Loading from "./Loading";
 import Error from "./Error";
+import { useNavigate } from "react-router-dom";
+import FoodCard from "./FoodCard";
 
 const DishesSuggestion = ({ searchTerm, filter }) => {
-  const { dishes, isLoading, error } = useSelector((state) => state.dishes);
+  const navigate = useNavigate();
+  const { dishes, isLoading, error, selectedDish } = useSelector(
+    (state) => state.dishes
+  );
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -55,7 +60,11 @@ const DishesSuggestion = ({ searchTerm, filter }) => {
         return (
           <div
             key={recipe.id}
-            className="flex items-center justify-between bg-white p-3 rounded-lg shadow-md border border-gray-300"
+            className="flex items-center justify-between bg-white p-3 rounded-lg shadow-md border border-gray-300 cursor-pointer"
+            onClick={() => {
+              dispatch(setSelectedDish(recipe));
+              navigate("/food"); // or your actual route
+            }}
           >
             <div className="flex items-center gap-3">
               <img
