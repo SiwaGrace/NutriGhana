@@ -7,7 +7,7 @@ export default function ProfileDishes() {
   const [filter, setFilter] = useState("all");
 
   return (
-    <div className="pt-18 px-4 bg-white">
+    <div className="pt-16 px-4 bg-white">
       {/* Title */}
       <h2 className="text-xl font-semibold mb-2 text-center text-black">
         Dish
@@ -20,12 +20,13 @@ export default function ProfileDishes() {
         {["all", "favorite", "saved"].map((type) => (
           <button
             key={type}
+            aria-label={`Filter dishes by ${type}`}
             className={`font-semibold capitalize cursor-pointer ${
               filter === type ? "text-black underline" : ""
             }`}
             onClick={() => setFilter(type)}
           >
-            {type === "saved" ? "Saved scans" : type}
+            {type === "saved" ? "Saved Dishes" : type}
           </button>
         ))}
       </div>

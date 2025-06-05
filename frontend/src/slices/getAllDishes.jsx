@@ -3,13 +3,25 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const getDishes = createAsyncThunk("dishes/getDishes", async () => {
-  const response = await axios.get(`http://localhost:5000/api/dishes/getall`);
-  // Alphabetically sort by recipe title
-  const sortedDishes = response.data.results.sort((a, b) =>
-    a.title.localeCompare(b.title)
-  );
-  console.log(response.data.results);
-  return sortedDishes;
+  try {
+    const response = await axios.get(`http://localhost:5000/api/dishes/getall`);
+    // Alphabetically sort by recipe title
+    const sortedDishes = response.data.results.sort((a, b) =>
+      a.title.localeCompare(b.title)
+    );
+    // Force favorite and saved to false initially
+    const initializedDishes = sortedDishes.map((dish) => ({
+      ...dish,
+      favorite: false,
+      saved: false,
+    }));
+    console.log(response.data.results);
+    return initializedDishes;
+  } catch (error) {
+    throw new Error(
+      "Spoonacular is currently unavailable. Please try again later."
+    );
+  }
 });
 
 const initialState = {
@@ -26,6 +38,18 @@ const dishesSlice = createSlice({
     setSelectedDish: (state, action) => {
       state.selectedDish = action.payload;
       console.log(action.payload);
+    },
+    toggleFavorite: (state, action) => {
+      const dish = state.dishes.find((d) => d.id === action.payload);
+      if (dish) {
+        dish.favorite = !dish.favorite;
+      }
+    },
+    toggleSaved: (state, action) => {
+      const dish = state.dishes.find((d) => d.id === action.payload);
+      if (dish) {
+        dish.saved = !dish.saved;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -46,7 +70,8 @@ const dishesSlice = createSlice({
 });
 
 // Export generated action creators
-export const { setSelectedDish } = dishesSlice.actions;
+export const { setSelectedDish, toggleFavorite, toggleSaved } =
+  dishesSlice.actions;
 
 // Export the reducer to be added to the store
 export default dishesSlice.reducer;
