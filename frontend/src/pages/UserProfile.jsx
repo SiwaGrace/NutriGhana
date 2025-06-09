@@ -11,7 +11,7 @@ import { signOut } from "firebase/auth";
 export default function ProfileUser() {
   const [mealReminders, setMealReminders] = useState(true);
   const [weeklyTips, setWeeklyTips] = useState(true);
-  const [email, setEmail] = useState(""); // <-- add state for email
+  const [email, setEmail] = useState("");
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -105,7 +105,7 @@ export default function ProfileUser() {
       {/* Goals */}
       <div className="p-5 w-full">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Goals</h2>
-
+        {/* setprofile */}
         <div className="bg-white p-4 shadow-xl rounded-2xl space-y-4 text-green-500">
           <div className="p-6">
             <h2 className="text-2xl font-bold mb-4">All Profiles</h2>

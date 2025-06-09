@@ -96,7 +96,7 @@ const Login = () => {
     }
   };
   return (
-    <div className="h-screen flex justify-center items-center overflow-hidden bg-white">
+    <div className="h-screen flex justify-center items-center overflow-hidden bg-white text-black">
       <div className="flex flex-col items-center text-center w-full sm:w-4/5 md:w-1/2 lg:w-1/3 p-6 space-y-4 font-Manrope">
         <h1 className="text-4xl font-bold">NutriGhana</h1>
         <h2 className="text-xl font-bold text-gray-800">{current.title}</h2>
