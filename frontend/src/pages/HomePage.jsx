@@ -8,38 +8,32 @@ import FoodLog from "../components/FoodLogCard";
 const ProfileHome = () => {
   const [selectedDay, setSelectedDay] = useState("today");
   return (
-    <div className="pt-24 px-4 bg-white min-h-screen text-black">
+    <div className="pt-8 px-4 bg-white min-h-screen text-black">
       {/* Header */}
-      {/* <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold text-gray-500">
           Good morning, <span className="font-bold text-black">Pokuaa</span>
         </h2>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 cursor-pointer">
           <img src={StreakIcon} alt="Fire" className="w-5 h-5" />
           <span className="text-gray-500 text-sm">0</span>
         </div>
-      </div> */}
+      </div>
       {/* days */}
       <div className="flex gap-4 text-gray-500 mb-4">
         {["today", "yesterday"].map((day) => (
           <button
             key={day}
             className={`font-semibold capitalize cursor-pointer ${
-              selectedDay === day ? "text-black underline" : ""
+              selectedDay === day
+                ? "bg-yellow-400 text-white px-3 py-1 rounded-full text-sm"
+                : ""
             }`}
             onClick={() => setSelectedDay(day)}
           >
             {day}
           </button>
         ))}
-      </div>
-
-      {/* Tabs */}
-      <div className="flex gap-4 mt-4">
-        <button className="bg-yellow-400 text-white px-3 py-1 rounded-full text-sm">
-          Today
-        </button>
-        <button className="text-gray-500 text-sm">yesterday</button>
       </div>
 
       {/* Calories Card */}
