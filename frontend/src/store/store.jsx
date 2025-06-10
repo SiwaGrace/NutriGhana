@@ -3,6 +3,7 @@
 // import rootReducer from "./reducers";
 import { configureStore } from "@reduxjs/toolkit";
 import dishesReducer from "../slices/getAllDishes";
+import { setProfiles } from "../slices/profileUserSlice";
 
 // import { configureStore } from "@reduxjs/toolkit";
 // import { persistStore, persistReducer } from "redux-persist";
@@ -36,5 +37,6 @@ import dishesReducer from "../slices/getAllDishes";
 export const store = configureStore({
   reducer: {
     dishes: dishesReducer,
+    profile: setProfiles, // Assuming you have a profileReducer for user profiles
   },
 });

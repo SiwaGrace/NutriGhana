@@ -7,7 +7,7 @@ export default function ProfileDishes() {
   const [filter, setFilter] = useState("all");
 
   return (
-    <div className="pt-16 px-4 bg-white">
+    <div className="pt-16 px-4 bg-white text-black">
       {/* Title */}
       <h2 className="text-xl font-semibold mb-2 text-center text-black">
         Dish

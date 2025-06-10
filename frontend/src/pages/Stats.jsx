@@ -24,7 +24,7 @@ export default function ProfileStats() {
   ];
 
   return (
-    <div className="py-18 px-4 bg-white">
+    <div className="py-18 px-4 bg-white text-black">
       {/* Title */}
       <h2 className="text-xl font-semibold text-center mb-2">Insights</h2>
 

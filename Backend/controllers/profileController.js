@@ -18,5 +18,23 @@ const getProfiles = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch profiles" });
   }
 };
+const updateProfile = async (req, res) => {
+  try {
+    const updatedProfile = await Profile.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true } // return the updated document
+    );
 
-module.exports = { createProfile, getProfiles };
+    if (!updatedProfile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    res.json(updatedProfile);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { createProfile, getProfiles, updateProfile };
