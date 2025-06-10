@@ -7,34 +7,23 @@ import { toast } from "react-toastify";
 import { auth } from "../components/firebase";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
+import EditProfile from "../components/EditProfile";
 
 export default function ProfileUser() {
   const [mealReminders, setMealReminders] = useState(true);
   const [weeklyTips, setWeeklyTips] = useState(true);
   const [email, setEmail] = useState("");
-  const [profiles, setProfiles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // On mount, get email from localStorage
+  // Load email from localStorage
   useEffect(() => {
     const storedEmail = localStorage.getItem("userEmail");
     if (storedEmail) {
       setEmail(storedEmail);
     }
-    const fetchProfiles = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:5000/api/profile");
-        setProfiles(data);
-      } catch (err) {
-        setError("Failed to fetch profiles.");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProfiles();
   }, []);
+
+  // Fetch profiles from API
 
   // Basic goals data
   // const basicGoals = [
@@ -81,7 +70,7 @@ export default function ProfileUser() {
   };
 
   return (
-    <div className="py-24 px-6 flex flex-col items-center bg-white">
+    <div className="py-24 px-6 flex flex-col items-center bg-white text-black">
       {/* Profile Section */}
       <h2 className="text-xl font-semibold mb-4">Profile</h2>
       <img
@@ -102,81 +91,7 @@ export default function ProfileUser() {
         <p className="text-3xl font-bold text-gray-300">54</p>
       </div>
 
-      {/* Goals */}
-      <div className="p-5 w-full">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Goals</h2>
-        {/* setprofile */}
-        <div className="bg-white p-4 shadow-xl rounded-2xl space-y-4 text-green-500">
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">All Profiles</h2>
-
-            {profiles.length === 0 ? (
-              <p>No profiles found.</p>
-            ) : (
-              <div className="grid gap-4">
-                {profiles.map((p, id) => (
-                  <div
-                    key={id}
-                    className=" rounded-lg p-4 shadow-sm hover:shadow-md transition"
-                  >
-                    {/* <p>
-                      <span className="font-semibold">Gender:</span> {p.gender}
-                    </p> */}
-                    {/* <p>
-                      <span className="font-semibold">Year of Birth:</span>{" "}
-                      {p.year}
-                    </p> */}
-                    <p className="flex flex-row justify-between">
-                      <span className="font-semibold">Weight Goal:</span>{" "}
-                      {p.currentWeightGoal}
-                    </p>
-
-                    <p className="flex flex-row justify-between">
-                      <span className="font-semibold">Current Weight:</span>{" "}
-                      {p.currentWeight}
-                    </p>
-
-                    <p className="flex flex-row justify-between">
-                      <span className="font-semibold">Activity Level:</span>{" "}
-                      {p.activityLevel}
-                    </p>
-                    <p className="flex flex-row justify-between">
-                      <span className="font-semibold">Dietary Goal:</span>{" "}
-                      {p.dietaryGoal}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Macronutrients section */}
-          {/* <div className="space-y-3">
-            <h3 className="font-semibold text-gray-700">Macronutrients</h3>
-
-            {macros.map((macro, index) => (
-              <div
-                key={index}
-                className={`flex justify-between items-center ${macro.bdClass} p-3`}
-              >
-                <div>
-                  <span className="font-medium text-gray-900">
-                    {macro.label}
-                  </span>
-                </div>
-                <div className="text-right flex items-center gap-2">
-                  <span className="font-bold text-gray-400">{macro.value}</span>
-                  <span className="text-gray-700">· {macro.percentage}</span>
-                  <IoIosArrowForward
-                    aria-hidden="true"
-                    className="cursor-pointer"
-                  />
-                </div>
-              </div>
-            ))}
-          </div> */}
-        </div>
-      </div>
+      <EditProfile />
 
       {/* Notifications */}
       <div className="w-full mt-6">
