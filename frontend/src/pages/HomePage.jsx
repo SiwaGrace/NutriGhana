@@ -4,6 +4,7 @@ import CarbIcon from "../assets/logo&icons/fluent_food-grains-20-filled.svg";
 import FatIcon from "../assets/logo&icons/game-icons_fat.svg";
 import StreakIcon from "../assets/logo&icons/streakIcon.svg";
 import FoodLog from "../components/FoodLogCard";
+import Streaks from "../components/Streaks";
 
 const ProfileHome = () => {
   const [selectedDay, setSelectedDay] = useState("today");
@@ -14,10 +15,7 @@ const ProfileHome = () => {
         <h2 className="text-lg font-semibold text-gray-500">
           Good morning, <span className="font-bold text-black">Pokuaa</span>
         </h2>
-        <div className="flex items-center gap-1 cursor-pointer">
-          <img src={StreakIcon} alt="Fire" className="w-5 h-5" />
-          <span className="text-gray-500 text-sm">0</span>
-        </div>
+        <Streaks />
       </div>
       {/* days */}
       <div className="flex gap-4 text-gray-500 mb-4">
