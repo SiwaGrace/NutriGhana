@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import StreakIcon from "../assets/logo&icons/vector.svg";
+import fire from "../assets/logo&icons/Vector (1).svg";
 
 const EditProfile = () => {
   const [profiles, setProfiles] = useState([]);
@@ -56,7 +57,11 @@ const EditProfile = () => {
                   <div className="collapse collapse-arrow   border-b-1 border-gray-300 border-opacity-50">
                     <input type="radio" name="my-accordion-4" />
                     <div className="collapse-title font-semibold">
-                      <span className="font-semibold">Current Weight:</span>
+                      <span className="font-semibold flex gap-3">
+                        {" "}
+                        <img src={fire} alt="" />
+                        Current Weight:
+                      </span>
                     </div>
                     <div className="collapse-content text-sm">
                       {p.currentWeight}
@@ -65,7 +70,11 @@ const EditProfile = () => {
                   <div className="collapse collapse-arrow  border-b-1 border-gray-300 border-opacity-50 ">
                     <input type="radio" name="my-accordion-4" />
                     <div className="collapse-title font-semibold">
-                      <span className="font-semibold">Activity Level:</span>
+                      <span className="font-semibold flex gap-3">
+                        {" "}
+                        <img src={StreakIcon} alt="" />
+                        Activity Level:
+                      </span>
                     </div>
                     <div className="collapse-content text-sm">
                       {p.activityLevel}
@@ -74,7 +83,11 @@ const EditProfile = () => {
                   <div className="collapse collapse-arrow   border-b-1 border-gray-300 border-opacity-50">
                     <input type="radio" name="my-accordion-4" />
                     <div className="collapse-title font-semibold">
-                      <span className="font-semibold">Dietary Goal:</span>
+                      <span className="font-semibold flex gap-3">
+                        {" "}
+                        <img src={StreakIcon} alt="" />
+                        Dietary Goal:
+                      </span>
                     </div>
                     <div className="collapse-content text-sm">
                       {p.dietaryGoal}
