@@ -26,7 +26,7 @@ const Streaks = () => {
       if (localStreak.lastLoggedDate === today) {
         dispatch(setStreak(localStreak));
       } else if (localStreak.lastLoggedDate === yesterday) {
-        // 🔁 Reset after 7
+        // 🔁 Reset after 7 del
         let newCount = localStreak.count + 1;
         // if (newCount > 7) newCount = 1;
 
@@ -36,14 +36,32 @@ const Streaks = () => {
         };
         saveStreakToLocal(updated);
         dispatch(setStreak(updated));
-        toast.success(
-          `🔥 You're on a ${updated.count}-day streak! Keep it up!`
-        );
+        // 🎉 Weekly visual cue
+        if (newCount % 7 === 0) {
+          const weekNum = newCount / 7;
+          toast.success(
+            `🎉 Week ${weekNum} complete! Starting Week ${weekNum + 1}...`,
+            {
+              duration: 6000,
+              style: {
+                background: "#d1fae5", // green-100
+                color: "#065f46", // green-800
+                fontWeight: "bold",
+                borderRadius: "8px",
+                padding: "12px 16px",
+              },
+            }
+          );
+        } else {
+          toast.success(
+            `🔥 You're on a ${updated.count}-day streak! Keep it up!`
+          );
+        }
       } else {
         const reset = { count: 1, lastLoggedDate: today };
         saveStreakToLocal(reset);
         dispatch(setStreak(reset));
-        toast("🔁 Streak reset. Start fresh today!");
+        toast("🔁 Streak reset. Start fresh today Day 1!");
       }
     }
   }, [dispatch]);
@@ -53,8 +71,10 @@ const Streaks = () => {
   };
 
   const renderDays = () => {
+    const currentDayInWeek = (streak.count - 1) % 7; // 0-based index
+
     return Array.from({ length: 7 }, (_, index) => {
-      const active = index < streak.count;
+      const active = index <= currentDayInWeek;
       return (
         <div key={index} className="flex flex-col items-center mx-1">
           <div
@@ -90,8 +110,8 @@ const Streaks = () => {
           </div>
         )}
       </div>
-      {/* del */}
-      <button
+      {/* del try streak*/}
+      {/* <button
         onClick={() => {
           // Simulate a new day manually by adding 1 to streak count
           const newCount = streak.count + 1;
@@ -111,7 +131,7 @@ const Streaks = () => {
         className="mt-4 px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
       >
         Test Next Day
-      </button>
+      </button> */}
     </>
   );
 };
