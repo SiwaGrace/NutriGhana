@@ -71,3 +71,8 @@
 .fade-in {
   animation: fadeIn 0.3s ease-out;
 }
+
+body {
+  @apply bg-white;
+  color: #000;
+}

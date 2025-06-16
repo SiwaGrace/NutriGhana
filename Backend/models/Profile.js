@@ -7,7 +7,7 @@ const profileSchema = new mongoose.Schema(
     height: String,
     weight: String,
     activityLevel: String,
-    dietaryLevel: String,
+    dietaryGoal: String,
     currentWeight: String,
     currentWeightGoal: String,
   },

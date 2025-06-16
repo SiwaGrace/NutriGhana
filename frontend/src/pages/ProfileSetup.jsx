@@ -111,7 +111,7 @@ export default function ProfileSetup() {
   const handleSubmit = async () => {
     const userData = {
       activityLevel,
-      dietaryGoals,
+      dietaryGoal,
       currentWeight,
       currentWeightGoal,
     };
