@@ -1,11 +1,12 @@
 import { SlSocialGoogle } from "react-icons/sl";
 import { FaApple } from "react-icons/fa6";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   GoogleAuthProvider,
   OAuthProvider,
   signInWithPopup,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "../components/firebase";
 import { toast } from "react-toastify";
@@ -33,10 +34,21 @@ const authForms = {
 };
 
 const Login = () => {
-  const [authType, setAuthType] = useState("signUp"); // signUp first as you wanted
+  const [authType, setAuthType] = useState("signUp");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const current = authForms[authType];
+
+  // Redirect if already logged in (using Firebase Auth)
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/home", { replace: true });
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
+
   // Function to block back navigation after login
   const blockBackNavigation = () => {
     window.history.pushState(null, "", window.location.href);
@@ -44,6 +56,7 @@ const Login = () => {
       window.history.go(1);
     };
   };
+
   const handleGoogleAuth = async () => {
     const provider = new GoogleAuthProvider();
     setLoading(true);
@@ -51,7 +64,6 @@ const Login = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const isNewUser = result.additionalUserInfo?.isNewUser;
-      localStorage.setItem("userEmail", user.email);
       toast.success(
         `Signed ${authType === "signUp" ? "up" : "in"} with Google!`
       );
@@ -70,31 +82,33 @@ const Login = () => {
       setLoading(false);
     }
   };
-  // const handleAppleAuth = async () => {
-  //   const provider = new OAuthProvider("apple.com");
-  //   setLoading(true);
-  //   try {
-  //     const result = await signInWithPopup(auth, provider);
-  //     const user = result.user;
-  //     const isNewUser = result.additionalUserInfo?.isNewUser;
-  //     toast.success(
-  //       `Signed ${authType === "signUp" ? "up" : "in"} with Apple!`
-  //     );
-  //     console.log("Apple user:", user);
-  //     if (isNewUser) {
-  //       navigate("/ProfileSetup", { replace: true });
-  //       blockBackNavigation();
-  //     } else {
-  //       navigate("/home", { replace: true });
-  //       blockBackNavigation();
-  //     }
-  //   } catch (error) {
-  //     console.error("Apple sign-in error:", error.message);
-  //     toast.error(error.message || "Apple sign-in failed");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+
+  const handleAppleAuth = async () => {
+    const provider = new OAuthProvider("apple.com");
+    setLoading(true);
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const isNewUser = result.additionalUserInfo?.isNewUser;
+      toast.success(
+        `Signed ${authType === "signUp" ? "up" : "in"} with Apple!`
+      );
+      console.log("Apple user:", user);
+      if (isNewUser) {
+        navigate("/ProfileSetup", { replace: true });
+        blockBackNavigation();
+      } else {
+        navigate("/home", { replace: true });
+        blockBackNavigation();
+      }
+    } catch (error) {
+      console.error("Apple sign-in error:", error.message);
+      toast.error(error.message || "Apple sign-in failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="h-screen flex justify-center items-center overflow-hidden bg-white text-black">
       <div className="flex flex-col items-center text-center w-full sm:w-4/5 md:w-1/2 lg:w-1/3 p-6 space-y-4 font-Manrope">
@@ -112,7 +126,7 @@ const Login = () => {
           </span>
         </button>
         <button
-          // onClick={handleAppleAuth}
+          onClick={handleAppleAuth}
           aria-label="Sign in with Apple"
           className={`flex items-center justify-center w-full border border-gray-300 font-bold py-6 rounded-full shadow-md space-x-3 cursor-pointer text-black ${
             loading ? "opacity-50 cursor-not-allowed" : ""

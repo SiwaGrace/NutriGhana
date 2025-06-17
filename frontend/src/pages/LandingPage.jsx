@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SplashScreen from "../components/SplashScreen";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../components/firebase";
 
 const foodItems = [
   {
@@ -27,6 +28,16 @@ const foodItems = [
 const Home = () => {
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
+
+  // Redirect if already logged in (using Firebase Auth)
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/home", { replace: true });
+      }
+    });
+    return () => unsubscribe();
+  }, [navigate]);
 
   const handleNext = () => {
     if (progress < foodItems.length - 1) {
