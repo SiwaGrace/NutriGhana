@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const profileSchema = new mongoose.Schema(
   {
+    userId: { type: String, required: false }, // unique removed
     gender: String,
     yearOfBirth: String,
     height: String,

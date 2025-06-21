@@ -8,10 +8,9 @@ const {
 
 const profileRouter = express.Router();
 
-profileRouter.post("/", createProfile);
-profileRouter.get("/", getProfiles);
-profileRouter.get("/:id", getProfileById);
-
-profileRouter.put("/:id", updateProfile);
+profileRouter.post("/", createProfile); // Create a new profile
+profileRouter.get("/", getProfiles); // Get all profiles
+profileRouter.get("/:id", getProfileById); // Get a profile by ID
+profileRouter.put("/:id", updateProfile); // Update a profile by ID
 
 module.exports = profileRouter;
