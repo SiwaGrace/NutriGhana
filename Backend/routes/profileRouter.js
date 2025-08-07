@@ -1,16 +1,23 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   createProfile,
   getProfiles,
   getProfileById,
   updateProfile,
-} = require("../controllers/profileController");
+} from "../controllers/profileController.js";
+import validateObjectId from "../middleware/validateObjectId.js";
 
-const profileRouter = express.Router();
+import profileAuth from "../middleware/profileAuth.js";
 
-profileRouter.post("/", createProfile); // Create a new profile
-profileRouter.get("/", getProfiles); // Get all profiles
-profileRouter.get("/:id", getProfileById); // Get a profile by ID
-profileRouter.put("/:id", updateProfile); // Update a profile by ID
+const router = express.Router();
 
-module.exports = profileRouter;
+router.post("/", createProfile);
+router.get("/", getProfiles);
+
+// ✅ New route to get profile by current logged-in user (ID from token)
+router.get("/me", profileAuth, getProfileById);
+
+router.get("/:id", validateObjectId, getProfileById);
+router.put("/:id", validateObjectId, updateProfile);
+
+export default router;

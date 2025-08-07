@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import Woman from "../assets/img/woman1.jpg";
-import axios from "axios";
+
 import { toast } from "react-toastify";
 import { auth } from "../components/firebase";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,19 @@ export default function ProfileUser() {
   const [userName, setUserName] = useState("");
 
   // Load user info from Firebase Auth
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setEmail(user.email || "");
+        setUserName(user.displayName || "");
+      } else {
+        setEmail("");
+        setUserName("");
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {

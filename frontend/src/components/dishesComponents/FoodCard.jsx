@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ArrowLeft, Heart } from "lucide-react";
 import FishIcon from "../../assets/logo&icons/fa-solid_fish.svg";
 import CarbIcon from "../../assets/logo&icons/fluent_food-grains-20-filled.svg";
 import FatIcon from "../../assets/logo&icons/game-icons_fat.svg";
-import bg from "../../assets/img/Kenkey.jpg";
+
 import { Link } from "react-router-dom";
 
 export default function FoodCard() {
@@ -39,9 +39,9 @@ export default function FoodCard() {
         <div className="px-6 py-10 max-w-md mx-auto rounded-lg shadow-sm">
           {/* Header */}
           <div className="flex  items-center space-x-30 mb-4">
-            <p className="border p-2 rounded-full">
+            <Link to="/dishes" className="border p-2 rounded-full">
               <ArrowLeft className="w-6 h-6" />
-            </p>
+            </Link>
             <span className="text-lg font-medium">Selected food</span>
           </div>
           {/* food image */}

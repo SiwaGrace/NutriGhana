@@ -17,11 +17,12 @@ import UserProfile from "./pages/UserProfile";
 // Pages and Components
 import LandingPage from "./pages/LandingPage";
 import NutriPalChat from "./components/NutriPalChat";
-import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import ProfileSetup from "./pages/ProfileSetup";
 import FoodCard from "./components/dishesComponents/FoodCard";
 import ProfilesList from "./pages/ProfilesList";
 import PrivateRoute from "./pages/PrivateRoute";
+import ForgetPassword from "./components/ForgetPassword";
 
 const App = () => {
   const myRoute = createBrowserRouter(
@@ -73,7 +74,8 @@ const App = () => {
         {/* no navbar */}
         <Route>
           <Route index element={<LandingPage />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Signup />} />
+          <Route path="/forgetPassword" element={<ForgetPassword />} />
           <Route path="/profileroute" element={<ProfileSetup />} />
           <Route path="/ProfileSetup" element={<ProfileSetup />} />
           <Route path="/see" element={<ProfilesList />} />

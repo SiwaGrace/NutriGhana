@@ -7,15 +7,18 @@ import App from "./App.jsx";
 import { store } from "./store/store.jsx";
 import { Provider } from "react-redux";
 import { Toaster } from "react-hot-toast";
+import { AppContextProvider } from "./context/AppContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     {/* <PersistGate loading={null} persistor={persistor}> */}
-    <StrictMode>
-      <App />
+    <AppContextProvider>
+      <StrictMode>
+        <App />
+        <Toaster />
+      </StrictMode>
+    </AppContextProvider>
 
-      <Toaster />
-    </StrictMode>
     {/* </PersistGate> */}
   </Provider>
 );

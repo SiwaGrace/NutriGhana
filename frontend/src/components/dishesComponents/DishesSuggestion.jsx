@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 // , HeartFilled
 import { Flame, Heart, Plus, Check } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,9 +17,7 @@ const DishesSuggestion = ({ searchTerm, filter }) => {
   // const [visibleDishId, setVisibleDishId] = useState(null);
 
   const navigate = useNavigate();
-  const { dishes, isLoading, error, selectedDish } = useSelector(
-    (state) => state.dishes
-  );
+  const { dishes, isLoading, error } = useSelector((state) => state.dishes);
 
   const dispatch = useDispatch();
   useEffect(() => {

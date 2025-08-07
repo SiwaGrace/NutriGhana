@@ -1,6 +1,6 @@
-const axios = require("axios");
-const Profile = require("../models/Profile");
-require("dotenv").config();
+import axios from "axios";
+import dotenv from "dotenv";
+dotenv.config();
 
 const getDishes = async (req, res) => {
   try {
@@ -22,6 +22,4 @@ const getDishes = async (req, res) => {
   }
 };
 
-module.exports = {
-  getDishes,
-};
+export { getDishes };
