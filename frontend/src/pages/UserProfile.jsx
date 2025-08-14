@@ -1,66 +1,51 @@
 import { useState, useEffect } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import Woman from "../assets/img/woman1.jpg";
-import axios from "axios";
 
 import { toast } from "react-toastify";
 import { auth } from "../components/firebase";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
+import { signOut, onAuthStateChanged } from "firebase/auth";
 import EditProfile from "../components/EditProfile";
 
 export default function ProfileUser() {
   const [mealReminders, setMealReminders] = useState(true);
   const [weeklyTips, setWeeklyTips] = useState(true);
   const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
 
-  // On mount, get email from localStorage
-  // Load email from localStorage
+  // Load user info from Firebase Auth
   useEffect(() => {
-    const storedEmail = localStorage.getItem("userEmail");
-    if (storedEmail) {
-      setEmail(storedEmail);
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setEmail(user.email || "");
+        setUserName(user.displayName || "");
+      } else {
+        setEmail("");
+        setUserName("");
+      }
+    });
+    return () => unsubscribe();
   }, []);
 
-  // Fetch profiles from API
-
-  // Basic goals data
-  // const basicGoals = [
-  //   { label: "Weight goal", value: "130kg", bdClass: "border-b" },
-  //   { label: "Calories goal", value: "13000 Kcal", bdClass: "border-b" },
-  // ];
-
-  // Macronutrients data
-  // const macros = [
-  //   {
-  //     label: "Protein",
-  //     value: "124 g",
-  //     percentage: "30%",
-  //     bdClass: "border-b",
-  //   },
-  //   {
-  //     label: "Carbs",
-  //     value: "120 g",
-  //     percentage: "30%",
-  //     bdClass: "border-b",
-  //   },
-  //   {
-  //     label: "Fat",
-  //     value: "124 g",
-  //     percentage: "30%",
-  //     bdClass: "border-b",
-  //   },
-  // ];
-
-  //logout
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setEmail(user.email || "");
+        setUserName(user.displayName || "");
+      } else {
+        setEmail("");
+        setUserName("");
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      localStorage.removeItem("userEmail");
       toast.success("Logged out successfully!");
       navigate("/login", { replace: true });
     } catch (error) {
@@ -78,8 +63,9 @@ export default function ProfileUser() {
         alt="Profile"
         className="w-24 h-24 rounded-full border-4 border-gray-300 cursor-pointer"
       />
-      <h3 className="text-lg font-semibold mt-2">Pokuaa</h3>
-      {/* Replace hardcoded email with dynamic email */}
+      <h3 className="text-lg font-semibold mt-2">
+        {userName || "No name found"}
+      </h3>
       <p className="text-gray-500">{email || "No email found"}</p>
       <button className="text-red-500 text-sm mt-1 cursor-pointer">
         change email

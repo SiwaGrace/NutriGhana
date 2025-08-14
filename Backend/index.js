@@ -1,48 +1,46 @@
-// express
-const express = require("express");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-require("dotenv").config();
-const cors = require("cors");
-const PORT = process.env.PORT || 5000;
-// imported routers
-const dishRouter = require("./routes/dishesRouter");
-const profileRouter = require("./routes/profileRouter");
+import dotenv from "dotenv";
+dotenv.config();
 
-// server
+import express from "express";
+import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+
+import dishRouter from "./routes/dishesRouter.js";
+import profileRouter from "./routes/profileRouter.js";
+import authRouter from "./routes/authRoute.js";
+import userRouter from "./routes/userRoute.js";
+
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// anabling cors with specific origin requirement
 const corsOptions = {
   origin: ["http://localhost:5173", "https://your-frontend.com"],
   methods: ["GET", "POST", "DELETE", "PUT"],
   credentials: true,
 };
+
 app.use(cors(corsOptions));
+app.use(cookieParser());
+app.use(express.json());
 
-// routers
-
-// body parser middleware
-app.use(bodyParser.json());
-
-// Routers
 app.use("/api/dishes", dishRouter);
 app.use("/api/profile", profileRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
-// connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log(" Connected to MongoDB successfully");
+    console.log("✅ Connected to MongoDB successfully");
     app.listen(PORT, () => {
-      console.log(` Server is running on http://localhost:${PORT}`);
+      console.log(`🚀 Server running at http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
-    console.error(" Database connection failed:", err);
+    console.error("❌ Database connection failed:", err);
     process.exit(1);
   });
-
 // app.listen(PORT, () => {
 //   console.log(`Server running on port ${PORT}`);
 // });

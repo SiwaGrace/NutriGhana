@@ -3,55 +3,84 @@ import { IoMdCheckmarkCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 
+// Helper: Calculate BMR and calories
+function calculateCalories({
+  gender,
+  age,
+  height,
+  weight,
+  activityLevel,
+  goal,
+}) {
+  // Mifflin-St Jeor Equation
+  let bmr =
+    gender === "Male"
+      ? 10 * weight + 6.25 * height - 5 * age + 5
+      : 10 * weight + 6.25 * height - 5 * age - 161;
+
+  // Activity multiplier
+  const activityMap = {
+    "Not active": 1.2,
+    "Lightly Active": 1.375,
+    Active: 1.55,
+    "Very Active": 1.725,
+  };
+  let calories = bmr * (activityMap[activityLevel] || 1.2);
+
+  // Goal adjustment
+  if (goal === "Weight loss") calories -= 500;
+  if (goal === "Weight gain" || goal === "Muscle gain") calories += 300;
+
+  return Math.round(calories);
+}
+
+// Helper: Convert cm to feet and inches
+function cmToFeetInches(cm) {
+  const totalInches = Math.round(cm / 2.54);
+  const feet = Math.floor(totalInches / 12);
+  const inches = totalInches % 12;
+  return `${feet}'${inches}"`;
+}
+
 export default function ProfileSetup() {
   const [gender, setGender] = useState("");
   const [year, setYear] = useState("");
-  const [height, setHeight] = useState("");
-
+  const [height, setHeight] = useState(""); // in cm
   const [step, setStep] = useState(1);
-  const [age, setAge] = useState("");
   const [activityLevel, setActivityLevel] = useState("");
   const [dietaryGoal, setDietaryGoal] = useState("");
-  const [currentWeight, setCurrentWeight] = useState("");
+  const [currentWeight, setCurrentWeight] = useState(""); // in kg
   const [currentWeightGoal, setCurrentWeightGoal] = useState("");
+  const [error, setError] = useState("");
+  const [calories, setCalories] = useState(null);
 
   const navigate = useNavigate();
 
-  const years = Array.from({ length: 26 }, (_, i) => 1995 + i);
-  const heightOptions = [
-    "100 cm",
-    "105 cm",
-    "110 cm",
-    "115 cm",
-    "120 cm",
-    "125 cm",
-    "130 cm",
-    "135 cm",
-    "140 cm",
-    "145 cm",
-    "150 cm",
-    "155 cm",
-    "160 cm",
-    "165 cm",
-    "170 cm",
-  ];
-  const weightOptions = [
-    "10kg",
-    "50 kg",
-    "60 kg",
-    "70 kg",
-    "80 kg",
-    "90 kg",
-    "100 kg",
-    "110 kg",
-    "120 kg",
-    "130 kg",
-    "140 kg",
-    "150 kg",
-    "160 kg",
-    "170 kg",
-    "180 kg",
-  ];
+  // Prevent users with a profile from accessing this page
+  useEffect(() => {
+    async function checkProfile() {
+      try {
+        const res = await fetch("http://localhost:5000/api/profile", {
+          credentials: "include", // or add auth headers if needed
+        });
+        if (res.ok) {
+          const data = await res.json();
+          // If profile exists, redirect to home
+          if (data && Object.keys(data).length > 0) {
+            navigate("/home", { replace: true });
+          }
+        }
+      } catch {
+        // Optionally handle error (e.g., user not logged in)
+      }
+    }
+    checkProfile();
+  }, [navigate]);
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 80 }, (_, i) => currentYear - i);
+  const heightOptions = Array.from({ length: 41 }, (_, i) => 140 + i); // 140-180cm
+  const weightOptions = Array.from({ length: 91 }, (_, i) => 40 + i); // 40-130kg
   const howActive = ["Not active", "Lightly Active", "Active", "Very Active"];
   const dietaryGoals = [
     "Weight loss",
@@ -59,61 +88,88 @@ export default function ProfileSetup() {
     "Muscle gain",
     "Maintenance",
   ];
-  const currentWeightOptions = weightOptions;
-  const CurrentWeightGoalOptions = weightOptions;
 
   useEffect(() => {
     if (step === 6) {
       const timer = setTimeout(() => {
         navigate("/home");
       }, 10000);
-
       return () => clearTimeout(timer);
     }
   }, [step, navigate]);
+
+  // Calculate calories when all info is available
+  useEffect(() => {
+    if (
+      gender &&
+      year &&
+      height &&
+      activityLevel &&
+      dietaryGoal &&
+      currentWeight
+    ) {
+      const age = currentYear - Number(year);
+      setCalories(
+        calculateCalories({
+          gender,
+          age,
+          height: Number(height),
+          weight: Number(currentWeight),
+          activityLevel,
+          goal: dietaryGoal,
+        })
+      );
+    }
+  }, [gender, year, height, activityLevel, dietaryGoal, currentWeight]);
 
   const resetForm = () => {
     setGender("");
     setYear("");
     setHeight("");
-
-    setAge("");
     setActivityLevel("");
     setDietaryGoal("");
     setCurrentWeight("");
     setCurrentWeightGoal("");
     setStep(1);
+    setError("");
+    setCalories(null);
   };
 
   const handleNext = () => {
-    if (
-      !gender ||
-      !year ||
-      (step === 2 && !height) ||
-      (step === 3 && !activityLevel) ||
-      (step === 4 && !dietaryGoal) ||
-      (step === 5 && (!currentWeight || !currentWeightGoal))
-    ) {
-      alert("Please fill out all fields.");
+    setError("");
+    if (step === 1 && (!gender || !year)) {
+      setError("Please select your gender and year of birth.");
       return;
     }
-
-    if (step === 5) {
-      setStep(6);
+    if (step === 2 && !height) {
+      setError("Please select your height.");
       return;
     }
-
-    if (step < 6) {
-      setStep(step + 1);
+    if (step === 3 && !activityLevel) {
+      setError("Please select your activity level.");
+      return;
     }
+    if (step === 4 && !dietaryGoal) {
+      setError("Please select your dietary goal.");
+      return;
+    }
+    if (step === 5 && (!currentWeight || !currentWeightGoal)) {
+      setError("Please select your current and goal weight.");
+      return;
+    }
+    setStep(step + 1);
   };
 
   const handleSubmit = async () => {
     const userData = {
+      gender,
+      year,
+      height,
       activityLevel,
       dietaryGoal,
       currentWeight,
       currentWeightGoal,
+      calories,
     };
 
     try {
@@ -126,19 +182,48 @@ export default function ProfileSetup() {
       });
 
       if (response.ok) {
-        alert("Submitted success!");
-        setStep(6); // move to success page or reset
+        localStorage.setItem("recommendedCalories", calories); // Save calories for HomePage
+        setStep(6);
       } else {
-        alert("Failed to submit. Try again.");
+        setError("Failed to submit. Try again.");
       }
-    } catch (error) {
-      console.error("Submission error:", error);
-      alert("Server error. Try again later.");
+    } catch {
+      setError("Server error. Try again later.");
     }
   };
 
+  // Progress bar
+  const steps = ["Profile", "Height", "Activity", "Goal", "Weight", "Summary"];
+
   return (
-    <div className="flex flex-col items-center p-6 h-screen justify-center space-y-12 bg-white text-black">
+    <div className="flex flex-col items-center p-6 h-screen justify-center space-y-8 bg-white text-black">
+      {/* Progress Bar */}
+      <div className="w-full max-w-xl flex items-center mb-4">
+        {steps.map((label, idx) => (
+          <div key={label} className="flex-1 flex flex-col items-center">
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                step > idx
+                  ? "bg-yellow-500 text-white"
+                  : "bg-gray-200 text-gray-600"
+              }`}
+            >
+              {idx + 1}
+            </div>
+            <span className="text-xs mt-1">{label}</span>
+            {idx < steps.length - 1 && (
+              <div className="w-full h-1 bg-gray-200 my-1">
+                <div
+                  className={`h-1 ${step > idx + 1 ? "bg-yellow-500" : ""}`}
+                ></div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {error && <div className="text-red-500 font-semibold mb-2">{error}</div>}
+
       {step === 1 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
@@ -162,14 +247,13 @@ export default function ProfileSetup() {
               ))}
             </div>
           </div>
-
           <div className="w-full mb-8">
             <p className="text-lg font-bold mb-2">Year of Birth</p>
             <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-60 overflow-y-auto">
               {years.map((yr) => (
                 <button
                   key={yr}
-                  className={`w-full py-5 px-6 text-lg font-bold transition duration-200 cursor-pointer ${
+                  className={`w-full py-3 px-6 text-lg font-bold transition duration-200 cursor-pointer ${
                     year === String(yr)
                       ? "bg-gray-300 text-black"
                       : "text-black hover:bg-gray-400"
@@ -181,7 +265,6 @@ export default function ProfileSetup() {
               ))}
             </div>
           </div>
-
           <button
             className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer"
             onClick={handleNext}
@@ -194,45 +277,40 @@ export default function ProfileSetup() {
       {step === 2 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
-            Height and Weight
+            Height
           </h2>
-
           <div className="w-full mb-6">
-            <p className="text-lg font-bold mb-2">Height</p>
+            <p className="text-lg font-bold mb-2">Height (ft/in)</p>
             <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-40 overflow-y-auto">
               {heightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-5 rounded-md text-lg font-bold transition duration-200 cursor-pointer ${
-                    height === option
+                  className={`w-full py-3 rounded-md text-lg font-bold transition duration-200 cursor-pointer ${
+                    height === String(option)
                       ? "bg-gray-300"
                       : "text-black hover:bg-gray-400"
                   }`}
-                  onClick={() => setHeight(option)}
+                  onClick={() => setHeight(String(option))}
                 >
-                  {option}
+                  {cmToFeetInches(option)} ({option} cm)
                 </button>
               ))}
             </div>
           </div>
-
-          <div className="flex justify-between w-full mt-6">
-            <button
-              className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 sm:w-auto cursor-pointer"
-              onClick={handleNext}
-            >
-              Next
-            </button>
-          </div>
+          <button
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer"
+            onClick={handleNext}
+          >
+            Next
+          </button>
         </>
       )}
 
       {step === 3 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">
-            How active are you
+            How active are you?
           </h2>
-
           <div className="w-full flex flex-col items-center gap-4">
             {howActive.map((preference) => (
               <button
@@ -248,15 +326,12 @@ export default function ProfileSetup() {
               </button>
             ))}
           </div>
-
-          <div className="flex justify-between w-full mt-10">
-            <button
-              className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 sm:w-auto cursor-pointer"
-              onClick={handleNext}
-            >
-              Next
-            </button>
-          </div>
+          <button
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-10 cursor-pointer"
+            onClick={handleNext}
+          >
+            Next
+          </button>
         </>
       )}
 
@@ -265,7 +340,6 @@ export default function ProfileSetup() {
           <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">
             What is your dietary goal?
           </h2>
-
           <div className="w-full flex flex-col items-center gap-4">
             {dietaryGoals.map((preference) => (
               <button
@@ -281,15 +355,12 @@ export default function ProfileSetup() {
               </button>
             ))}
           </div>
-
-          <div className="flex justify-between w-full mt-10">
-            <button
-              className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 sm:w-auto cursor-pointer"
-              onClick={handleNext}
-            >
-              Next
-            </button>
-          </div>
+          <button
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-10 cursor-pointer"
+            onClick={handleNext}
+          >
+            Next
+          </button>
         </>
       )}
 
@@ -298,45 +369,42 @@ export default function ProfileSetup() {
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
             Current and Goal Weight
           </h2>
-
           <div className="w-full mb-6">
-            <p className="text-lg font-bold mb-2">Current Weight</p>
+            <p className="text-lg font-bold mb-2">Current Weight (kg)</p>
             <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-40 overflow-y-auto">
-              {currentWeightOptions.map((option) => (
+              {weightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-5 rounded-md text-sm font-medium transition duration-200 cursor-pointer${
-                    currentWeight === option
+                  className={`w-full py-3 rounded-md text-lg font-bold transition duration-200 cursor-pointer${
+                    currentWeight === String(option)
                       ? " bg-gray-300"
                       : " text-black hover:bg-gray-200"
                   }`}
-                  onClick={() => setCurrentWeight(option)}
+                  onClick={() => setCurrentWeight(String(option))}
                 >
-                  {option}
+                  {option} kg
                 </button>
               ))}
             </div>
           </div>
-
           <div className="w-full mb-6">
-            <p className="text-lg font-bold mb-2">Weight Goal</p>
+            <p className="text-lg font-bold mb-2">Weight Goal (kg)</p>
             <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-40 overflow-y-auto">
-              {CurrentWeightGoalOptions.map((option) => (
+              {weightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-5 rounded-md text-sm font-medium transition duration-200 cursor-pointer${
-                    currentWeightGoal === option
+                  className={`w-full py-3 rounded-md text-lg font-bold transition duration-200 cursor-pointer${
+                    currentWeightGoal === String(option)
                       ? " bg-gray-300"
                       : " text-black hover:bg-gray-200"
                   }`}
-                  onClick={() => setCurrentWeightGoal(option)}
+                  onClick={() => setCurrentWeightGoal(String(option))}
                 >
-                  {option}
+                  {option} kg
                 </button>
               ))}
             </div>
           </div>
-
           <button
             className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer"
             onClick={() => {
@@ -355,14 +423,17 @@ export default function ProfileSetup() {
           <h2 className="text-4xl font-medium text-center text-black">
             Profile successfully created!
           </h2>
+          {calories && (
+            <div className="mt-4 text-xl text-center text-gray-700">
+              Your recommended daily calories:{" "}
+              <span className="font-bold text-yellow-600">{calories} kcal</span>
+            </div>
+          )}
           <p className="mt-2 text-gray-600 text-sm text-center">
             Redirecting to your dashboard in 10 seconds...
           </p>
           <button
-            onClick={() => {
-              resetForm();
-              setStep(1);
-            }}
+            onClick={resetForm}
             className="mt-6 bg-yellow-500 px-12 py-4 rounded-full text-lg font-semibold text-white hover:bg-yellow-600 cursor-pointer"
           >
             Start Over

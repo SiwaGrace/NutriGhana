@@ -3,7 +3,7 @@
 // import rootReducer from "./reducers";
 import { configureStore } from "@reduxjs/toolkit";
 import dishesReducer from "../slices/getAllDishes";
-import { setProfiles } from "../slices/profileUserSlice";
+import profileReducer from "../slices/profileUserSlice";
 import streakReducer from "../slices/streakSlice";
 
 // import { configureStore } from "@reduxjs/toolkit";
@@ -38,7 +38,7 @@ import streakReducer from "../slices/streakSlice";
 export const store = configureStore({
   reducer: {
     dishes: dishesReducer,
-    profile: setProfiles, // Assuming you have a profileReducer for user profiles
+    profiles: profileReducer,
     streak: streakReducer,
   },
 });

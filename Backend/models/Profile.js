@@ -1,7 +1,8 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const profileSchema = new mongoose.Schema(
   {
+    userId: { type: String, required: false }, // unique removed
     gender: String,
     yearOfBirth: String,
     height: String,
@@ -14,4 +15,7 @@ const profileSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Profile", profileSchema);
+const Profile =
+  mongoose.models.Profile || mongoose.model("Profile", profileSchema);
+
+export default Profile;

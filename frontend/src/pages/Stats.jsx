@@ -11,7 +11,7 @@ import {
 import { ChevronDown } from "lucide-react";
 
 export default function ProfileStats() {
-  const [selectedPeriod, setSelectedPeriod] = useState("Weekly");
+  const [selectedPeriod] = useState("Weekly");
 
   const data = [
     { day: "SUN", Protein: 600, Carbs: 800, Fat: 200 },
