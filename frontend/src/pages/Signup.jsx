@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 import Logo from "../assets/logo&icons/nutrighanaLogo.svg";
-import Login from "./Login"; // this is your OAuth component
+// import Login from "./Login"; // this is your OAuth component
 import { AppContent } from "../context/AppContext";
 
 const Signup = () => {
@@ -166,7 +166,7 @@ const Signup = () => {
         <div className="text-center mt-6">
           <h3 className="text-gray-600">Or continue with</h3>
           <div className="flex justify-center gap-4 mt-4">
-            <Login />
+            {/* <Login /> */}
           </div>
         </div>
       )}
