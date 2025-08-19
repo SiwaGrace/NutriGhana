@@ -41,3 +41,6 @@ mongoose
     console.error("❌ Database connection failed:", err);
     process.exit(1);
   });
+// app.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
