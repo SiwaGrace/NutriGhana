@@ -57,25 +57,25 @@ export default function ProfileSetup() {
   const navigate = useNavigate();
 
   // Prevent users with a profile from accessing this page
-  useEffect(() => {
-    async function checkProfile() {
-      try {
-        const res = await fetch("http://localhost:5000/api/profile", {
-          credentials: "include", // or add auth headers if needed
-        });
-        if (res.ok) {
-          const data = await res.json();
-          // If profile exists, redirect to home
-          if (data && Object.keys(data).length > 0) {
-            navigate("/home", { replace: true });
-          }
-        }
-      } catch {
-        // Optionally handle error (e.g., user not logged in)
-      }
-    }
-    checkProfile();
-  }, [navigate]);
+  // useEffect(() => {
+  //   async function checkProfile() {
+  //     try {
+  //       const res = await fetch("http://localhost:5000/api/profile", {
+  //         credentials: "include", // or add auth headers if needed
+  //       });
+  //       if (res.ok) {
+  //         const data = await res.json();
+  //         // If profile exists, redirect to home
+  //         if (data && Object.keys(data).length > 0) {
+  //           navigate("/home", { replace: true });
+  //         }
+  //       }
+  //     } catch {
+  //       // Optionally handle error (e.g., user not logged in)
+  //     }
+  //   }
+  //   checkProfile();
+  // }, [navigate]);
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 80 }, (_, i) => currentYear - i);

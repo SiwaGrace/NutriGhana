@@ -6,26 +6,26 @@ import StreakIcon from "../assets/logo&icons/streakIcon.svg";
 import FoodLog from "../components/FoodLogCard";
 import Streaks from "../components/Streaks";
 // import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../components/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+// import { auth } from "../components/firebase";
+// import { onAuthStateChanged } from "firebase/auth";
 
 const ProfileHome = () => {
-  const [userName, setUserName] = useState("");
+  // const [userName, setUserName] = useState("");
   const [selectedDay, setSelectedDay] = useState("today");
   const [recommendedCalories, setRecommendedCalories] = useState(null);
   const [caloriesPop, setCaloriesPop] = useState(false);
 
   // Load user info from Firebase Auth
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserName(user.displayName || "");
-      } else {
-        setUserName("");
-      }
-    });
-    return () => unsubscribe();
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       setUserName(user.displayName || "");
+  //     } else {
+  //       setUserName("");
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
 
   useEffect(() => {
     const storedCalories = localStorage.getItem("recommendedCalories");
@@ -48,7 +48,7 @@ const ProfileHome = () => {
         <h2 className="text-lg font-semibold text-gray-500">
           Good morning,
           <span className="text-lg font-semibold mt-2 text-gray-800">
-            {userName || "No name found"}
+            {/* {userName || "No name found"} */}
           </span>
         </h2>
         <Streaks />

@@ -7,72 +7,74 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 import Logo from "../assets/logo&icons/nutrighanaLogo.svg";
-// import Login from "./Login"; // this is your OAuth component
 import { AppContent } from "../context/AppContext";
 
 const Signup = () => {
   const navigate = useNavigate();
   const { backendUrl, setIsLoggedIn } = useContext(AppContent);
 
-  const [formType, setFormType] = useState("Sign Up");
+  const [state, setState] = useState("Sign Up");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     axios.defaults.withCredentials = true;
+    setLoading(true);
 
     try {
-      const endpoint =
-        formType === "Sign Up"
-          ? `${backendUrl}/api/auth/register`
-          : `${backendUrl}/api/auth/login`;
+      if (state === "Sign Up") {
+        const { data } = await axios.post(backendUrl + "/api/auth/register", {
+          name,
+          email,
+          password,
+        });
 
-      const payload =
-        formType === "Sign Up"
-          ? { name, email, password }
-          : { email, password };
-
-      const { data } = await axios.post(endpoint, payload);
-
-      if (data.success) {
-        localStorage.setItem("isLoggedIn", "true");
-        setIsLoggedIn(true);
-
-        if (formType === "Sign Up") {
+        if (data.success) {
+          setIsLoggedIn(true);
           navigate("/ProfileSetup");
         } else {
-          navigate("/home");
+          toast.error(data.message);
         }
       } else {
-        toast.error(data.message || "Authentication failed");
+        const { data } = await axios.post(backendUrl + "/api/auth/login", {
+          email,
+          password,
+        });
+
+        if (data.success) {
+          setIsLoggedIn(true);
+          navigate("/home");
+        } else {
+          toast.error(data.message);
+        }
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 text-black font-manrope">
-      {/* App Logo and Title */}
       <h1 className="text-5xl font-bold mb-6 flex items-center gap-3">
         <img src={Logo} alt="NutriGhana Logo" className="h-12 w-12" />
         <span>NutriGhana</span>
       </h1>
 
-      {/* Form Card */}
       <div className="bg-white px-4 py-6 rounded-lg w-full max-w-md">
         <h2 className="text-3xl text-gray-700 mb-5 font-medium text-center">
-          {formType === "Login"
+          {state === "Login"
             ? "Continue your nutrition journey!"
             : "Begin your nutrition journey!"}
         </h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col">
           <div className="flex flex-col space-y-4 mb-6">
-            {/* Full Name (Sign Up only) */}
-            {formType === "Sign Up" && (
+            {state === "Sign Up" && (
               <div className="relative">
                 <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                   <IoPerson className="text-xl" />
@@ -89,7 +91,6 @@ const Signup = () => {
               </div>
             )}
 
-            {/* Email */}
             <div className="relative">
               <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                 <MdOutlineMail className="text-xl" />
@@ -105,7 +106,6 @@ const Signup = () => {
               />
             </div>
 
-            {/* Password */}
             <div className="relative">
               <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                 <CiLock className="text-xl" />
@@ -122,8 +122,7 @@ const Signup = () => {
             </div>
           </div>
 
-          {/* Forgot Password */}
-          {formType === "Login" && (
+          {state === "Login" && (
             <div className="text-right mb-4">
               <button
                 type="button"
@@ -135,38 +134,42 @@ const Signup = () => {
             </div>
           )}
 
-          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-yellow-500 text-white py-4 rounded-2xl font-semibold hover:bg-yellow-600 transition"
+            disabled={loading}
+            className={`w-full py-4 rounded-2xl font-semibold transition ${
+              loading
+                ? "bg-yellow-300 cursor-not-allowed"
+                : "bg-yellow-500 hover:bg-yellow-600 text-white"
+            }`}
           >
-            {formType === "Login" ? "Login" : "Create Account"}
+            {loading
+              ? "Loading..."
+              : state === "Login"
+              ? "Login"
+              : "Create Account"}
           </button>
         </form>
 
-        {/* Toggle Form */}
         <p className="text-center mt-4 text-lg">
-          {formType === "Login"
+          {state === "Login"
             ? "Don't have an account?"
             : "Already have an account?"}{" "}
           <button
             type="button"
             className="text-blue-600 underline font-semibold"
-            onClick={() =>
-              setFormType(formType === "Login" ? "Sign Up" : "Login")
-            }
+            onClick={() => setState(state === "Login" ? "Sign Up" : "Login")}
           >
-            {formType === "Login" ? "Sign Up" : "Login"}
+            {state === "Login" ? "Sign Up" : "Login"}
           </button>
         </p>
       </div>
 
-      {/* Social Login */}
-      {formType === "Sign Up" && (
+      {state === "Sign Up" && (
         <div className="text-center mt-6">
           <h3 className="text-gray-600">Or continue with</h3>
           <div className="flex justify-center gap-4 mt-4">
-            {/* <Login /> */}
+            {/* Add OAuth buttons here */}
           </div>
         </div>
       )}

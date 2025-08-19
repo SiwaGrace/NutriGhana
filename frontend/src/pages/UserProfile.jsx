@@ -5,7 +5,7 @@ import Woman from "../assets/img/woman1.jpg";
 import { toast } from "react-toastify";
 import { auth } from "../components/firebase";
 import { useNavigate } from "react-router-dom";
-import { signOut, onAuthStateChanged } from "firebase/auth";
+// import { signOut, onAuthStateChanged } from "firebase/auth";
 import EditProfile from "../components/EditProfile";
 
 export default function ProfileUser() {
@@ -15,30 +15,55 @@ export default function ProfileUser() {
   const [userName, setUserName] = useState("");
 
   // Load user info from Firebase Auth
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setEmail(user.email || "");
-        setUserName(user.displayName || "");
-      } else {
-        setEmail("");
-        setUserName("");
-      }
-    });
-    return () => unsubscribe();
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       setEmail(user.email || "");
+  //       setUserName(user.displayName || "");
+  //     } else {
+  //       setEmail("");
+  //       setUserName("");
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
+
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       setEmail(user.email || "");
+  //       setUserName(user.displayName || "");
+  //     } else {
+  //       setEmail("");
+  //       setUserName("");
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setEmail(user.email || "");
-        setUserName(user.displayName || "");
-      } else {
-        setEmail("");
-        setUserName("");
+    async function fetchUserData() {
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/user-profile", {
+          method: "GET",
+          credentials: "include", // sends cookie with JWT
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (data.success) {
+          setEmail(data.user.email);
+          setUserName(data.user.name); // <-- fix here
+        } else {
+          console.error(data.message);
+        }
+      } catch (err) {
+        console.error("Error fetching profile:", err);
       }
-    });
-    return () => unsubscribe();
+    }
+
+    fetchUserData();
   }, []);
 
   const navigate = useNavigate();

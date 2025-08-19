@@ -37,25 +37,26 @@ const EditProfile = () => {
   };
 
   // Save the edited field
-  const handleSave = async (field) => {
-    const value = editing[field];
-    try {
-      const { data } = await axios.put(
-        `http://localhost:5000/api/profile/${id}`,
-        { [field]: value }
-      );
-      setProfile({ ...profile, [field]: value });
-      setEditing((prev) => {
-        const newEdit = { ...prev };
-        delete newEdit[field];
-        return newEdit;
-      });
-      alert("Updated!");
-    } catch (error) {
-      alert("Update failed.");
-      console.error(error);
-    }
-  };
+  // const handleSave = async (field) => {
+  //   const value = editing[field];
+  //   try {
+  //     const { data } =
+  //      await axios.put(
+  //       `http://localhost:5000/api/profile/${id}`,
+  //       { [field]: value }
+  //     );
+  //     setProfile({ ...profile, [field]: value });
+  //     setEditing((prev) => {
+  //       const newEdit = { ...prev };
+  //       delete newEdit[field];
+  //       return newEdit;
+  //     });
+  //     alert("Updated!");
+  //   } catch (error) {
+  //     alert("Update failed.");
+  //     console.error(error);
+  //   }
+  // };
 
   if (loading) return <p className="text-gray-500">Loading profile...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
@@ -72,7 +73,7 @@ const EditProfile = () => {
           field="currentWeightGoal"
           editing={editing}
           onEdit={handleEdit}
-          onSave={handleSave}
+          // onSave={handleSave}
         />
         <CollapsibleSection
           icon={fire}
@@ -81,7 +82,7 @@ const EditProfile = () => {
           field="currentWeight"
           editing={editing}
           onEdit={handleEdit}
-          onSave={handleSave}
+          // onSave={handleSave}
         />
         <CollapsibleSection
           icon={StreakIcon}
@@ -90,7 +91,7 @@ const EditProfile = () => {
           field="activityLevel"
           editing={editing}
           onEdit={handleEdit}
-          onSave={handleSave}
+          // onSave={handleSave}
         />
         <CollapsibleSection
           icon={StreakIcon}
@@ -99,7 +100,7 @@ const EditProfile = () => {
           field="dietaryGoal"
           editing={editing}
           onEdit={handleEdit}
-          onSave={handleSave}
+          // onSave={handleSave}
         />
       </div>
     </div>
