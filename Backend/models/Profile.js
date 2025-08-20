@@ -1,21 +1,21 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
-const profileSchema = new mongoose.Schema(
-  {
-    userId: { type: String, required: false }, // unique removed
-    gender: String,
-    yearOfBirth: String,
-    height: String,
-    weight: String,
-    activityLevel: String,
-    dietaryGoal: String,
-    currentWeight: String,
-    currentWeightGoal: String,
-  },
-  { timestamps: true }
-);
+// const profileSchema = new mongoose.Schema(
+//   {
+//     userId: { type: String, required: false },
+//     gender: String,
+//     yearOfBirth: String,
+//     height: String,
+//     weight: String,
+//     activityLevel: String,
+//     dietaryGoal: String,
+//     currentWeight: String,
+//     currentWeightGoal: String,
+//   },
+//   { timestamps: true }
+// );
 
-const Profile =
-  mongoose.models.Profile || mongoose.model("Profile", profileSchema);
+// const Profile =
+//   mongoose.models.Profile || mongoose.model("Profile", profileSchema);
 
-export default Profile;
+// export default Profile;

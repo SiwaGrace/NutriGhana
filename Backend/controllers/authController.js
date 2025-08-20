@@ -303,21 +303,84 @@ export const getUserProfile = async (req, res) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await userModel.findById(decoded.id).select("_id name email");
+    const user = await userModel.findById(decoded.id).select("-password");
     if (!user) {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
 
-    res.status(200).json({
-      success: true,
-      user: { id: user._id, name: user.name, email: user.email },
-    });
+    res.status(200).json({ success: true, user });
   } catch (error) {
     console.error("Profile fetch error:", error);
     res
       .status(401)
       .json({ success: false, message: "Invalid or expired token" });
+  }
+};
+
+// ===== CREATE USER PROFILE =====
+export const createUserProfile = async (req, res) => {
+  try {
+    // Extract token from cookies or Authorization header
+    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "No token provided" });
+    }
+
+    // Verify JWT and extract user ID
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
+
+    // Extract profile fields from request body
+    const {
+      gender,
+      yearOfBirth,
+      height,
+      weight,
+      activityLevel,
+      dietaryGoal,
+      currentWeight,
+      currentWeightGoal,
+      calories,
+    } = req.body;
+
+    // Update the user with profile information
+    const updatedUser = await userModel
+      .findByIdAndUpdate(
+        userId,
+        {
+          gender,
+          yearOfBirth,
+          height,
+          weight,
+          activityLevel,
+          dietaryGoal,
+          currentWeight,
+          currentWeightGoal,
+          calories,
+        },
+        { new: true } // Return the updated document
+      )
+      .select("-password"); // Exclude password field
+
+    if (!updatedUser) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    res.status(201).json({
+      success: true,
+      message: "Profile created successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error creating user profile:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to create profile" });
   }
 };

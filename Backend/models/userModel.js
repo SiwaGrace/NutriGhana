@@ -1,17 +1,29 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  verifyOtp: { type: String, default: "" },
-  verifyOtpExpireAt: { type: Number, default: 0 },
-  isAccountVerified: { type: Boolean, default: false },
-  resetOtp: { type: String, default: "" },
-  resetOtpExpireAt: { type: Number, default: 0 },
-  profile: { type: mongoose.Schema.Types.ObjectId, ref: "Profile" },
-});
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    verifyOtp: { type: String, default: "" },
+    verifyOtpExpireAt: { type: Number, default: 0 },
+    isAccountVerified: { type: Boolean, default: false },
+    resetOtp: { type: String, default: "" },
+    resetOtpExpireAt: { type: Number, default: 0 },
 
-const userModel = mongoose.models.user || mongoose.model("User", userSchema);
+    // Profile information directly inside user
+    gender: String,
+    yearOfBirth: String,
+    height: String,
+    weight: String,
+    activityLevel: String,
+    dietaryGoal: String,
+    currentWeight: String,
+    currentWeightGoal: String,
+  },
+  { timestamps: true }
+);
 
-export default userModel;
+const User = mongoose.models.User || mongoose.model("User", userSchema);
+
+export default User;

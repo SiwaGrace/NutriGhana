@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 import dishRouter from "./routes/dishesRouter.js";
-import profileRouter from "./routes/profileRouter.js";
+
 import authRouter from "./routes/authRoute.js";
 import userRouter from "./routes/userRoute.js";
 
@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/api/dishes", dishRouter);
-app.use("/api/profile", profileRouter);
+
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 

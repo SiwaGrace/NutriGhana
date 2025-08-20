@@ -1,35 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import axios from "axios";
 
 import StreakIcon from "../assets/logo&icons/vector.svg";
 import fire from "../assets/logo&icons/Vector (1).svg";
 
 const EditProfile = () => {
-  const { id } = useParams(); // Get ID from URL
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editing, setEditing] = useState({});
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  // Fetch profile by ID
+  // Fetch user profile using JWT
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:5000/api/profile/${id}`
+          `${backendUrl}/api/auth/user-profile`,
+          {
+            withCredentials: true,
+          }
         );
-        setProfile(data);
+        if (data.success) {
+          setProfile(data.user);
+        } else {
+          setError(data.message || "Failed to fetch profile");
+        }
       } catch (err) {
-        setError("Failed to fetch profile.");
-        console.error(err);
+        console.error("Error fetching profile:", err);
+        setError("Server error while fetching profile");
       } finally {
         setLoading(false);
       }
     };
-
-    if (id) fetchProfile();
-  }, [id]);
+    fetchProfile();
+  }, [backendUrl]);
 
   // Start editing a field
   const handleEdit = (field, value) => {
@@ -37,28 +42,33 @@ const EditProfile = () => {
   };
 
   // Save the edited field
-  // const handleSave = async (field) => {
-  //   const value = editing[field];
-  //   try {
-  //     const { data } =
-  //      await axios.put(
-  //       `http://localhost:5000/api/profile/${id}`,
-  //       { [field]: value }
-  //     );
-  //     setProfile({ ...profile, [field]: value });
-  //     setEditing((prev) => {
-  //       const newEdit = { ...prev };
-  //       delete newEdit[field];
-  //       return newEdit;
-  //     });
-  //     alert("Updated!");
-  //   } catch (error) {
-  //     alert("Update failed.");
-  //     console.error(error);
-  //   }
-  // };
+  const handleSave = async (field) => {
+    const value = editing[field];
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/api/auth/create-profile`,
+        { [field]: value },
+        { withCredentials: true }
+      );
 
-  if (loading) return <p className="text-gray-500">Loading profile...</p>;
+      if (data.success) {
+        setProfile((prev) => ({ ...prev, [field]: data.user[field] || value }));
+        setEditing((prev) => {
+          const newEdit = { ...prev };
+          delete newEdit[field];
+          return newEdit;
+        });
+        alert("Profile updated!");
+      } else {
+        alert(data.message || "Update failed.");
+      }
+    } catch (error) {
+      console.error("Update failed:", error);
+      alert("Update failed. Please try again.");
+    }
+  };
+
+  if (loading) return null; // remove "Loading profile..."
   if (error) return <p className="text-red-500">{error}</p>;
   if (!profile) return <p>No profile found.</p>;
 
@@ -73,7 +83,7 @@ const EditProfile = () => {
           field="currentWeightGoal"
           editing={editing}
           onEdit={handleEdit}
-          // onSave={handleSave}
+          onSave={handleSave}
         />
         <CollapsibleSection
           icon={fire}
@@ -82,7 +92,7 @@ const EditProfile = () => {
           field="currentWeight"
           editing={editing}
           onEdit={handleEdit}
-          // onSave={handleSave}
+          onSave={handleSave}
         />
         <CollapsibleSection
           icon={StreakIcon}
@@ -91,7 +101,7 @@ const EditProfile = () => {
           field="activityLevel"
           editing={editing}
           onEdit={handleEdit}
-          // onSave={handleSave}
+          onSave={handleSave}
         />
         <CollapsibleSection
           icon={StreakIcon}
@@ -100,7 +110,7 @@ const EditProfile = () => {
           field="dietaryGoal"
           editing={editing}
           onEdit={handleEdit}
-          // onSave={handleSave}
+          onSave={handleSave}
         />
       </div>
     </div>

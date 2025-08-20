@@ -29,19 +29,19 @@ export const AppContextProvider = (props) => {
     }
   };
 
-  const getUserData = async () => {
-    try {
-      const { data } = await axios.get(backendUrl + "api/auth/user-profile");
-      if (data.success) {
-        setUserData(data.user);
-      } else {
-        toast.error(data.message);
-        setUserData(null);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  // const getUserData = async () => {
+  //   try {
+  //     const { data } = await axios.get(backendUrl + "api/auth/user-profile");
+  //     if (data.success) {
+  //       setUserData(data.user);
+  //     } else {
+  //       toast.error(data.message);
+  //       setUserData(null);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
 
   // Fetch user data on initial load
 
@@ -51,7 +51,7 @@ export const AppContextProvider = (props) => {
     setIsLoggedIn,
     userData,
     setUserData,
-    getUserData,
+    // getUserData,
     getAuthState,
   };
 

@@ -7,6 +7,7 @@ import { auth } from "../components/firebase";
 import { useNavigate } from "react-router-dom";
 // import { signOut, onAuthStateChanged } from "firebase/auth";
 import EditProfile from "../components/EditProfile";
+// import ProfilesList from "./ProfilesList";
 
 export default function ProfileUser() {
   const [mealReminders, setMealReminders] = useState(true);
@@ -101,8 +102,8 @@ export default function ProfileUser() {
         <p className="text-lg text-gray-500">Total Food Logged</p>
         <p className="text-3xl font-bold text-gray-300">54</p>
       </div>
-
       <EditProfile />
+      {/* <ProfilesList /> */}
 
       {/* Notifications */}
       <div className="w-full mt-6">

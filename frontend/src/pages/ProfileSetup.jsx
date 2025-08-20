@@ -53,29 +53,10 @@ export default function ProfileSetup() {
   const [currentWeightGoal, setCurrentWeightGoal] = useState("");
   const [error, setError] = useState("");
   const [calories, setCalories] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-
-  // Prevent users with a profile from accessing this page
-  // useEffect(() => {
-  //   async function checkProfile() {
-  //     try {
-  //       const res = await fetch("http://localhost:5000/api/profile", {
-  //         credentials: "include", // or add auth headers if needed
-  //       });
-  //       if (res.ok) {
-  //         const data = await res.json();
-  //         // If profile exists, redirect to home
-  //         if (data && Object.keys(data).length > 0) {
-  //           navigate("/home", { replace: true });
-  //         }
-  //       }
-  //     } catch {
-  //       // Optionally handle error (e.g., user not logged in)
-  //     }
-  //   }
-  //   checkProfile();
-  // }, [navigate]);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL; // make sure you define this in your .env
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 80 }, (_, i) => currentYear - i);
@@ -89,6 +70,7 @@ export default function ProfileSetup() {
     "Maintenance",
   ];
 
+  // Auto-redirect to home after success step
   useEffect(() => {
     if (step === 6) {
       const timer = setTimeout(() => {
@@ -98,7 +80,7 @@ export default function ProfileSetup() {
     }
   }, [step, navigate]);
 
-  // Calculate calories when all info is available
+  // Calculate calories whenever info changes
   useEffect(() => {
     if (
       gender &&
@@ -135,8 +117,43 @@ export default function ProfileSetup() {
     setCalories(null);
   };
 
+  const handleSubmit = async () => {
+    setLoading(true);
+    const userData = {
+      gender,
+      year,
+      height,
+      activityLevel,
+      dietaryGoal,
+      currentWeight,
+      currentWeightGoal,
+      calories,
+    };
+
+    try {
+      const response = await fetch(backendUrl + "/api/auth/create-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        localStorage.setItem("recommendedCalories", calories); // Save calories for HomePage
+        setStep(6);
+      } else {
+        setError("Failed to submit. Try again.");
+      }
+    } catch {
+      setError("Server error. Try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleNext = () => {
     setError("");
+
     if (step === 1 && (!gender || !year)) {
       setError("Please select your gender and year of birth.");
       return;
@@ -157,42 +174,15 @@ export default function ProfileSetup() {
       setError("Please select your current and goal weight.");
       return;
     }
-    setStep(step + 1);
-  };
 
-  const handleSubmit = async () => {
-    const userData = {
-      gender,
-      year,
-      height,
-      activityLevel,
-      dietaryGoal,
-      currentWeight,
-      currentWeightGoal,
-      calories,
-    };
-
-    try {
-      const response = await fetch("http://localhost:5000/api/profile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
-
-      if (response.ok) {
-        localStorage.setItem("recommendedCalories", calories); // Save calories for HomePage
-        setStep(6);
-      } else {
-        setError("Failed to submit. Try again.");
-      }
-    } catch {
-      setError("Server error. Try again later.");
+    if (step === 5) {
+      handleSubmit(); // submit on last step
+    } else {
+      setStep(step + 1);
     }
   };
 
-  // Progress bar
+  // Progress bar labels
   const steps = ["Profile", "Height", "Activity", "Goal", "Weight", "Summary"];
 
   return (
@@ -224,6 +214,7 @@ export default function ProfileSetup() {
 
       {error && <div className="text-red-500 font-semibold mb-2">{error}</div>}
 
+      {/* Step 1: Gender + Year */}
       {step === 1 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
@@ -274,6 +265,7 @@ export default function ProfileSetup() {
         </>
       )}
 
+      {/* Step 2: Height */}
       {step === 2 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
@@ -306,6 +298,7 @@ export default function ProfileSetup() {
         </>
       )}
 
+      {/* Step 3: Activity */}
       {step === 3 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">
@@ -335,6 +328,7 @@ export default function ProfileSetup() {
         </>
       )}
 
+      {/* Step 4: Dietary Goal */}
       {step === 4 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">
@@ -364,6 +358,7 @@ export default function ProfileSetup() {
         </>
       )}
 
+      {/* Step 5: Weight */}
       {step === 5 && (
         <>
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
@@ -406,17 +401,16 @@ export default function ProfileSetup() {
             </div>
           </div>
           <button
-            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer"
-            onClick={() => {
-              handleNext();
-              handleSubmit();
-            }}
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer disabled:opacity-50"
+            onClick={handleNext}
+            disabled={loading}
           >
-            Submit
+            {loading ? "Submitting..." : "Submit"}
           </button>
         </>
       )}
 
+      {/* Step 6: Success */}
       {step === 6 && (
         <>
           <IoMdCheckmarkCircle className="text-green-500 text-[180px]" />
