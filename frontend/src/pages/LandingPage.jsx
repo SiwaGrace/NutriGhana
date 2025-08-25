@@ -55,12 +55,12 @@ const Home = () => {
 
   return (
     <SplashScreen>
-      <div className="w-full max-w-sm mx-auto  py-6 bg-white rounded-2xl  min-h-screen flex flex-col">
+      <div className="w-full max-w-sm mx-auto  py-6 bg-white rounded-2xl  min-h-screen flex flex-col ">
         {/* Skip Button */}
         <div className="flex justify-end">
           <button
             onClick={() => navigate("/login")}
-            className="text-gray-600 text-sm font-semibold underline hover:text-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 px-2 py-1 rounded transition"
+            className="text-gray-600 text-sm font-semibold underline hover:text-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400  rounded transition"
             aria-label="Skip introduction and go to login"
             tabIndex={isAnimating ? -1 : 0}
             disabled={isAnimating}
@@ -70,7 +70,7 @@ const Home = () => {
         </div>
 
         {/* Progress Indicator */}
-        <div className="flex gap-2 mt-2 mb-4">
+        <div className="flex gap-2">
           {foodItems.map((_, index) => (
             <div
               key={index}
@@ -82,32 +82,32 @@ const Home = () => {
         </div>
 
         {/* Food Image, Name and Description */}
-        <div className="flex flex-col items-center flex-1 justify-center gap-20">
+        <div className="flex flex-col items-center flex-1 justify-center  gap-8 mt-2">
           <div
-            className={`w-full transition-opacity duration-300 gap-8 ${
+            className={`w-full transition-opacity duration-300 ${
               isAnimating ? "opacity-60" : "opacity-100"
             }`}
           >
             <img
               src={foodItems[progress].image}
               alt={`Photo of ${foodItems[progress].name}`}
-              className="w-full rounded-xl shadow-md object-cover h-70 sm:h-60 mb-4 border-2 border-yellow-100"
+              className="w-full rounded-xl shadow-md object-cover h-70 sm:h-60  border-2 border-yellow-100"
               loading="lazy"
             />
 
-            <h3 className="mt-7 text-3xl sm:text-4xl font-semibold font-manrope text-gray-800 text-center tracking-tight whitespace-nowrap -ml-3 ">
+            <h3 className="mt-4 text-3xl sm:text-3xl font-semibold font-manrope text-gray-800 text-center tracking-tight whitespace-nowrap -ml-3 p-1">
               {foodItems[progress].name}
             </h3>
-            <p className="mt-6 text-xl sm:text-2xl font-semibold font-manrope text-gray-600 text-center leading-relaxed max-w-xl mx-auto ">
+            <p className="mt-2 text-xl sm:text-xl font-semibold font-manrope text-gray-600 text-center leading-relaxed max-w-xl mx-auto ">
               {foodItems[progress].description}
             </p>
           </div>
 
           {/* Next Button */}
-          <div className=" flex justify-center w-full">
+          <div className=" flex justify-center w-full ">
             <button
               onClick={handleNext}
-              className={`bg-yellow-400 text-white px-30 py-8 rounded-full shadow-md font-bold text-lg transition-all duration-150 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
+              className={`bg-yellow-400 text-white px-30 py-8 rounded-full shadow-md font-bold text-lg transition-all duration-150 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 sm:mb-16 cursor-pointer ${
                 isAnimating ? "opacity-50 cursor-not-allowed" : ""
               }`}
               disabled={isAnimating}

@@ -74,7 +74,7 @@ const EditProfile = () => {
 
   return (
     <div className="w-full px-4">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Edit Goals</h2>
+      <h2 className="text-2xl font-bold text-gray-800 "> Goals</h2>
       <div className="bg-white p-4 rounded-2xl space-y-4 text-black">
         <CollapsibleSection
           icon={StreakIcon}
@@ -140,12 +140,12 @@ const CollapsibleSection = ({
           <>
             <input
               type="text"
-              className="border-2 rounded-lg px-3 py-2 mr-2"
+              className="border rounded-l-lg px-4 py-3 "
               value={editing[field]}
               onChange={(e) => onEdit(field, e.target.value)}
             />
             <button
-              className="bg-yellow-500 px-4 py-2 rounded text-white font-semibold"
+              className="bg-yellow-500 px-4 py-3  text-white font-semibold rounded-r-lg"
               onClick={() => onSave(field)}
             >
               Save

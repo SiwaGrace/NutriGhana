@@ -3,11 +3,8 @@ import { IoIosArrowForward } from "react-icons/io";
 import Woman from "../assets/img/woman1.jpg";
 
 import { toast } from "react-toastify";
-import { auth } from "../components/firebase";
 import { useNavigate } from "react-router-dom";
-// import { signOut, onAuthStateChanged } from "firebase/auth";
 import EditProfile from "../components/EditProfile";
-// import ProfilesList from "./ProfilesList";
 
 export default function ProfileUser() {
   const [mealReminders, setMealReminders] = useState(true);
@@ -71,9 +68,20 @@ export default function ProfileUser() {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      toast.success("Logged out successfully!");
-      navigate("/login", { replace: true });
+      const res = await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success("Logged out successfully!");
+        navigate("/login", { replace: true });
+      } else {
+        toast.error(data.message || "Failed to log out. Please try again.");
+      }
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Failed to log out. Please try again.");
@@ -81,13 +89,14 @@ export default function ProfileUser() {
   };
 
   return (
-    <div className="py-24 px-6 flex flex-col items-center bg-white text-black">
+    <div className=" px-6 flex flex-col items-center bg-white text-black">
       {/* Profile Section */}
-      <h2 className="text-xl font-semibold mb-4">Profile</h2>
+      {/* Profile Section */}
+      {/* <h2 className="text-xl font-semibold ">Profile</h2> */}
       <img
         src={Woman}
         alt="Profile"
-        className="w-24 h-24 rounded-full border-4 border-gray-300 cursor-pointer"
+        className="w-24 h-24 rounded-full border-4 border-gray-300 cursor-pointer mt-3"
       />
       <h3 className="text-lg font-semibold mt-2">
         {userName || "No name found"}
@@ -151,7 +160,7 @@ export default function ProfileUser() {
       {/* Logout Button */}
       <button
         onClick={handleLogout}
-        className="bg-yellow-400 text-white w-full py-3 rounded-lg text-lg font-semibold mt-8 cursor-pointer"
+        className="bg-yellow-400 text-white w-full py-6 sm:py-3 rounded-full text-lg font-semibold mt-8 cursor-pointer sm:rounded-lg"
       >
         Log out
       </button>

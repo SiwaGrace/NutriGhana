@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { IoPerson } from "react-icons/io5";
 import { MdOutlineMail } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebookF } from "react-icons/fa";
 
 import Logo from "../assets/logo&icons/nutrighanaLogo.svg";
 import { AppContent } from "../context/AppContext";
@@ -26,7 +29,7 @@ const Signup = () => {
 
     try {
       if (state === "Sign Up") {
-        const { data } = await axios.post(backendUrl + "/api/auth/register", {
+        const { data } = await axios.post(`${backendUrl}/api/auth/register`, {
           name,
           email,
           password,
@@ -34,19 +37,21 @@ const Signup = () => {
 
         if (data.success) {
           setIsLoggedIn(true);
-          navigate("/ProfileSetup");
+          localStorage.setItem("isLoggedIn", "true"); // persist login
+          navigate("/ProfileSetup", { replace: true }); // <-- IMPORTANT
         } else {
           toast.error(data.message);
         }
       } else {
-        const { data } = await axios.post(backendUrl + "/api/auth/login", {
+        const { data } = await axios.post(`${backendUrl}/api/auth/login`, {
           email,
           password,
         });
 
         if (data.success) {
           setIsLoggedIn(true);
-          navigate("/home");
+          localStorage.setItem("isLoggedIn", "true"); // persist login
+          navigate("/home", { replace: true }); // <-- IMPORTANT
         } else {
           toast.error(data.message);
         }
@@ -127,7 +132,7 @@ const Signup = () => {
               <button
                 type="button"
                 onClick={() => navigate("/forgetpassword")}
-                className="text-blue-600 underline text-sm"
+                className="text-blue-600 underline text-sm cursor-pointer"
               >
                 Forgot Password?
               </button>
@@ -137,7 +142,7 @@ const Signup = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-4 rounded-2xl font-semibold transition ${
+            className={`w-full py-5 rounded-2xl font-semibold transition cursor-pointer ${
               loading
                 ? "bg-yellow-300 cursor-not-allowed"
                 : "bg-yellow-500 hover:bg-yellow-600 text-white"
@@ -151,13 +156,13 @@ const Signup = () => {
           </button>
         </form>
 
-        <p className="text-center mt-4 text-lg">
+        <p className="text-center mt-4 text-lg ">
           {state === "Login"
             ? "Don't have an account?"
             : "Already have an account?"}{" "}
           <button
             type="button"
-            className="text-blue-600 underline font-semibold"
+            className="text-blue-600 underline font-semibold cursor-pointer"
             onClick={() => setState(state === "Login" ? "Sign Up" : "Login")}
           >
             {state === "Login" ? "Sign Up" : "Login"}
@@ -165,14 +170,31 @@ const Signup = () => {
         </p>
       </div>
 
-      {state === "Sign Up" && (
-        <div className="text-center mt-6">
-          <h3 className="text-gray-600">Or continue with</h3>
-          <div className="flex justify-center gap-4 mt-4">
-            {/* Add OAuth buttons here */}
-          </div>
+      {/* Show OAuth buttons for both Sign Up and Login */}
+      <div className="text-center ">
+        <h3 className="text-gray-600">Or continue with</h3>
+        <div className="flex justify-center gap-4 mt-4">
+          <button
+            type="button"
+            className="flex items-center justify-center w-full border-gray-300 font-semibold "
+          >
+            <FcGoogle className="text-xl mr-2" />
+            Google
+          </button>
+          <button
+            type="button"
+            className="flex items-center justify-center w-full  border-gray-300  font-semibold "
+          >
+            <FaFacebookF className="text-xl mr-2" />
+            Facebook
+          </button>
+          {/* Add OAuth buttons here */}
         </div>
-      )}
+      </div>
+
+      <div className="mt-10 text-center text-gray-500">
+        &copy; {new Date().getFullYear()} NutriGhana. All rights reserved.
+      </div>
     </div>
   );
 };
