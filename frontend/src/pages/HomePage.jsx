@@ -5,27 +5,37 @@ import FatIcon from "../assets/logo&icons/game-icons_fat.svg";
 import StreakIcon from "../assets/logo&icons/streakIcon.svg";
 import FoodLog from "../components/FoodLogCard";
 import Streaks from "../components/Streaks";
-// import { onAuthStateChanged } from "firebase/auth";
-// import { auth } from "../components/firebase";
-// import { onAuthStateChanged } from "firebase/auth";
 
 const ProfileHome = () => {
-  // const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState(""); // add userName state
   const [selectedDay, setSelectedDay] = useState("today");
   const [recommendedCalories, setRecommendedCalories] = useState(null);
   const [caloriesPop, setCaloriesPop] = useState(false);
+  const [loginStreak, setLoginStreak] = useState(0);
 
-  // Load user info from Firebase Auth
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       setUserName(user.displayName || "");
-  //     } else {
-  //       setUserName("");
-  //     }
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
+  // Fetch the user's name from the backend
+  useEffect(() => {
+    async function fetchUserData() {
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/user-profile", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (data.success) {
+          setUserName(data.user.name);
+          setLoginStreak(data.user.loginStreak || 0); // get streak from backend
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        // Optionally handle error
+      }
+    }
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     const storedCalories = localStorage.getItem("recommendedCalories");
@@ -45,12 +55,12 @@ const ProfileHome = () => {
     <div className="pt-24 px-4 bg-white min-h-screen text-black">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-lg font-semibold text-gray-500">
-          Good morning,
-          <span className="text-lg font-semibold mt-2 text-gray-800">
-            {/* {userName || "No name found"} */}
-          </span>
-        </h2>
+        <div className="flex flex-col ">
+          <h2 className="text-xl font-semibold text-gray-500">Good morning,</h2>
+          <div className="text-xl font-semibold mt-2 text-gray-800 mb-2">
+            {userName || "No name found"}
+          </div>
+        </div>
         <Streaks />
       </div>
       {/* days */}
@@ -84,8 +94,11 @@ const ProfileHome = () => {
             </h3>
             <p className="text-gray-500 text-sm">Calories left</p>
           </div>
-          <div className="w-16 h-16 flex items-center justify-center rounded-full border-4 border-gray-200">
-            <img src={StreakIcon} alt="Fire" className="w-6 h-6" />
+          <div className="w-16 h-16 flex flex-col items-center justify-center rounded-full border-4 border-gray-200">
+            <img src={StreakIcon} alt="Streak" className="w-6 h-6" />
+            <span className="text-xs font-bold text-yellow-500 mt-1">
+              {loginStreak}d
+            </span>
           </div>
         </div>
 
