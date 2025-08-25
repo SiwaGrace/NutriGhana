@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 import StreakIcon from "../assets/logo&icons/vector.svg";
 import fire from "../assets/logo&icons/Vector (1).svg";
@@ -9,6 +10,7 @@ const EditProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editing, setEditing] = useState({});
+  const [openSection, setOpenSection] = useState(""); // add openSection state
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   // Fetch user profile using JWT
@@ -58,13 +60,13 @@ const EditProfile = () => {
           delete newEdit[field];
           return newEdit;
         });
-        alert("Profile updated!");
+        toast.success("Profile updated!");
       } else {
-        alert(data.message || "Update failed.");
+        toast.error(data.message || "Update failed.");
       }
     } catch (error) {
       console.error("Update failed:", error);
-      alert("Update failed. Please try again.");
+      toast.error("Update failed. Please try again.");
     }
   };
 
@@ -84,6 +86,8 @@ const EditProfile = () => {
           editing={editing}
           onEdit={handleEdit}
           onSave={handleSave}
+          openSection={openSection}
+          setOpenSection={setOpenSection}
         />
         <CollapsibleSection
           icon={fire}
@@ -93,6 +97,8 @@ const EditProfile = () => {
           editing={editing}
           onEdit={handleEdit}
           onSave={handleSave}
+          openSection={openSection}
+          setOpenSection={setOpenSection}
         />
         <CollapsibleSection
           icon={StreakIcon}
@@ -102,6 +108,8 @@ const EditProfile = () => {
           editing={editing}
           onEdit={handleEdit}
           onSave={handleSave}
+          openSection={openSection}
+          setOpenSection={setOpenSection}
         />
         <CollapsibleSection
           icon={StreakIcon}
@@ -111,6 +119,8 @@ const EditProfile = () => {
           editing={editing}
           onEdit={handleEdit}
           onSave={handleSave}
+          openSection={openSection}
+          setOpenSection={setOpenSection}
         />
       </div>
     </div>
@@ -125,32 +135,43 @@ const CollapsibleSection = ({
   editing,
   onEdit,
   onSave,
+  openSection,
+  setOpenSection,
 }) => {
   const isEditing = editing[field] !== undefined;
+  const isOpen = openSection === field;
 
   return (
-    <div className="collapse collapse-arrow border-b border-gray-300 border-opacity-50">
-      <input type="radio" name={`accordion-${field}`} />
-      <div className="collapse-title font-semibold flex gap-3 items-center">
+    <div
+      className={`collapse collapse-arrow border-b border-gray-300 border-opacity-50 ${
+        isOpen ? "collapse-open" : ""
+      }`}
+    >
+      <div
+        className="collapse-title font-semibold flex gap-3 items-center cursor-pointer"
+        onClick={() => setOpenSection(isOpen ? "" : field)}
+      >
         <img src={icon} alt={`${title} Icon`} />
         {title}
       </div>
-      <div className="collapse-content text-sm">
+      <div
+        className={`collapse-content text-sm ${isOpen ? "block" : "hidden"}`}
+      >
         {isEditing ? (
-          <>
+          <div className="flex gap-2 items-center">
             <input
               type="text"
-              className="border rounded-l-lg px-4 py-3 "
+              className="border border-yellow-400 rounded-lg px-4 py-2 shadow focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
               value={editing[field]}
               onChange={(e) => onEdit(field, e.target.value)}
             />
             <button
-              className="bg-yellow-500 px-4 py-3  text-white font-semibold rounded-r-lg"
+              className="bg-yellow-500 px-5 py-2 text-white font-semibold rounded-lg shadow hover:bg-yellow-600 transition"
               onClick={() => onSave(field)}
             >
               Save
             </button>
-          </>
+          </div>
         ) : (
           <div className="flex items-center justify-between">
             <span>{value || "Not set"}</span>

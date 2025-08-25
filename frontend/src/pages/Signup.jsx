@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IoPerson } from "react-icons/io5";
 import { MdOutlineMail } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -21,6 +22,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -116,14 +118,27 @@ const Signup = () => {
                 <CiLock className="text-xl" />
               </span>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-2xl font-semibold focus:outline-none"
+                className="w-full pl-12 pr-12 py-4 border border-gray-300 rounded-2xl font-semibold focus:outline-none"
               />
+              <span
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+                onClick={() => setShowPassword((prev) => !prev)}
+                tabIndex={0}
+                role="button"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <FaEyeSlash className="text-xl" />
+                ) : (
+                  <FaEye className="text-xl" />
+                )}
+              </span>
             </div>
           </div>
 

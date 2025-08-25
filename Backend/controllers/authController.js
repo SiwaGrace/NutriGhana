@@ -256,27 +256,23 @@ The NutriGhana Team`,
 
 // ===== RESET PASSWORD =====
 export const resetPassword = async (req, res) => {
-  const { email, otp, newPassword } = req.body;
-  if (!email || !otp || !newPassword) {
+  const { otp, newPassword } = req.body;
+  if (!otp || !newPassword) {
     return res
       .status(400)
-      .json({ success: false, message: "All fields are required" });
+      .json({ success: false, message: "OTP and new password are required" });
   }
 
   try {
-    const user = await userModel.findOne({ email });
+    // Find user by OTP and check expiry
+    const user = await userModel.findOne({
+      resetOtp: otp,
+      resetOtpExpireAt: { $gt: Date.now() },
+    });
     if (!user) {
       return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-    if (user.resetOtp === "" || user.resetOtp !== otp) {
-      return res.status(400).json({ success: false, message: "Invalid OTP" });
-    }
-    if (user.resetOtpExpireAt < Date.now()) {
-      return res
         .status(400)
-        .json({ success: false, message: "OTP has expired" });
+        .json({ success: false, message: "Invalid or expired OTP" });
     }
 
     user.password = await bcrypt.hash(newPassword, 10);

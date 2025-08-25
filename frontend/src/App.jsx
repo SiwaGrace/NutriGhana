@@ -21,6 +21,8 @@ import FoodCard from "./components/dishesComponents/FoodCard";
 import ProfilesList from "./pages/ProfilesList";
 import ForgetPassword from "./components/ForgetPassword";
 import PrivateRoute from "./pages/PrivateRoute";
+import VerifyOtp from "./components/VerifyOtp";
+import ResetPassword from "./components/ResetPassword";
 
 const App = () => {
   const myRoute = createBrowserRouter(
@@ -75,6 +77,8 @@ const App = () => {
           <Route index element={<LandingPage />} />
           <Route path="/login" element={<Signup />} />
           <Route path="/forgetPassword" element={<ForgetPassword />} />
+          <Route path="/verify-otp" element={<VerifyOtp />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/ProfileSetup" element={<ProfileSetup />} />
           <Route path="/see" element={<ProfilesList />} />
         </Route>
