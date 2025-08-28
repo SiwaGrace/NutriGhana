@@ -97,7 +97,7 @@ const ProfileHome = () => {
           <div className="w-16 h-16 flex flex-col items-center justify-center rounded-full border-4 border-gray-200">
             <img src={StreakIcon} alt="Streak" className="w-6 h-6" />
             <span className="text-xs font-bold text-yellow-500 mt-1">
-              {loginStreak}d
+              {/* {loginStreak} */}
             </span>
           </div>
         </div>
