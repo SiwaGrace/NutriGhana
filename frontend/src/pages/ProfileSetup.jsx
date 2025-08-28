@@ -183,50 +183,29 @@ export default function ProfileSetup() {
   };
 
   // Progress bar labels
-  const steps = ["Profile", "Height", "Activity", "Goal", "Weight", "Summary"];
 
   return (
     <div className="flex flex-col items-center p-6 h-screen justify-center space-y-8 bg-white text-black">
       {/* Progress Bar */}
-      <div className="w-full max-w-xl flex items-center mb-4">
-        {steps.map((label, idx) => (
-          <div key={label} className="flex-1 flex flex-col items-center">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                step > idx
-                  ? "bg-yellow-500 text-white"
-                  : "bg-gray-200 text-gray-600"
-              }`}
-            >
-              {idx + 1}
-            </div>
-            <span className="text-xs mt-1">{label}</span>
-            {idx < steps.length - 1 && (
-              <div className="w-full h-1 bg-gray-200 my-1">
-                <div
-                  className={`h-1 ${step > idx + 1 ? "bg-yellow-500" : ""}`}
-                ></div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
 
       {error && <div className="text-red-500 font-semibold mb-2">{error}</div>}
 
       {/* Step 1: Gender + Year */}
       {step === 1 && (
         <>
-          <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
-            Let’s set your profile!
+          <h2 className="text-3xl font-[300] text-center mb-6 text-black leading-snug tracking-wide">
+            Let’s set <br /> your profile!
           </h2>
+
           <div className="w-full mb-6">
-            <p className="text-lg font-bold mb-2">Gender</p>
+            <p className="text-xl  font-[500]  mb-6 text-black leading-loose tracking-wide">
+              Gender
+            </p>
             <div className="flex gap-6 items-center justify-center">
               {["Male", "Female"].map((g) => (
                 <button
                   key={g}
-                  className={`px-14 py-6 rounded-full text-sm font-bold border transition duration-200 cursor-pointer ${
+                  className={`px-14 py-6 rounded-full text-sm font-bold border transition duration-200 cursor-pointer font-light tracking-wide ${
                     gender === g
                       ? "bg-yellow-500 text-white"
                       : "border-gray-300 hover:border-yellow-500"
@@ -239,14 +218,16 @@ export default function ProfileSetup() {
             </div>
           </div>
           <div className="w-full mb-8">
-            <p className="text-lg font-bold mb-2">Year of Birth</p>
-            <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-60 overflow-y-auto">
+            <p className="text-lg font-[500]  mb-6 text-black leading-loose tracking-wide">
+              Year of Birthday
+            </p>
+            <div className="scrollable-container font-light tracking-wide  w-full flex flex-col items-center gap-2 max-h-60 overflow-y-auto">
               {years.map((yr) => (
                 <button
                   key={yr}
-                  className={`w-full py-3 px-6 text-lg font-bold transition duration-200 cursor-pointer ${
+                  className={`w-full py-3 px-6 text-lg font-light tracking-wide   transition duration-200 cursor-pointer ${
                     year === String(yr)
-                      ? "bg-gray-300 text-black"
+                      ? "bg-gray-200 text-black "
                       : "text-black hover:bg-gray-400"
                   }`}
                   onClick={() => setYear(String(yr))}
@@ -257,7 +238,7 @@ export default function ProfileSetup() {
             </div>
           </div>
           <button
-            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer"
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-[280px]"
             onClick={handleNext}
           >
             Next
@@ -268,19 +249,21 @@ export default function ProfileSetup() {
       {/* Step 2: Height */}
       {step === 2 && (
         <>
-          <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
+          <h2 className="text-3xl font-[300] text-center mb-6 text-black leading-snug tracking-wide">
             Height
           </h2>
           <div className="w-full mb-6">
-            <p className="text-lg font-bold mb-2">Height (ft/in)</p>
-            <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-40 overflow-y-auto">
+            <p className="text-lg font-[500]  mb-6 text-black leading-loose tracking-wide">
+              Height (ft/in)
+            </p>
+            <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-90 overflow-y-auto">
               {heightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-3 rounded-md text-lg font-bold transition duration-200 cursor-pointer ${
+                  className={`w-full py-3 rounded-md text-lg   font-light tracking-wide  font-bold transition duration-200 cursor-pointer ${
                     height === String(option)
-                      ? "bg-gray-300"
-                      : "text-black hover:bg-gray-400"
+                      ? "bg-gray-200"
+                      : "text-black hover:bg-gray-300"
                   }`}
                   onClick={() => setHeight(String(option))}
                 >
@@ -290,7 +273,7 @@ export default function ProfileSetup() {
             </div>
           </div>
           <button
-            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer"
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-[280px]"
             onClick={handleNext}
           >
             Next
@@ -301,14 +284,14 @@ export default function ProfileSetup() {
       {/* Step 3: Activity */}
       {step === 3 && (
         <>
-          <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">
+          <h2 className="text-3xl font-[300] text-center mb-24 text-black leading-snug tracking-wide">
             How active are you?
           </h2>
           <div className="w-full flex flex-col items-center gap-4">
             {howActive.map((preference) => (
               <button
                 key={preference}
-                className={`w-[284px] h-[68px] py-4 rounded-full text-lg font-bold transition bg-white justify-center items-center flex border border-gray-300 cursor-pointer${
+                className={`w-[284px] h-[68px] py-4 rounded-full text-xl font-light tracking-wide transition bg-white justify-center items-center flex border border-gray-300 cursor-pointer${
                   activityLevel === preference
                     ? " bg-yellow-500 text-white"
                     : " text-black"
@@ -320,7 +303,7 @@ export default function ProfileSetup() {
             ))}
           </div>
           <button
-            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-10 cursor-pointer"
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-[280px]"
             onClick={handleNext}
           >
             Next
@@ -331,17 +314,17 @@ export default function ProfileSetup() {
       {/* Step 4: Dietary Goal */}
       {step === 4 && (
         <>
-          <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">
+          <h2 className="text-3xl font-[300] text-center mb-24 text-black leading-snug tracking-wide">
             What is your dietary goal?
           </h2>
           <div className="w-full flex flex-col items-center gap-4">
             {dietaryGoals.map((preference) => (
               <button
                 key={preference}
-                className={`w-[284px] h-[68px] py-4 rounded-full text-lg font-bold transition bg-white justify-center items-center flex border border-gray-300 cursor-pointer${
+                className={`w-[284px] h-[68px] py-4 rounded-full text-xl font-light tracking-wide transition bg-white justify-center items-center flex border border-gray-300 cursor-pointer ${
                   dietaryGoal === preference
-                    ? " bg-yellow-500 text-white"
-                    : " text-black"
+                    ? "bg-yellow-500 text-white"
+                    : "text-black"
                 }`}
                 onClick={() => setDietaryGoal(preference)}
               >
@@ -350,7 +333,7 @@ export default function ProfileSetup() {
             ))}
           </div>
           <button
-            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-10 cursor-pointer"
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-[280px]"
             onClick={handleNext}
           >
             Next
@@ -361,16 +344,18 @@ export default function ProfileSetup() {
       {/* Step 5: Weight */}
       {step === 5 && (
         <>
-          <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
+          <h2 className="text-3xl font-[300] text-center mb-6 text-black leading-snug tracking-wide">
             Current and Goal Weight
           </h2>
           <div className="w-full mb-6">
-            <p className="text-lg font-bold mb-2">Current Weight (kg)</p>
+            <p className="text-lg font-[500]  mb-6 text-black leading-loose tracking-wide">
+              Current Weight (kg)
+            </p>
             <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-40 overflow-y-auto">
               {weightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-3 rounded-md text-lg font-bold transition duration-200 cursor-pointer${
+                  className={`w-full py-3 rounded-md text-lg   font-light tracking-wide  font-bold transition duration-200 cursor-pointer${
                     currentWeight === String(option)
                       ? " bg-gray-300"
                       : " text-black hover:bg-gray-200"
@@ -383,12 +368,14 @@ export default function ProfileSetup() {
             </div>
           </div>
           <div className="w-full mb-6">
-            <p className="text-lg font-bold mb-2">Weight Goal (kg)</p>
+            <p className="text-lg font-[500]  mb-6 text-black leading-loose tracking-wide">
+              Weight Goal (kg)
+            </p>
             <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-40 overflow-y-auto">
               {weightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-3 rounded-md text-lg font-bold transition duration-200 cursor-pointer${
+                  className={`w-full py-3 rounded-md text-lg   font-light tracking-wide  font-bold transition duration-200 cursor-pointer${
                     currentWeightGoal === String(option)
                       ? " bg-gray-300"
                       : " text-black hover:bg-gray-200"
@@ -428,7 +415,7 @@ export default function ProfileSetup() {
           </p>
           <button
             onClick={resetForm}
-            className="mt-6 bg-yellow-500 px-12 py-4 rounded-full text-lg font-semibold text-white hover:bg-yellow-600 cursor-pointer"
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-[280px]"
           >
             Start Over
           </button>

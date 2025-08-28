@@ -143,7 +143,7 @@ const CollapsibleSection = ({
 
   return (
     <div
-      className={`collapse collapse-arrow border-b border-gray-300 border-opacity-50 ${
+      className={`collapse collapse-arrow border-b rounded-none border-gray-300 border-opacity-50 ${
         isOpen ? "collapse-open" : ""
       }`}
     >
