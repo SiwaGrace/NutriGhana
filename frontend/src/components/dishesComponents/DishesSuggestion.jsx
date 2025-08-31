@@ -26,7 +26,7 @@ const DishesSuggestion = ({ searchTerm, filter }) => {
 
   const filteredDishes = dishes
     .filter((recipe) =>
-      recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+      recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .filter((recipe) => {
       if (filter === "favorite") return recipe.favorite;
@@ -41,12 +41,10 @@ const DishesSuggestion = ({ searchTerm, filter }) => {
       {error && <Error />}
       {/* Dish Item with Add Button */}
       {filteredDishes.map((recipe) => {
-        const calories = recipe.nutrition?.nutrients?.find(
-          (n) => n.name === "Calories"
-        );
+        const calories = recipe.nutrients?.find((n) => n.name === "Calories");
         return (
           <div
-            key={recipe.id}
+            key={recipe._id}
             className="flex items-center justify-between bg-white p-3 rounded-lg shadow-md border border-gray-300 cursor-pointer"
             onClick={() => {
               dispatch(setSelectedDish(recipe));
@@ -55,12 +53,12 @@ const DishesSuggestion = ({ searchTerm, filter }) => {
           >
             <div className="flex items-center gap-3">
               <img
-                src={recipe.image}
+                src={recipe.imageUrl}
                 alt="Kenkey with pepper"
                 className="w-12 h-12 rounded-md object-cover"
               />
               <div>
-                <p className="font-semibold">{recipe.title}</p>
+                <p className="font-semibold">{recipe.name}</p>
                 <p className="text-sm text-gray-500 flex items-center gap-1">
                   <Flame size={14} />{" "}
                   {calories ? `${calories.amount} ${calories.unit}` : "No data"}

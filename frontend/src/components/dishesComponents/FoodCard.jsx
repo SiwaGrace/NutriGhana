@@ -12,12 +12,12 @@ export default function FoodCard() {
   const [servings, setServings] = useState(1);
   const { selectedDish } = useSelector((state) => state.dishes);
   // nutrients
-  const nutrients = selectedDish?.nutrition?.nutrients || [];
+  const Allnutrients = selectedDish?.nutrients || [];
 
-  const calories = nutrients.find((n) => n.name === "Calories");
-  const protein = nutrients.find((n) => n.name === "Protein");
-  const fat = nutrients.find((n) => n.name === "Fat");
-  const carbs = nutrients.find((n) => n.name === "Carbohydrates");
+  const calories = Allnutrients.find((n) => n.name === "Calories");
+  const protein = Allnutrients.find((n) => n.name === "Protein");
+  const fat = Allnutrients.find((n) => n.name === "Fat");
+  const carbs = Allnutrients.find((n) => n.name === "Carbs");
 
   // console.log(selectedDish);
   if (!selectedDish) {
@@ -47,13 +47,11 @@ export default function FoodCard() {
           {/* food image */}
           <div
             className="bg-cover bg-center h-[40vh] mb-5 rounded-2xl"
-            style={{ backgroundImage: `url(${selectedDish.image})` }}
+            style={{ backgroundImage: `url(${selectedDish.imageUrl})` }}
           ></div>
           {/* Food Title */}
           <div className="flex justify-between items-center mb-4 ">
-            <h1 className="text-2xl font-semibold mb-2">
-              {selectedDish.title}
-            </h1>
+            <h1 className="text-2xl font-semibold mb-2">{selectedDish.name}</h1>
             <p className="border p-2 rounded-full">
               <Heart className="w-6 h-6 text-gray-400" />
             </p>

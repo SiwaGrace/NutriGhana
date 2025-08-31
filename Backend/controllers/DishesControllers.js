@@ -1,7 +1,9 @@
-const Food = require("../models/DishesModel");
-const asyncHandler = require("express-async-handler");
-const cloudinary = require("cloudinary").v2;
-require("dotenv").config();
+import Food from "../models/DishesModel.js";
+import asyncHandler from "express-async-handler";
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Cloudinary config
 cloudinary.config({
@@ -61,10 +63,7 @@ const createFood = asyncHandler(async (req, res) => {
 // @access  Public
 const retrieveFood = asyncHandler(async (req, res) => {
   const foods = await Food.find();
-  res.status(200).json(foods);
+  res.status(200).json({ results: foods });
 });
 
-module.exports = {
-  createFood,
-  retrieveFood,
-};
+export { createFood, retrieveFood };

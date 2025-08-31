@@ -4,10 +4,12 @@ import axios from "axios";
 
 export const getDishes = createAsyncThunk("dishes/getDishes", async () => {
   try {
-    const response = await axios.get(`http://localhost:5000/api/dishes/getall`);
+    const response = await axios.get(`http://localhost:5000/api/dishes/get`);
+    // `http://localhost:5000/api/foods/getAll`;
     // Alphabetically sort by recipe title
     const sortedDishes = response.data.results.sort((a, b) =>
-      a.title.localeCompare(b.title)
+      // with spoonacular i had a.title
+      a.name.localeCompare(b.name)
     );
     // Force favorite and saved to false initially
     const initializedDishes = sortedDishes.map((dish) => ({
@@ -15,6 +17,7 @@ export const getDishes = createAsyncThunk("dishes/getDishes", async () => {
       favorite: false,
       saved: false,
     }));
+
     console.log(response.data.results);
     return initializedDishes;
   } catch (error) {
