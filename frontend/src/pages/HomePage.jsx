@@ -143,7 +143,7 @@ const ProfileHome = () => {
       <div className="mt-4">
         <h3 className="text-sm font-semibold">Recent logged</h3>
         <div className="bg-white p-4 rounded-lg shadow-md mt-2 text-center text-gray-500 text-sm">
-          {loggedDishes === 0
+          {loggedDishes <= 0
             ? "No food logged yet."
             : loggedDishes.map((dish) => <FoodLog dish={dish} />)}
         </div>
