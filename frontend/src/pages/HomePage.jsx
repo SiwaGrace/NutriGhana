@@ -97,65 +97,74 @@ const ProfileHome = () => {
         ))}
       </div>
       {/* depends on selected day */}
-      <div>
-        {/* Calories Card */}
-        <div className="mt-4 bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
+      {selectedDay === "today" ? (
+        <>
           <div>
-            <h3
-              className={`text-2xl font-bold transition-transform duration-300 ${
-                caloriesPop ? "scale-125" : ""
-              }`}
-              style={{ display: "inline-block" }}
-            >
-              {recommendedCalories ? recommendedCalories : "—"}
-            </h3>
-            <p className="text-gray-500 text-sm">Calories left</p>
-          </div>
-          <div className="w-16 h-16 flex flex-col items-center justify-center rounded-full border-4 border-gray-200">
-            <img src={StreakIcon} alt="Streak" className="w-6 h-6" />
-            <span className="text-xs font-bold text-yellow-500 mt-1">
-              {/* {loginStreak} */}
-            </span>
-          </div>
-        </div>
+            {/* Calories Card */}
+            <div className="mt-4 bg-white p-4 rounded-lg shadow-md flex justify-between items-center">
+              <div>
+                <h3
+                  className={`text-2xl font-bold transition-transform duration-300 ${
+                    caloriesPop ? "scale-125" : ""
+                  }`}
+                  style={{ display: "inline-block" }}
+                >
+                  {recommendedCalories ? recommendedCalories : "—"}
+                </h3>
+                <p className="text-gray-500 text-sm">Calories left</p>
+              </div>
+              <div className="w-16 h-16 flex flex-col items-center justify-center rounded-full border-4 border-gray-200">
+                <img src={StreakIcon} alt="Streak" className="w-6 h-6" />
+                <span className="text-xs font-bold text-yellow-500 mt-1">
+                  {/* {loginStreak} */}
+                </span>
+              </div>
+            </div>
 
-        {/* Macros */}
-        <div className="mt-4 flex gap-3">
-          <div className="flex-1 bg-white p-4 rounded-lg shadow-md text-center transform transition-transform hover:scale-105">
-            <img src={FishIcon} alt="Protein" className="w-5 h-5 mx-auto" />
-            <p className="text-xs text-gray-500">Protein left</p>
-            <p className="h-1 mt-2 bg-gray-200 w-full"></p>
+            {/* Macros */}
+            <div className="mt-4 flex gap-3">
+              <div className="flex-1 bg-white p-4 rounded-lg shadow-md text-center transform transition-transform hover:scale-105">
+                <img src={FishIcon} alt="Protein" className="w-5 h-5 mx-auto" />
+                <p className="text-xs text-gray-500">Protein left</p>
+                <p className="h-1 mt-2 bg-gray-200 w-full"></p>
+              </div>
+              <div className="flex-1 bg-white p-4 rounded-lg shadow-md text-center transform transition-transform hover:scale-105">
+                <img src={CarbIcon} alt="Carbs" className="w-5 h-5 mx-auto" />
+                <p className="text-xs text-gray-500">Carbs left</p>
+                <p className="h-1 mt-2 bg-gray-200 w-full"></p>
+              </div>
+              <div className="flex-1 bg-white p-4 rounded-lg shadow-md text-center transform transition-transform hover:scale-105">
+                <img src={FatIcon} alt="Fat" className="w-5 h-5 mx-auto" />
+                <p className="text-xs text-gray-500">Fat left</p>
+                <p className="h-1 mt-2 bg-gray-200 w-full "></p>
+              </div>
+            </div>
           </div>
-          <div className="flex-1 bg-white p-4 rounded-lg shadow-md text-center transform transition-transform hover:scale-105">
-            <img src={CarbIcon} alt="Carbs" className="w-5 h-5 mx-auto" />
-            <p className="text-xs text-gray-500">Carbs left</p>
-            <p className="h-1 mt-2 bg-gray-200 w-full"></p>
-          </div>
-          <div className="flex-1 bg-white p-4 rounded-lg shadow-md text-center transform transition-transform hover:scale-105">
-            <img src={FatIcon} alt="Fat" className="w-5 h-5 mx-auto" />
-            <p className="text-xs text-gray-500">Fat left</p>
-            <p className="h-1 mt-2 bg-gray-200 w-full "></p>
-          </div>
-        </div>
-      </div>
 
-      {/* Recent Log */}
-      <div className="mt-4">
-        <h3 className="text-sm font-semibold">Recent logged</h3>
-        <div className="bg-white p-4 rounded-lg shadow-md mt-2 text-center text-gray-500 text-sm">
-          {loggedDishes <= 0
-            ? "No food logged yet."
-            : loggedDishes.map((dish) => <FoodLog dish={dish} />)}
-        </div>
-      </div>
-      {/* Add this style for the pop animation if not using Tailwind CSS v3+ */}
-      <style>
-        {`
+          {/* Recent Log */}
+          <div className="mt-8">
+            <h3 className="text-xl font-semibold text-center">Recent logged</h3>
+            <div className="bg-white p-4 rounded-lg mt-2 text-center text-gray-500 text-sm">
+              {loggedDishes.length <= 0
+                ? "No food logged yet."
+                : loggedDishes.map((dish) => (
+                    <FoodLog dish={dish} key={dish._id} />
+                  ))}
+            </div>
+          </div>
+          {/* Add this style for the pop animation if not using Tailwind CSS v3+ */}
+          <style>
+            {`
           .scale-125 {
             transform: scale(1.25);
           }
         `}
-      </style>
+          </style>
+        </>
+      ) : (
+        // yesterday
+        "No recorded data"
+      )}
     </div>
   );
 };
