@@ -1,13 +1,17 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ArrowLeft, Heart } from "lucide-react";
 import FishIcon from "../../assets/logo&icons/fa-solid_fish.svg";
 import CarbIcon from "../../assets/logo&icons/fluent_food-grains-20-filled.svg";
 import FatIcon from "../../assets/logo&icons/game-icons_fat.svg";
+import { addFood } from "../../slices/loggedFoodsSlice";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function FoodCard() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [measurement, setMeasurement] = useState("Bowl");
   const [servings, setServings] = useState(1);
   const { selectedDish } = useSelector((state) => state.dishes);
@@ -33,15 +37,29 @@ export default function FoodCard() {
       </div>
     );
   }
+
+  // on log
+  const [isLogged, setIsLogged] = useState(false);
+
+  const onLog = () => {
+    setIsLogged(true);
+    dispatch(addFood(selectedDish));
+  };
   return (
     <Link to="/food">
       <div className="pt-28 ">
         <div className="px-6 py-10 max-w-md mx-auto rounded-lg shadow-sm">
           {/* Header */}
           <div className="flex  items-center space-x-30 mb-4">
-            <Link to="/dishes" className="border p-2 rounded-full">
+            <button
+              onClick={(e) => {
+                e.preventDefault(); // stop outer link navigation
+                navigate("/dishes");
+              }}
+              className="border p-2 rounded-full"
+            >
               <ArrowLeft className="w-6 h-6" />
-            </Link>
+            </button>
             <span className="text-lg font-medium">Selected food</span>
           </div>
           {/* food image */}
@@ -135,8 +153,11 @@ export default function FoodCard() {
           </div>
 
           {/* Log Button */}
-          <button className="w-[80%] block  mx-auto bg-yellow-500 text-white py-3 rounded-full text-lg mt-10">
-            Log
+          <button
+            className="w-[80%] block  mx-auto bg-yellow-500 text-white py-3 rounded-full text-lg mt-10 cursor-pointer"
+            onClick={() => onLog()}
+          >
+            {isLogged ? "Food Logged" : "Log"}
           </button>
         </div>
       </div>

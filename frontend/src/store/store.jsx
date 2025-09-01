@@ -5,6 +5,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import dishesReducer from "../slices/getAllDishes";
 import profileReducer from "../slices/profileUserSlice";
 import streakReducer from "../slices/streakSlice";
+import loggedFoodsReducer from "../slices/loggedFoodsSlice";
 
 // import { configureStore } from "@reduxjs/toolkit";
 // import { persistStore, persistReducer } from "redux-persist";
@@ -40,5 +41,6 @@ export const store = configureStore({
     dishes: dishesReducer,
     profiles: profileReducer,
     streak: streakReducer,
+    loggedFoods: loggedFoodsReducer,
   },
 });

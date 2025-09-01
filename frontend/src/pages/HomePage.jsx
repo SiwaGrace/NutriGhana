@@ -3,8 +3,9 @@ import FishIcon from "../assets/logo&icons/fa-solid_fish.svg";
 import CarbIcon from "../assets/logo&icons/fluent_food-grains-20-filled.svg";
 import FatIcon from "../assets/logo&icons/game-icons_fat.svg";
 import StreakIcon from "../assets/logo&icons/streakIcon.svg";
-import FoodLog from "../components/FoodLogCard";
+import FoodLog from "../components/dishesComponents/FoodLogCard";
 import Streaks from "../components/Streaks";
+import { useSelector } from "react-redux";
 
 const ProfileHome = () => {
   const [userName, setUserName] = useState(""); // add userName state
@@ -51,12 +52,28 @@ const ProfileHome = () => {
     }
   }, [recommendedCalories]);
 
+  // dynamic greeting
+  const hour = new Date().getHours();
+
+  let greeting;
+  if (hour < 12) {
+    greeting = "Good morning,what a beautifull day hehe";
+  } else if (hour < 18) {
+    greeting = "Good afternoon,philipooo";
+  } else if (hour < 22) {
+    greeting = "Good evening,";
+  } else {
+    greeting = "Good night,";
+  }
+  // looged dish
+  const loggedDishes = useSelector((state) => state.loggedFoods.loggedfoods);
+
   return (
     <div className="pt-24 px-4 bg-white min-h-screen text-black">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex flex-col ">
-          <h2 className="text-xl font-semibold text-gray-500">Good morning,</h2>
+          <h2 className="text-xl font-semibold text-gray-500">{greeting}</h2>
           <div className="text-xl font-semibold mt-2 text-gray-800 mb-2">
             {userName || "No name found"}
           </div>
@@ -126,9 +143,10 @@ const ProfileHome = () => {
       <div className="mt-4">
         <h3 className="text-sm font-semibold">Recent logged</h3>
         <div className="bg-white p-4 rounded-lg shadow-md mt-2 text-center text-gray-500 text-sm">
-          No food logged yet.
+          {loggedDishes === 0
+            ? "No food logged yet."
+            : loggedDishes.map((dish) => <FoodLog dish={dish} />)}
         </div>
-        <FoodLog />
       </div>
       {/* Add this style for the pop animation if not using Tailwind CSS v3+ */}
       <style>
