@@ -5,8 +5,11 @@ import Woman from "../assets/img/woman1.jpg";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import EditProfile from "../components/EditProfile";
+import { useSelector } from "react-redux";
 
 export default function ProfileUser() {
+  const { loggedfoods } = useSelector((state) => state.loggedFoods);
+
   const [mealReminders, setMealReminders] = useState(true);
   const [weeklyTips, setWeeklyTips] = useState(true);
   const [email, setEmail] = useState("");
@@ -89,7 +92,7 @@ export default function ProfileUser() {
   };
 
   return (
-    <div className=" px-6 flex flex-col items-center bg-white text-black">
+    <div className="pt-5 px-6 flex flex-col items-center bg-white text-black">
       {/* Profile Section */}
       {/* Profile Section */}
       {/* <h2 className="text-xl font-semibold ">Profile</h2> */}
@@ -109,7 +112,7 @@ export default function ProfileUser() {
       {/* Total Food Logged */}
       <div className="w-full mt-6">
         <p className="text-lg text-gray-500">Total Food Logged</p>
-        <p className="text-3xl font-bold text-gray-300">54</p>
+        <p className="text-3xl font-bold text-gray-300">{loggedfoods.length}</p>
       </div>
       <EditProfile />
       {/* <ProfilesList /> */}

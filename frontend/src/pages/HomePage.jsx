@@ -69,7 +69,7 @@ const ProfileHome = () => {
   const loggedDishes = useSelector((state) => state.loggedFoods.loggedfoods);
 
   return (
-    <div className="pt-24 px-4 bg-white min-h-screen text-black">
+    <div className="pt-5  px-4 bg-white min-h-screen text-black">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex flex-col ">

@@ -205,7 +205,7 @@ export default function ProfileSetup() {
               {["Male", "Female"].map((g) => (
                 <button
                   key={g}
-                  className={`px-14 py-6 rounded-full text-sm font-bold border transition duration-200 cursor-pointer font-light tracking-wide ${
+                  className={`px-14 py-6 rounded-full text-sm font-bold border transition duration-200 cursor-pointer tracking-wide ${
                     gender === g
                       ? "bg-yellow-500 text-white"
                       : "border-gray-300 hover:border-yellow-500"
@@ -260,7 +260,7 @@ export default function ProfileSetup() {
               {heightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-3 rounded-md text-lg   font-light tracking-wide  font-bold transition duration-200 cursor-pointer ${
+                  className={`w-full py-3 rounded-md text-lg tracking-wide  font-bold transition duration-200 cursor-pointer ${
                     height === String(option)
                       ? "bg-gray-200"
                       : "text-black hover:bg-gray-300"
@@ -355,7 +355,7 @@ export default function ProfileSetup() {
               {weightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-3 rounded-md text-lg   font-light tracking-wide  font-bold transition duration-200 cursor-pointer${
+                  className={`w-full py-3 rounded-md text-lg  tracking-wide  font-bold transition duration-200 cursor-pointer${
                     currentWeight === String(option)
                       ? " bg-gray-300"
                       : " text-black hover:bg-gray-200"
@@ -375,7 +375,7 @@ export default function ProfileSetup() {
               {weightOptions.map((option) => (
                 <button
                   key={option}
-                  className={`w-full py-3 rounded-md text-lg   font-light tracking-wide  font-bold transition duration-200 cursor-pointer${
+                  className={`w-full py-3 rounded-md text-lg  tracking-wide  font-bold transition duration-200 cursor-pointer${
                     currentWeightGoal === String(option)
                       ? " bg-gray-300"
                       : " text-black hover:bg-gray-200"

@@ -47,8 +47,14 @@ export default function FoodCard() {
   };
   return (
     <Link to="/food">
-      <div className="pt-28 ">
-        <div className="px-6 py-10 max-w-md mx-auto rounded-lg shadow-sm">
+      <div className="pt-28">
+        <div className="px-6 py-10 max-w-md mx-auto rounded-lg shadow-sm  relative">
+          {/* Food Tag in top-left corner */}
+          {selectedDish.tribe && (
+            <span className="absolute top-2 right-2 bg-yellow-100 text-yellow-700 text-sm px-2 py-1 rounded-full font-bold">
+              {selectedDish.tribe}
+            </span>
+          )}
           {/* Header */}
           <div className="flex  items-center space-x-30 mb-4">
             <button

@@ -1,3 +1,18 @@
+const loadSavedFromLocalStorage = () => {
+  try {
+    return JSON.parse(localStorage.getItem("savedDishes")) || [];
+  } catch {
+    return [];
+  }
+};
+
+const loadFavorites = () => {
+  const saved = localStorage.getItem("favorites");
+  return saved ? JSON.parse(saved) : {};
+};
+const saveFavorites = (favorites) => {
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+};
 // src/features/counter/counterSlice.js
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
@@ -32,6 +47,8 @@ const initialState = {
   isLoading: true,
   error: null,
   selectedDish: null,
+  favorites: loadFavorites(),
+  savedIds: loadSavedFromLocalStorage(),
 };
 
 const dishesSlice = createSlice({
@@ -43,16 +60,31 @@ const dishesSlice = createSlice({
       console.log(action.payload);
     },
     toggleFavorite: (state, action) => {
-      const dish = state.dishes.find((d) => d.id === action.payload);
+      const dishId = action.payload;
+      const dish = state.dishes.find((d) => d._id === dishId);
       if (dish) {
         dish.favorite = !dish.favorite;
+        state.favorites[dishId] = dish.favorite;
+        saveFavorites(state.favorites); // ✅ persist in localStorage
       }
     },
     toggleSaved: (state, action) => {
-      const dish = state.dishes.find((d) => d.id === action.payload);
-      if (dish) {
-        dish.saved = !dish.saved;
+      const dishId = action.payload;
+      const dish = state.dishes.find((d) => d._id === dishId);
+
+      if (!dish) return;
+
+      // toggle saved
+      dish.saved = !dish.saved;
+
+      if (dish.saved) {
+        state.savedIds.push(dishId);
+      } else {
+        state.savedIds = state.savedIds.filter((id) => id !== dishId);
       }
+
+      // persist to localStorage
+      localStorage.setItem("savedDishes", JSON.stringify(state.savedIds));
     },
   },
   extraReducers: (builder) => {
@@ -62,9 +94,14 @@ const dishesSlice = createSlice({
       })
 
       .addCase(getDishes.fulfilled, (state, action) => {
-        state.dishes = action.payload;
+        state.dishes = action.payload.map((dish) => ({
+          ...dish,
+          saved: state.savedIds.includes(dish._id), // sync saved state
+          favorite: state.favorites[dish._id] || false, // ✅ sync favorite state
+        }));
         state.isLoading = false;
       })
+
       .addCase(getDishes.rejected, (state) => {
         state.error = "error loading";
         state.isLoading = false;

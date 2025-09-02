@@ -2,16 +2,16 @@ import React, { useEffect } from "react";
 // , HeartFilled
 import { Flame, Heart, Plus, Check } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getDishes,
-  setSelectedDish,
-  toggleFavorite,
-  toggleSaved,
-} from "../../slices/getAllDishes";
+import { getDishes, setSelectedDish } from "../../slices/getAllDishes";
 import Loading from "./Loading";
 import Error from "./Error";
 import { useNavigate } from "react-router-dom";
-import FoodCard from "./FoodCard";
+import {
+  saveToLocalStorage,
+  getFromLocalStorage,
+} from "../../utils/likedDishStorage";
+import FavoriteButton from "./FavoriteButton";
+import SaveButton from "./SaveButton";
 
 const DishesSuggestion = ({ searchTerm, filter }) => {
   // const [visibleDishId, setVisibleDishId] = useState(null);
@@ -19,6 +19,7 @@ const DishesSuggestion = ({ searchTerm, filter }) => {
   const navigate = useNavigate();
   const { dishes, isLoading, error } = useSelector((state) => state.dishes);
 
+  // get all
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getDishes());
@@ -59,6 +60,7 @@ const DishesSuggestion = ({ searchTerm, filter }) => {
               />
               <div>
                 <p className="font-semibold">{recipe.name}</p>
+
                 <p className="text-sm text-gray-500 flex items-center gap-1">
                   <Flame size={14} />{" "}
                   {calories ? `${calories.amount} ${calories.unit}` : "No data"}
@@ -67,38 +69,10 @@ const DishesSuggestion = ({ searchTerm, filter }) => {
             </div>
             <div className="flex gap-2">
               {/* Favorite (Love) Button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Dispatch toggle favorite
-                  dispatch(toggleFavorite(recipe.id));
-                }}
-                className="cursor-pointer"
-              >
-                <Heart
-                  size={24}
-                  className={
-                    recipe.favorite ? "text-orange-300" : "text-gray-400"
-                  }
-                  strokeWidth={2}
-                  fill={recipe.favorite ? "orange" : "none"}
-                />
-              </button>
 
+              <FavoriteButton recipe={recipe} />
               {/* Save (Plus) Button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  dispatch(toggleSaved(recipe.id));
-                }}
-                className="cursor-pointer"
-              >
-                {recipe.saved ? (
-                  <Check size={24} className="text-green-600" />
-                ) : (
-                  <Plus size={24} className="text-gray-400" />
-                )}
-              </button>
+              <SaveButton recipe={recipe} />
             </div>
           </div>
         );

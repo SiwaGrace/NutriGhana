@@ -1,8 +1,8 @@
-// features/loggedFoodsSlice.js
 import { createSlice } from "@reduxjs/toolkit";
+import { loadLoggedFoods, saveLoggedFoods } from "../utils/likedDishStorage";
 
 const initialState = {
-  loggedfoods: [], // array of logged foods
+  loggedfoods: loadLoggedFoods(), // load saved foods
 };
 
 const loggedFoodsSlice = createSlice({
@@ -10,10 +10,12 @@ const loggedFoodsSlice = createSlice({
   initialState,
   reducers: {
     addFood: (state, action) => {
-      state.loggedfoods.push(action.payload); // add new food
+      state.loggedfoods.push(action.payload);
+      saveLoggedFoods(state.loggedfoods); // save to localStorage
     },
     clearFoods: (state) => {
       state.loggedfoods = [];
+      saveLoggedFoods(state.loggedfoods); // clear localStorage
     },
   },
 });
