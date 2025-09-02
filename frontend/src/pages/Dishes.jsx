@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import DishesSuggestion from "../components/dishesComponents/DishesSuggestion";
 import SearchBar from "../components/dishesComponents/SearchBar";
+import DishCategory from "../components/dishesComponents/DishCategory";
 import { useState } from "react";
 
 export default function ProfileDishes() {
@@ -17,6 +18,8 @@ export default function ProfileDishes() {
 
       {/* Search Bar */}
       <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+      {/* category */}
+      <DishCategory />
       {/* Filters */}
       <div className="flex gap-4 text-gray-500 mb-4">
         {["all", "favorite", "saved"].map((type) => {

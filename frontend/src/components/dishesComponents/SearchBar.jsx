@@ -1,24 +1,8 @@
 import React from "react";
 import { Search } from "lucide-react";
+import { useState } from "react";
 
-const SearchBar = ({
-  searchTerm,
-  onSearchChange,
-  selectedFilter,
-  onFilterChange,
-}) => {
-  const filterOptions = [
-    "All",
-    "Diary",
-    "Non-Diary",
-    "Carbs",
-    "Protein",
-    "Fat",
-    "Drinks",
-    "Breakfast",
-    "Dinner",
-  ];
-
+const SearchBar = ({ searchTerm, onSearchChange }) => {
   return (
     <div className="mb-4">
       {/* Search Input with Icon */}
@@ -34,28 +18,6 @@ const SearchBar = ({
           placeholder="Search dishes"
           className="w-full pl-10 p-2 border rounded-[50px] border-gray-300 bg-[#dddedf]"
         />
-      </div>
-
-      {/* Filter Buttons */}
-      <div>
-        <h2 className="text-black font-bold text-xl my-2 capitalize">
-          Filters
-        </h2>
-        <div className="flex gap-2 flex-wrap">
-          {filterOptions.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => onFilterChange(filter)}
-              className={`px-3 py-1 rounded-full border cursor-pointer ${
-                selectedFilter === filter
-                  ? "bg-purple-500 text-white border-purple-500"
-                  : "bg-white text-gray-700 border-gray-300"
-              } text-sm font-semibold`}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
       </div>
     </div>
   );

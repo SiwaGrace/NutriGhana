@@ -19,7 +19,7 @@ import axios from "axios";
 
 export const getDishes = createAsyncThunk("dishes/getDishes", async () => {
   try {
-    const response = await axios.get(`http://localhost:5000/api/dishes/get`);
+    const response = await axios.get(`http://localhost:5000/api/dishes`);
     // `http://localhost:5000/api/foods/getAll`;
     // Alphabetically sort by recipe title
     const sortedDishes = response.data.results.sort((a, b) =>

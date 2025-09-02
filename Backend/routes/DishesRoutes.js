@@ -1,5 +1,9 @@
 import express from "express";
-import { createFood, retrieveFood } from "../controllers/DishesControllers.js";
+import {
+  createFood,
+  retrieveFood,
+  getDishesByCategory,
+} from "../controllers/DishesControllers.js";
 import { upload } from "../config/cloudinary.js";
 
 const router = express.Router();
@@ -8,6 +12,9 @@ const router = express.Router();
 router.post("/", upload.single("image"), createFood);
 
 // GET /api/foods -> retrieve all foods
-router.get("/get", retrieveFood);
+router.get("/", retrieveFood);
+
+// GET /api/foods -> retrieve foods by category
+router.get("/category/:category", getDishesByCategory);
 
 export default router;

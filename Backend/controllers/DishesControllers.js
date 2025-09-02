@@ -66,4 +66,18 @@ const retrieveFood = asyncHandler(async (req, res) => {
   res.status(200).json({ results: foods });
 });
 
-export { createFood, retrieveFood };
+// @desc    Retrieve foods by category
+// @route   GET /api/foods
+// @access  Public
+const getDishesByCategory = asyncHandler(async (req, res) => {
+  const { category } = req.params;
+
+  const dishes = await Food.find({ category });
+  if (dishes.length === 0) {
+    res.status(404).json({ message: `No dishes found in ${category}` });
+  } else {
+    res.json(dishes);
+  }
+});
+
+export { createFood, retrieveFood, getDishesByCategory };

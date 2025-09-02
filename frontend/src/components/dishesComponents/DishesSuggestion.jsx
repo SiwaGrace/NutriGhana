@@ -1,19 +1,15 @@
 import React, { useEffect } from "react";
 // , HeartFilled
-import { Flame, Heart, Plus, Check } from "lucide-react";
+import { Flame } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDishes, setSelectedDish } from "../../slices/getAllDishes";
 import Loading from "./Loading";
 import Error from "./Error";
 import { useNavigate } from "react-router-dom";
-import {
-  saveToLocalStorage,
-  getFromLocalStorage,
-} from "../../utils/likedDishStorage";
 import FavoriteButton from "./FavoriteButton";
 import SaveButton from "./SaveButton";
 
-const DishesSuggestion = ({ searchTerm, filter }) => {
+const DishesSuggestion = ({ searchTerm, filter, category }) => {
   // const [visibleDishId, setVisibleDishId] = useState(null);
 
   const navigate = useNavigate();
