@@ -60,12 +60,19 @@ const dishesSlice = createSlice({
     toggleFavorite: (state, action) => {
       const dishId = action.payload;
       const dish = state.allDishes.find((d) => d._id === dishId);
-      if (dish) {
-        dish.favorite = !dish.favorite;
-        state.favorites[dishId] = dish.favorite;
-        saveFavorites(state.favorites);
+      if (!dish) return;
+
+      // Toggle favorite
+      dish.favorite = !dish.favorite;
+      state.favorites[dishId] = dish.favorite;
+      saveFavorites(state.favorites);
+
+      // Update selectedDish if it’s the one currently viewed
+      if (state.selectedDish?._id === dishId) {
+        state.selectedDish.favorite = dish.favorite;
       }
     },
+
     toggleSaved: (state, action) => {
       const dishId = action.payload;
       const dish = state.allDishes.find((d) => d._id === dishId);

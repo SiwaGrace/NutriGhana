@@ -7,6 +7,7 @@ import FatIcon from "../../assets/logo&icons/game-icons_fat.svg";
 import { addFood } from "../../slices/loggedFoodsSlice";
 
 import { Link, useNavigate } from "react-router-dom";
+import FavoriteButton from "./FavoriteButton";
 
 export default function FoodCard() {
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ export default function FoodCard() {
   // }, []);
   return (
     <Link to="/food">
-      <div className="pt-28">
+      <div className="pt-12">
         <div className="px-6 py-10 max-w-md mx-auto rounded-lg shadow-sm  relative">
           {/* Food Tag in top-left corner */}
           {selectedDish.tribe && (
@@ -92,6 +93,7 @@ export default function FoodCard() {
             <p className="border p-2 rounded-full">
               <Heart className="w-6 h-6 text-gray-400" />
             </p>
+            {/* <FavoriteButton recipeId={selectedDish._id} /> */}
           </div>
 
           {/* Measurement Options */}

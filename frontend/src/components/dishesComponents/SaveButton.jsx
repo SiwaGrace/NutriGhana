@@ -1,15 +1,19 @@
 import { Plus, Check } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleSaved } from "../../slices/getAllDishes";
 
-const SaveButton = ({ recipe }) => {
+const SaveButton = ({ recipeId }) => {
   const dispatch = useDispatch();
+  const recipe = useSelector((state) =>
+    state.dishes.allDishes.find((d) => d._id === recipeId)
+  );
 
   const handleSave = (e) => {
     e.stopPropagation();
-    dispatch(toggleSaved(recipe._id));
-    // Save to localStorage
+    dispatch(toggleSaved(recipeId));
   };
+
+  if (!recipe) return null;
 
   return (
     <button onClick={handleSave} className="cursor-pointer">

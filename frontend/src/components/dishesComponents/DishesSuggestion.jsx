@@ -77,9 +77,9 @@ const DishesSuggestion = ({ searchTerm, filter, category }) => {
             <div className="flex gap-2">
               {/* Favorite (Love) Button */}
 
-              <FavoriteButton recipe={recipe} />
+              <FavoriteButton recipeId={recipe._id} />
               {/* Save (Plus) Button */}
-              <SaveButton recipe={recipe} />
+              <SaveButton recipeId={recipe._id} />
             </div>
           </div>
         );

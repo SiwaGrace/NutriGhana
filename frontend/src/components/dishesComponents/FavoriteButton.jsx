@@ -1,14 +1,19 @@
 import { Heart } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleFavorite } from "../../slices/getAllDishes";
 
-const FavoriteButton = ({ recipe }) => {
+const FavoriteButton = ({ recipeId }) => {
   const dispatch = useDispatch();
+  const recipe = useSelector((state) =>
+    state.dishes.allDishes.find((d) => d._id === recipeId)
+  );
 
   const handleFavorite = (e) => {
     e.stopPropagation();
-    dispatch(toggleFavorite(recipe._id));
+    dispatch(toggleFavorite(recipeId));
   };
+
+  if (!recipe) return null;
 
   return (
     <button onClick={handleFavorite} className="cursor-pointer">
