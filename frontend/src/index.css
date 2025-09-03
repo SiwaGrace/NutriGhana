@@ -88,3 +88,14 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: black !important;
   transition: background-color 5000s ease-in-out 0s;
 }
+
+/* Hide scrollbar for all divs */
+div::-webkit-scrollbar {
+  display: none;
+}
+
+/* Optional: hide scrollbar in Firefox */
+div {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}

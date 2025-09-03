@@ -1,3 +1,7 @@
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+
+// LocalStorage helpers
 const loadSavedFromLocalStorage = () => {
   try {
     return JSON.parse(localStorage.getItem("savedDishes")) || [];
@@ -5,7 +9,6 @@ const loadSavedFromLocalStorage = () => {
     return [];
   }
 };
-
 const loadFavorites = () => {
   const saved = localStorage.getItem("favorites");
   return saved ? JSON.parse(saved) : {};
@@ -13,37 +16,33 @@ const loadFavorites = () => {
 const saveFavorites = (favorites) => {
   localStorage.setItem("favorites", JSON.stringify(favorites));
 };
-// src/features/counter/counterSlice.js
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 
+// Fetch all dishes
 export const getDishes = createAsyncThunk("dishes/getDishes", async () => {
-  try {
-    const response = await axios.get(`http://localhost:5000/api/dishes`);
-    // `http://localhost:5000/api/foods/getAll`;
-    // Alphabetically sort by recipe title
-    const sortedDishes = response.data.results.sort((a, b) =>
-      // with spoonacular i had a.title
-      a.name.localeCompare(b.name)
-    );
-    // Force favorite and saved to false initially
-    const initializedDishes = sortedDishes.map((dish) => ({
-      ...dish,
-      favorite: false,
-      saved: false,
-    }));
-
-    console.log(response.data.results);
-    return initializedDishes;
-  } catch (error) {
-    throw new Error(
-      "Spoonacular is currently unavailable. Please try again later."
-    );
-  }
+  const response = await axios.get(`http://localhost:5000/api/dishes`);
+  const sorted = response.data.results.sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+  return sorted.map((dish) => ({ ...dish, favorite: false, saved: false }));
 });
 
+// Fetch dishes by category
+export const getDishesByCategory = createAsyncThunk(
+  "dishes/getDishesByCategory",
+  async (category) => {
+    const response = await axios.get(
+      `http://localhost:5000/api/dishes/category/${category}`
+    );
+    const sorted = response.data.results.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+    return sorted.map((dish) => ({ ...dish, favorite: false, saved: false }));
+  }
+);
+
 const initialState = {
-  dishes: [],
+  allDishes: [], // full list
+  dishes: [], // filtered / displayed list
   isLoading: true,
   error: null,
   selectedDish: null,
@@ -57,34 +56,41 @@ const dishesSlice = createSlice({
   reducers: {
     setSelectedDish: (state, action) => {
       state.selectedDish = action.payload;
-      console.log(action.payload);
     },
     toggleFavorite: (state, action) => {
       const dishId = action.payload;
-      const dish = state.dishes.find((d) => d._id === dishId);
+      const dish = state.allDishes.find((d) => d._id === dishId);
       if (dish) {
         dish.favorite = !dish.favorite;
         state.favorites[dishId] = dish.favorite;
-        saveFavorites(state.favorites); // ✅ persist in localStorage
+        saveFavorites(state.favorites);
       }
     },
     toggleSaved: (state, action) => {
       const dishId = action.payload;
-      const dish = state.dishes.find((d) => d._id === dishId);
-
+      const dish = state.allDishes.find((d) => d._id === dishId);
       if (!dish) return;
 
-      // toggle saved
       dish.saved = !dish.saved;
 
-      if (dish.saved) {
-        state.savedIds.push(dishId);
-      } else {
-        state.savedIds = state.savedIds.filter((id) => id !== dishId);
-      }
+      if (dish.saved) state.savedIds.push(dishId);
+      else state.savedIds = state.savedIds.filter((id) => id !== dishId);
 
-      // persist to localStorage
       localStorage.setItem("savedDishes", JSON.stringify(state.savedIds));
+    },
+    // ✅ filter dishes locally
+    filterDishes: (state, action) => {
+      const filter = action.payload;
+      if (filter === "all") {
+        state.dishes = [...state.allDishes];
+      } else if (filter === "favorite") {
+        state.dishes = state.allDishes.filter((d) => d.favorite);
+      } else if (filter === "saved") {
+        state.dishes = state.allDishes.filter((d) => d.saved);
+      } else {
+        // category filter
+        state.dishes = state.allDishes.filter((d) => d.category === filter);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -92,26 +98,45 @@ const dishesSlice = createSlice({
       .addCase(getDishes.pending, (state) => {
         state.isLoading = true;
       })
-
       .addCase(getDishes.fulfilled, (state, action) => {
+        state.allDishes = action.payload.map((dish) => ({
+          ...dish,
+          saved: state.savedIds.includes(dish._id),
+          favorite: state.favorites[dish._id] || false,
+        }));
+        state.dishes = [...state.allDishes]; // display all initially
+        state.isLoading = false;
+      })
+      .addCase(getDishes.rejected, (state) => {
+        state.error = "Error loading dishes";
+        state.isLoading = false;
+      })
+      // Category fetch (optional, can merge into allDishes if needed)
+      .addCase(getDishesByCategory.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getDishesByCategory.fulfilled, (state, action) => {
+        // merge new category dishes into allDishes (if not already present)
+        action.payload.forEach((dish) => {
+          if (!state.allDishes.find((d) => d._id === dish._id)) {
+            state.allDishes.push(dish);
+          }
+        });
         state.dishes = action.payload.map((dish) => ({
           ...dish,
-          saved: state.savedIds.includes(dish._id), // sync saved state
-          favorite: state.favorites[dish._id] || false, // ✅ sync favorite state
+          saved: state.savedIds.includes(dish._id),
+          favorite: state.favorites[dish._id] || false,
         }));
         state.isLoading = false;
       })
-
-      .addCase(getDishes.rejected, (state) => {
-        state.error = "error loading";
+      .addCase(getDishesByCategory.rejected, (state) => {
+        state.error = "Error loading dishes by category";
         state.isLoading = false;
       });
   },
 });
 
-// Export generated action creators
-export const { setSelectedDish, toggleFavorite, toggleSaved } =
+export const { setSelectedDish, toggleFavorite, toggleSaved, filterDishes } =
   dishesSlice.actions;
 
-// Export the reducer to be added to the store
 export default dishesSlice.reducer;

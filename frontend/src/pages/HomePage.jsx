@@ -57,9 +57,9 @@ const ProfileHome = () => {
 
   let greeting;
   if (hour < 12) {
-    greeting = "Good morning,what a beautifull day hehe";
+    greeting = "Good morning,";
   } else if (hour < 18) {
-    greeting = "Good afternoon,philipooo";
+    greeting = "Good afternoon,";
   } else if (hour < 22) {
     greeting = "Good evening,";
   } else {

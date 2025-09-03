@@ -16,7 +16,7 @@ const SearchBar = ({ searchTerm, onSearchChange }) => {
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search dishes"
-          className="w-full pl-10 p-2 border rounded-[50px] border-gray-300 bg-[#dddedf]"
+          className="w-full pl-10 p-2 border rounded-[50px] border-gray-300 bg-[#f1f1f1] focus:outline-none focus:ring-1 focus:ring-gray-400"
         />
       </div>
     </div>

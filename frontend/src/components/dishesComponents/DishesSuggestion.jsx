@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
-// , HeartFilled
+// HeartFilled
 import { Flame } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { getDishes, setSelectedDish } from "../../slices/getAllDishes";
+import {
+  getDishes,
+  setSelectedDish,
+  filterDishes,
+} from "../../slices/getAllDishes";
 import Loading from "./Loading";
 import Error from "./Error";
 import { useNavigate } from "react-router-dom";
@@ -15,12 +19,18 @@ const DishesSuggestion = ({ searchTerm, filter, category }) => {
   const navigate = useNavigate();
   const { dishes, isLoading, error } = useSelector((state) => state.dishes);
 
-  // get all
+  // dispatch
   const dispatch = useDispatch();
+  // fetch all dishes on mount
   useEffect(() => {
     dispatch(getDishes());
   }, [dispatch]);
+  // local filtering for favorite/saved/category
+  useEffect(() => {
+    dispatch(filterDishes(filter));
+  }, [filter, dispatch]);
 
+  // Frontend local filtering(saved/favorite)
   const filteredDishes = dishes
     .filter((recipe) =>
       recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -45,6 +55,7 @@ const DishesSuggestion = ({ searchTerm, filter, category }) => {
             className="flex items-center justify-between bg-white p-3 rounded-lg shadow-md border border-gray-300 cursor-pointer"
             onClick={() => {
               dispatch(setSelectedDish(recipe));
+              localStorage.setItem("selectedDish", JSON.stringify(recipe));
               navigate("/food"); // or your actual route
             }}
           >
