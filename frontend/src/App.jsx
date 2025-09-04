@@ -23,6 +23,7 @@ import ForgetPassword from "./components/ForgetPassword";
 import PrivateRoute from "./pages/PrivateRoute";
 import VerifyOtp from "./components/VerifyOtp";
 import ResetPassword from "./components/ResetPassword";
+import Demo from "./components/dishesComponents/ToDelete.jsx/Demo";
 
 const App = () => {
   const myRoute = createBrowserRouter(
@@ -75,6 +76,7 @@ const App = () => {
         {/* no navbar */}
         <Route>
           <Route index element={<LandingPage />} />
+          <Route path="/demo" element={<Demo />} />
           <Route path="/login" element={<Signup />} />
           <Route path="/forgetPassword" element={<ForgetPassword />} />
           <Route path="/verify-otp" element={<VerifyOtp />} />

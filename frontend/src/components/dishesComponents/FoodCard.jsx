@@ -8,6 +8,8 @@ import { addFood } from "../../slices/loggedFoodsSlice";
 
 import { Link, useNavigate } from "react-router-dom";
 import FavoriteButton from "./FavoriteButton";
+import NumberofServings from "./NumberofServings";
+import MealBuilder from "./ToDelete.jsx/MealBuilder";
 
 export default function FoodCard() {
   const navigate = useNavigate();
@@ -65,7 +67,7 @@ export default function FoodCard() {
         <div className="px-6 py-10 max-w-md mx-auto rounded-lg shadow-sm  relative">
           {/* Food Tag in top-left corner */}
           {selectedDish.tribe && (
-            <span className="absolute top-2 right-2 bg-yellow-100 text-yellow-700 text-sm px-2 py-1 rounded-full font-bold">
+            <span className="absolute top-2 right-2 bg-yellow-100 text-yellow-700 text-sm px-2 py-1 rounded-full font-bold cursor-default">
               {selectedDish.tribe}
             </span>
           )}
@@ -76,9 +78,9 @@ export default function FoodCard() {
                 e.preventDefault(); // stop outer link navigation
                 navigate("/dishes");
               }}
-              className="border p-2 rounded-full"
+              className="border border-gray-300 p-2 rounded-full"
             >
-              <ArrowLeft className="w-6 h-6" />
+              <ArrowLeft className="w-6 h-6 cursor-pointer text-gray-500" />
             </button>
             <span className="text-lg font-medium">Selected food</span>
           </div>
@@ -97,37 +99,13 @@ export default function FoodCard() {
           </div>
 
           {/* Measurement Options */}
-          <div className="mb-4">
-            {" "}
-            <p className=" mb-2 text-xl font-bold">Measurement</p>
-            <div className="flex space-x-2 mb-4">
-              {["Bowl", "Balls", "Pcs"].map((option) => (
-                <button
-                  key={option}
-                  className={`px-4 py-2 rounded-full ${
-                    measurement === option
-                      ? "bg-yellow-500 text-white"
-                      : "bg-gray-200"
-                  }`}
-                  onClick={() => setMeasurement(option)}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-            {/* Number of Servings */}
-            <div className="mb-4 flex justify-between">
-              <p className="text-gray-500 ">Number of servings</p>
-              <input
-                type="number"
-                value={servings}
-                min="1"
-                className="w-16 text-center border rounded-4xl"
-                onChange={(e) => setServings(Number(e.target.value))}
-              />
-            </div>
-          </div>
-
+          <NumberofServings
+            servings={servings}
+            measurement={measurement}
+            setMeasurement={setMeasurement}
+            setServings={setServings}
+          />
+          {/* <MealBuilder /> */}
           {/* nutritions */}
           <div className="p-4">
             <p className=" mb-2 text-xl font-bold text-center">
@@ -175,35 +153,6 @@ export default function FoodCard() {
                 ))}
               </div>
             </div>
-            {/* Micros*/}
-            <div className="mt-6 p-4 bg-white rounded-lg shadow-md max-w-md mx-auto">
-              <h2 className="text-xl font-semibold mb-3 text-gray-800">
-                Micros Nutrients
-              </h2>
-
-              {/* Header row */}
-              <div className="flex justify-between items-center bg-[#e3e4e8] rounded-3xl px-4 py-2 mb-2">
-                <p className="text-sm font-medium text-gray-600">Nutrient</p>
-                <p className="text-lg font-semibold text-gray-800">Value</p>
-              </div>
-
-              {/* Dynamic list of all micro nutrients */}
-              {[
-                { nutrient: protein },
-                { nutrient: carbs },
-                { nutrient: fat },
-              ].map(({ nutrient }) => (
-                <div
-                  key={nutrient.name}
-                  className="flex justify-between items-center px-4 py-2 border-b border-gray-200"
-                >
-                  <p className="text-sm text-gray-600">{nutrient.name}</p>
-                  <p className="text-lg font-semibold text-gray-800">
-                    {nutrient.amount} {nutrient.unit}
-                  </p>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Log Button */}
@@ -217,12 +166,4 @@ export default function FoodCard() {
       </div>
     </Link>
   );
-}
-
-{
-  /* <div className="flex-1 bg-white p-4 rounded-lg shadow-md text-center">
-  <img src={FatIcon} alt="Fat" className="w-5 h-5 mx-auto" />
-  <p className="text-xs text-gray-500">Fat left</p>
-  <p className="h-1 mt-2 bg-gray-200 w-full "></p>
-</div>; */
 }
