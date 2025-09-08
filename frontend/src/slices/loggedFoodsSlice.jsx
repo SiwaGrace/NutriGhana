@@ -17,8 +17,16 @@ const loggedFoodsSlice = createSlice({
       state.loggedfoods = [];
       saveLoggedFoods(state.loggedfoods); // clear localStorage
     },
+    // ✅ new reducer: clean logged foods if they don’t exist in dishes anymore
+    syncWithDishes: (state, action) => {
+      const validDishIds = action.payload.map((dish) => dish._id);
+      state.loggedfoods = state.loggedfoods.filter((dish) =>
+        validDishIds.includes(dish._id)
+      );
+      saveLoggedFoods(state.loggedfoods);
+    },
   },
 });
 
-export const { addFood, clearFoods } = loggedFoodsSlice.actions;
+export const { addFood, clearFoods, syncWithDishes } = loggedFoodsSlice.actions;
 export default loggedFoodsSlice.reducer;

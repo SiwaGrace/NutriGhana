@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { syncWithDishes } from "./loggedFoodsSlice";
 
 // LocalStorage helpers
 const loadSavedFromLocalStorage = () => {
@@ -20,6 +21,7 @@ const saveFavorites = (favorites) => {
 // Fetch all dishes
 export const getDishes = createAsyncThunk("dishes/getDishes", async () => {
   const response = await axios.get(`http://localhost:5000/api/dishes`);
+  console.log(response.data.results);
   const sorted = response.data.results.sort((a, b) =>
     a.name.localeCompare(b.name)
   );
@@ -106,6 +108,16 @@ const dishesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getDishes.fulfilled, (state, action) => {
+        // Keep only favorites that still exist when i delete all dishes data
+        const validFavorites = {};
+        action.payload.forEach((dish) => {
+          if (state.favorites[dish._id]) {
+            validFavorites[dish._id] = true;
+          }
+        });
+        state.favorites = validFavorites;
+        saveFavorites(state.favorites);
+
         state.allDishes = action.payload.map((dish) => ({
           ...dish,
           saved: state.savedIds.includes(dish._id),

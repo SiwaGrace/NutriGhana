@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ArrowLeft, Heart } from "lucide-react";
-import FishIcon from "../../assets/logo&icons/fa-solid_fish.svg";
-import CarbIcon from "../../assets/logo&icons/fluent_food-grains-20-filled.svg";
-import FatIcon from "../../assets/logo&icons/game-icons_fat.svg";
 import { addFood } from "../../slices/loggedFoodsSlice";
 
 import { Link, useNavigate } from "react-router-dom";
@@ -66,11 +63,19 @@ export default function FoodCard() {
       <div className="pt-12">
         <div className="px-6 py-10 max-w-md mx-auto rounded-lg shadow-sm  relative">
           {/* Food Tag in top-left corner */}
-          {selectedDish.tribe && (
-            <span className="absolute top-2 right-2 bg-yellow-100 text-yellow-700 text-sm px-2 py-1 rounded-full font-bold cursor-default">
-              {selectedDish.tribe}
-            </span>
+          {selectedDish.tags && selectedDish.tags.length > 0 && (
+            <div className="absolute top-2 right-2 flex flex-wrap gap-2">
+              {selectedDish.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="bg-yellow-100 text-yellow-700 text-sm px-2 py-1 rounded-full font-bold cursor-default"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           )}
+
           {/* Header */}
           <div className="flex  items-center space-x-30 mb-4">
             <button
@@ -84,11 +89,13 @@ export default function FoodCard() {
             </button>
             <span className="text-lg font-medium">Selected food</span>
           </div>
+
           {/* food image */}
           <div
             className="bg-cover bg-center h-[40vh] mb-5 rounded-2xl"
             style={{ backgroundImage: `url(${selectedDish.imageUrl})` }}
           ></div>
+
           {/* Food Title */}
           <div className="flex justify-between items-center mb-4 ">
             <h1 className="text-2xl font-semibold mb-2">{selectedDish.name}</h1>
@@ -104,64 +111,14 @@ export default function FoodCard() {
             measurement={measurement}
             setMeasurement={setMeasurement}
             setServings={setServings}
+            calories={calories}
+            protein={protein}
+            fat={fat}
+            carbs={carbs}
+            onLog={onLog}
+            isLogged={isLogged}
           />
           {/* <MealBuilder /> */}
-          {/* nutritions */}
-          <div className="p-4">
-            <p className=" mb-2 text-xl font-bold text-center">
-              Food Nutritions
-            </p>
-            {/* Macros */}
-            <div className="mt-6 p-4 bg-white rounded-lg shadow-md max-w-md mx-auto">
-              <h2 className="text-xl font-semibold mb-3 text-gray-800">
-                Micros Nutrients
-              </h2>
-              {/* Calories Card */}
-              <div className="p-4 rounded-lg shadow-md mb-4 bg-base-100 flex space-x-4">
-                <span className="text-xl border-3 border-gray-400 p-3 rounded-[100%]">
-                  🔥
-                </span>
-
-                <div>
-                  <p className="text-2xl font-semibold">
-                    {calories.amount} {calories.unit}
-                  </p>
-                  <p className="text-gray-500">{calories.name}</p>
-                </div>
-              </div>
-              <div className="mt-4 flex gap-3">
-                {[
-                  { icon: FishIcon, nutrient: protein },
-                  { icon: CarbIcon, nutrient: carbs },
-                  { icon: FatIcon, nutrient: fat },
-                ].map(({ icon, nutrient }) => (
-                  <div
-                    key={nutrient.name}
-                    className="flex-1 bg-white p-3 rounded-lg shadow-md text-center"
-                  >
-                    <img
-                      src={icon}
-                      alt={nutrient.name}
-                      className="w-5 h-5 mx-auto"
-                    />
-                    <p className="text-xs text-gray-500">{nutrient.name}</p>
-                    <p>
-                      {nutrient.amount}
-                      {nutrient.unit}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Log Button */}
-          <button
-            className="w-[80%] block  mx-auto bg-yellow-500 text-white py-3 rounded-full text-lg mt-10 cursor-pointer"
-            onClick={() => onLog()}
-          >
-            {isLogged ? "Food Logged" : "Log"}
-          </button>
         </div>
       </div>
     </Link>

@@ -22,6 +22,7 @@ const createFood = asyncHandler(async (req, res) => {
     category,
     tribe,
     nutrients,
+    bowlPreset,
     ingredients,
     instructions,
     tags,
@@ -48,6 +49,7 @@ const createFood = asyncHandler(async (req, res) => {
     tribe,
     country: country || "Ghana",
     nutrients: nutrients || [],
+    bowlPreset: bowlPreset || [],
     ingredients: ingredients || [],
     instructions: instructions || [],
     tags: tags || [],
@@ -80,4 +82,12 @@ const getDishesByCategory = asyncHandler(async (req, res) => {
   }
 });
 
-export { createFood, retrieveFood, getDishesByCategory };
+// @desc    Delete dishes
+// @route   DELETE /api/foods/all
+// @access  Public to delete later
+const deleteAllDishes = asyncHandler(async (req, res) => {
+  await Food.deleteMany({});
+  res.status(200).json({ message: "All dishes have been deleted" });
+});
+
+export { createFood, retrieveFood, getDishesByCategory, deleteAllDishes };

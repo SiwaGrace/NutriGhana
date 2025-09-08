@@ -56,6 +56,26 @@ export default function MealBuilder() {
     }));
   };
 
+  const resetMeal = () => {
+    setSelectedGrams(250); // back to 1 bowl default
+    setAddOnQuantities(
+      ADD_ONS.reduce((acc, addOn) => {
+        acc[addOn.id] = 0;
+        return acc;
+      }, {})
+    );
+  };
+
+  const logMeal = () => {
+    console.log("Meal logged:", {
+      dish: WAKYE.name,
+      grams: selectedGrams,
+      addOns: addOnQuantities,
+      total,
+    });
+    alert("Meal logged! (check console)");
+  };
+
   // Base totals (scaled by grams / 250g per bowl)
   const baseTotals = useMemo(() => {
     const factor = selectedGrams / 250;
@@ -163,8 +183,8 @@ export default function MealBuilder() {
       </div>
 
       {/* Meal Summary */}
-      <div className="bg-white p-4 rounded-xl shadow">
-        <h2 className="text-xl font-bold mb-3">Meal Summary</h2>
+      <div className="bg-white p-4 rounded-xl shadow space-y-4">
+        <h2 className="text-xl font-bold">Meal Summary</h2>
         <div className="grid grid-cols-2 gap-3 text-center">
           {Object.entries(total).map(([name, value]) => (
             <div key={name} className="p-2 bg-gray-50 rounded-lg">
@@ -172,6 +192,22 @@ export default function MealBuilder() {
               <p className="text-sm text-gray-500">{name}</p>
             </div>
           ))}
+        </div>
+
+        {/* Action buttons */}
+        <div className="flex gap-3 justify-between">
+          <button
+            onClick={logMeal}
+            className="flex-1 rounded-lg bg-green-600 text-white py-2 font-medium hover:bg-green-700"
+          >
+            Log Meal
+          </button>
+          <button
+            onClick={resetMeal}
+            className="flex-1 rounded-lg bg-gray-300 text-gray-800 py-2 font-medium hover:bg-gray-400"
+          >
+            Reset
+          </button>
         </div>
       </div>
     </div>

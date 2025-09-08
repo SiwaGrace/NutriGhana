@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { syncWithDishes, clearFoods } from "../../slices/loggedFoodsSlice";
+
 // HeartFilled
 import { Flame } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +25,11 @@ const DishesSuggestion = ({ searchTerm, filter, category }) => {
   const dispatch = useDispatch();
   // fetch all dishes on mount
   useEffect(() => {
-    dispatch(getDishes());
+    dispatch(getDishes()).then((res) => {
+      if (res.payload) {
+        dispatch(syncWithDishes(res.payload)); // ✅ cleanup loggedFoods
+      }
+    });
   }, [dispatch]);
   // local filtering for favorite/saved/category
   useEffect(() => {
