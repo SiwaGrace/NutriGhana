@@ -6,7 +6,7 @@ import StreakIcon from "../assets/logo&icons/streakIcon.svg";
 import FoodLog from "../components/dishesComponents/FoodLogCard";
 import Streaks from "../components/Streaks";
 import { useSelector } from "react-redux";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 const ProfileHome = () => {
   const [userName, setUserName] = useState("");
