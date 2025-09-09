@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ArrowLeft, Heart } from "lucide-react";
 import { addFood } from "../../slices/loggedFoodsSlice";
@@ -8,10 +8,40 @@ import FavoriteButton from "./FavoriteButton";
 import NumberofServings from "./NumberofServings";
 import MealBuilder from "./ToDelete.jsx/MealBuilder";
 
+// Updated Add-ons
+const ADD_ONS = [
+  {
+    id: "friedFish",
+    name: "Fried Fish (tilapia)",
+    unitLabel: "piece (~100g)",
+    perUnit: { calories: 200, protein: 30, carbs: 0, fat: 10 },
+  },
+  {
+    id: "chicken",
+    name: "Chicken Leg",
+    unitLabel: "piece (~100g)",
+    perUnit: { calories: 165, protein: 26, carbs: 0, fat: 6 },
+  },
+  {
+    id: "egg",
+    name: "Boiled Egg",
+    unitLabel: "piece",
+    perUnit: { calories: 78, protein: 6, carbs: 0.6, fat: 5 },
+  },
+];
+
 export default function FoodCard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [selectedGrams, setSelectedGrams] = useState(250);
 
+  // add ons
+  const [addOnQuantities, setAddOnQuantities] = useState(
+    ADD_ONS.reduce((acc, addOn) => {
+      acc[addOn.id] = 0;
+      return acc;
+    }, {})
+  );
   const [measurement, setMeasurement] = useState("Bowl");
   const [servings, setServings] = useState(1);
   const { selectedDish: reduxSelectedDish } = useSelector(
@@ -43,21 +73,57 @@ export default function FoodCard() {
       </div>
     );
   }
+  // Base totals (scaled by grams / 250g per bowl)
+  const baseTotals = useMemo(() => {
+    const factor = selectedGrams / 250;
+    return {
+      calories: calories.amount * factor,
+      protein: protein.amount * factor,
+      carbs: carbs.amount * factor,
+      fat: fat.amount * factor,
+    };
+  }, [selectedGrams]);
 
-  // on log
-  const [isLogged, setIsLogged] = useState(false);
+  // Add-ons totals
+  const addOnTotals = useMemo(() => {
+    return ADD_ONS.reduce(
+      (acc, addOn) => {
+        const qty = addOnQuantities[addOn.id] || 0;
+        acc.calories += addOn.perUnit.calories * qty;
+        acc.protein += addOn.perUnit.protein * qty;
+        acc.carbs += addOn.perUnit.carbs * qty;
+        acc.fat += addOn.perUnit.fat * qty;
+        return acc;
+      },
+      { calories: 0, protein: 0, carbs: 0, fat: 0 }
+    );
+  }, [addOnQuantities]);
 
-  const onLog = () => {
-    setIsLogged(true);
-    dispatch(addFood(selectedDish));
+  const total = {
+    calories: baseTotals.calories + addOnTotals.calories,
+    protein: baseTotals.protein + addOnTotals.protein,
+    carbs: baseTotals.carbs + addOnTotals.carbs,
+    fat: baseTotals.fat + addOnTotals.fat,
   };
-
   // Optional: update Redux if it's empty
   // useEffect(() => {
   //   if (!reduxSelectedDish && selectedDish) {
   //     dispatch(setSelectedDish(selectedDish));
   //   }
   // }, []);
+  // on log
+  const [isLogged, setIsLogged] = useState(false);
+
+  const onLog = () => {
+    setIsLogged(true);
+    dispatch(addFood(selectedDish));
+    console.log("Meal logged:", {
+      dish: selectedDish.name,
+      grams: selectedGrams,
+      addOns: addOnQuantities,
+      total,
+    });
+  };
   return (
     <Link to="/food">
       <div className="pt-12">
@@ -117,6 +183,15 @@ export default function FoodCard() {
             carbs={carbs}
             onLog={onLog}
             isLogged={isLogged}
+            selectedDish={selectedDish}
+            addOnQuantities={addOnQuantities}
+            setAddOnQuantities={setAddOnQuantities}
+            ADD_ONS={ADD_ONS}
+            total={total}
+            selectedGrams={selectedGrams}
+            setSelectedGrams={setSelectedGrams}
+            addOnTotals={addOnTotals}
+            // baseTotals={baseTotals}
           />
           {/* <MealBuilder /> */}
         </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import FishIcon from "../../assets/logo&icons/fa-solid_fish.svg";
 import CarbIcon from "../../assets/logo&icons/fluent_food-grains-20-filled.svg";
 import FatIcon from "../../assets/logo&icons/game-icons_fat.svg";
@@ -14,36 +14,137 @@ const NumberofServings = ({
   protein,
   fat,
   carbs,
+  selectedDish,
+  addOnQuantities,
+  setAddOnQuantities,
+  ADD_ONS,
+  total,
+  selectedGrams,
+  setSelectedGrams,
 }) => {
+  const handlePreset = (grams) => setSelectedGrams(grams);
+
+  const incrementAddOn = (id) => {
+    setAddOnQuantities((prev) => ({ ...prev, [id]: prev[id] + 1 }));
+  };
+
+  const decrementAddOn = (id) => {
+    setAddOnQuantities((prev) => ({
+      ...prev,
+      [id]: Math.max(0, prev[id] - 1),
+    }));
+  };
+
+  const resetMeal = () => {
+    setSelectedGrams(250); // back to 1 bowl default
+    setAddOnQuantities(
+      ADD_ONS.reduce((acc, addOn) => {
+        acc[addOn.id] = 0;
+        return acc;
+      }, {})
+    );
+  };
+
   return (
     <div className="mb-4">
       {" "}
       <p className=" mb-2 text-xl font-bold">Measurement</p>
-      <div className="flex space-x-2 mb-4">
-        {["Bowl", "Balls", "Pcs"].map((option) => (
-          <button
-            key={option}
-            className={`px-4 py-2 rounded-full cursor-pointer ${
-              measurement === option
-                ? "bg-yellow-500 text-white"
-                : "bg-gray-200"
-            }`}
-            onClick={() => setMeasurement(option)}
-          >
-            {option}
-          </button>
-        ))}
+      {/* Bowl Presets */}
+      <div className="p-4 shadow-sm">
+        <h2 className="mb-3 text-lg font-semibold">
+          Portion presets for {selectedDish.title}
+        </h2>
+        <div className="flex flex-wrap gap-2">
+          {selectedDish.bowlPresets.map((p) => (
+            <button
+              key={p.label}
+              onClick={() => handlePreset(p.grams)}
+              className={`rounded-xl border px-3 py-2 text-sm transition ${
+                selectedGrams === p.grams
+                  ? "border-slate-900 bg-slate-900 text-white"
+                  : "border-slate-200 bg-white hover:border-slate-300"
+              }`}
+            >
+              {p.label} · {p.grams}g
+            </button>
+          ))}
+        </div>
+
+        {/* Custom grams */}
+        <div className="mt-3 flex items-center gap-3">
+          <label className="text-sm text-slate-600">Custom grams</label>
+          <input
+            type="number"
+            min={0}
+            value={selectedGrams}
+            onChange={(e) =>
+              setSelectedGrams(parseInt(e.target.value || "0", 10))
+            }
+            className="w-32 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:border-slate-400 focus:outline-none"
+          />
+        </div>
       </div>
-      {/* Number of Servings */}
-      <div className="mb-4 flex justify-between">
-        <p className="text-gray-500 ">Number of servings</p>
-        <input
-          type="number"
-          value={servings}
-          min="1"
-          className="w-16 text-center border rounded-4xl"
-          onChange={(e) => setServings(Number(e.target.value))}
-        />
+      {/* Add-ons */}
+      <div className="bg-white p-4 rounded-xl shadow">
+        <h2 className="text-xl font-bold mb-3">Add-ons</h2>
+        <div className="space-y-2">
+          {ADD_ONS.map((addOn) => (
+            <div
+              key={addOn.id}
+              className="flex items-center justify-between gap-2 border rounded-lg px-4 py-2 bg-gray-100"
+            >
+              <div>
+                <p className="font-semibold">{addOn.name}</p>
+                <p className="text-xs text-gray-500">{addOn.unitLabel}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => decrementAddOn(addOn.id)}
+                  className="w-6 h-6 rounded-full bg-gray-300 text-center"
+                >
+                  -
+                </button>
+                <span className="w-6 text-center">
+                  {addOnQuantities[addOn.id]}
+                </span>
+                <button
+                  onClick={() => incrementAddOn(addOn.id)}
+                  className="w-6 h-6 rounded-full bg-gray-300 text-center"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Meal Summary */}
+      <div className="bg-white p-4 rounded-xl shadow space-y-4">
+        <h2 className="text-xl font-bold">Meal Summary</h2>
+        <div className="grid grid-cols-2 gap-3 text-center">
+          {Object.entries(total).map(([name, value]) => (
+            <div key={name} className="p-2 bg-gray-50 rounded-lg">
+              <p className="font-bold">{Math.round(value)}</p>
+              <p className="text-sm text-gray-500">{name}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Action buttons */}
+        <div className="flex gap-3 justify-between">
+          <button
+            className="flex-1 rounded-lg bg-green-600 text-white py-2 font-medium hover:bg-green-700"
+            onClick={() => onLog()}
+          >
+            Log Meal
+          </button>
+          <button
+            onClick={resetMeal}
+            className="flex-1 rounded-lg bg-gray-300 text-gray-800 py-2 font-medium hover:bg-gray-400"
+          >
+            Reset
+          </button>
+        </div>
       </div>
       {/* nutritions */}
       <div className="p-4">
@@ -92,12 +193,12 @@ const NumberofServings = ({
         </div>
       </div>
       {/* Log Button */}
-      <button
+      {/* <button
         className="w-[80%] block  mx-auto bg-yellow-500 text-white py-3 rounded-full text-lg mt-10 cursor-pointer"
         onClick={() => onLog()}
       >
         {isLogged ? "Food Logged" : "Log"}
-      </button>
+      </button> */}
     </div>
   );
 };

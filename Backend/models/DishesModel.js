@@ -46,11 +46,12 @@ const foodSchema = new Schema(
         percentOfDailyNeeds: { type: Number, default: 0 },
       },
     ],
-    bowlPreset: {
-      type: String,
-      enum: ["small", "medium", "large"],
-      default: "medium",
-    },
+    bowlPresets: [
+      {
+        label: { type: String, required: true },
+        grams: { type: Number, required: true },
+      },
+    ],
     imageUrl: {
       type: String,
       default: "", // Cloudinary or other image link
