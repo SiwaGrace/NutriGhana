@@ -5,7 +5,8 @@ import FatIcon from "../assets/logo&icons/game-icons_fat.svg";
 import StreakIcon from "../assets/logo&icons/streakIcon.svg";
 import FoodLog from "../components/dishesComponents/FoodLogCard";
 import Streaks from "../components/Streaks";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { clearFoods } from "../slices/loggedFoodsSlice";
 import { motion } from "framer-motion";
 
 const ProfileHome = () => {
@@ -84,7 +85,13 @@ const ProfileHome = () => {
       : "Good night,";
 
   // logged dishes
+  // use this to clear recent log []
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(clearFoods());
+  // }, []);
   const loggedDishes = useSelector((state) => state.loggedFoods.loggedfoods);
+  console.log(loggedDishes);
 
   // total calories consumed = sum of macros (you can replace with backend calc)
   const totalConsumed = macros.protein * 4 + macros.carbs * 4 + macros.fat * 9; // kcal formula

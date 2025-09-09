@@ -20,7 +20,7 @@ const FoodLogCard = ({ dish }) => {
               <img src={StreakIcon} alt="Fire" className="w-4 h-4" />
               <span>
                 {}
-                {calories.amount} {calories.unit}
+                {dish.totalCalories} {calories.unit}
               </span>
             </div>
           </div>

@@ -116,14 +116,21 @@ export default function FoodCard() {
 
   const onLog = () => {
     setIsLogged(true);
-    dispatch(addFood(selectedDish));
-    console.log("Meal logged:", {
-      dish: selectedDish.name,
+
+    const loggedMeal = {
+      ...selectedDish,
       grams: selectedGrams,
       addOns: addOnQuantities,
-      total,
-    });
+      total, // ⬅️ calories, protein, carbs, fat
+      totalCalories: total.calories,
+      loggedAt: new Date().toISOString(), // optional for history
+    };
+
+    dispatch(addFood(loggedMeal));
+
+    console.log("Meal logged:", loggedMeal);
   };
+
   return (
     <Link to="/food">
       <div className="pt-12">
