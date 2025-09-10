@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import EditProfile from "../components/EditProfile";
 import { useSelector } from "react-redux";
+import ProfileImageUpload from "../components/userprofileComponents/UploadImage";
 
 export default function ProfileUser() {
   const { loggedfoods } = useSelector((state) => state.loggedFoods);
@@ -96,11 +97,12 @@ export default function ProfileUser() {
       {/* Profile Section */}
       {/* Profile Section */}
       {/* <h2 className="text-xl font-semibold ">Profile</h2> */}
-      <img
+      {/* <img
         src={Woman}
         alt="Profile"
         className="w-24 h-24 rounded-full border-4 border-gray-300 cursor-pointer mt-3"
-      />
+      /> */}
+      <ProfileImageUpload />
       <h3 className="text-lg font-semibold mt-2">
         {userName || "No name found"}
       </h3>

@@ -42,8 +42,7 @@ export default function FoodCard() {
       return acc;
     }, {})
   );
-  const [measurement, setMeasurement] = useState("Bowl");
-  const [servings, setServings] = useState(1);
+
   const { selectedDish: reduxSelectedDish } = useSelector(
     (state) => state.dishes
   );
@@ -137,7 +136,7 @@ export default function FoodCard() {
         <div className="px-6 py-10 max-w-md mx-auto rounded-lg shadow-sm  relative">
           {/* Food Tag in top-left corner */}
           {selectedDish.tags && selectedDish.tags.length > 0 && (
-            <div className="absolute top-2 right-2 flex flex-wrap gap-2">
+            <div className="absolute top-4 right-2 flex flex-wrap gap-2">
               {selectedDish.tags.map((tag, index) => (
                 <span
                   key={index}
@@ -150,7 +149,7 @@ export default function FoodCard() {
           )}
 
           {/* Header */}
-          <div className="flex  items-center space-x-30 mb-4">
+          <div className="flex  items-center space-x-30 my-5">
             <button
               onClick={(e) => {
                 e.preventDefault(); // stop outer link navigation
@@ -171,19 +170,15 @@ export default function FoodCard() {
 
           {/* Food Title */}
           <div className="flex justify-between items-center mb-4 ">
-            <h1 className="text-2xl font-semibold mb-2">{selectedDish.name}</h1>
-            <p className="border p-2 rounded-full">
+            <h1 className="text-2xl  mb-2">{selectedDish.name}</h1>
+            {/* <p className="border p-2 rounded-full">
               <Heart className="w-6 h-6 text-gray-400" />
-            </p>
-            {/* <FavoriteButton recipeId={selectedDish._id} /> */}
+            </p> */}
+            <FavoriteButton />
           </div>
 
           {/* Measurement Options */}
           <NumberofServings
-            servings={servings}
-            measurement={measurement}
-            setMeasurement={setMeasurement}
-            setServings={setServings}
             calories={calories}
             protein={protein}
             fat={fat}
