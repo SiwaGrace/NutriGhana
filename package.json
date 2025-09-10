@@ -1,7 +1,5 @@
 {
-  "dependencies": {
-    "react-hot-toast": "^2.5.2"
-  },
+  "dependencies": {},
   "scripts": {
     "client": "cd frontend && yarn dev",
     "server": "cd backend && yarn start",
