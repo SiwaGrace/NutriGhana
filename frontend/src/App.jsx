@@ -64,8 +64,9 @@ const App = () => {
               </PrivateRoute>
             }
           />
+          {/* why is this here? */}
           <Route
-            path="/food"
+            path="/food/:name"
             element={
               <PrivateRoute>
                 <FoodCard />

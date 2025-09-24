@@ -63,7 +63,7 @@ const DishesSuggestion = ({ searchTerm, filter, category }) => {
               onClick={() => {
                 dispatch(setSelectedDish(recipe));
                 localStorage.setItem("selectedDish", JSON.stringify(recipe));
-                navigate("/food"); // or your actual route
+                navigate(`/food/${recipe.name}`); // or your actual route
               }}
             >
               <div className="flex items-center gap-3">
