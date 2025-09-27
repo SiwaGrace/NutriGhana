@@ -5,8 +5,7 @@ import FatIcon from "../assets/logo&icons/game-icons_fat.svg";
 import StreakIcon from "../assets/logo&icons/streakIcon.svg";
 import FoodLog from "../components/dishesComponents/FoodLogCard";
 import Streaks from "../components/Streaks";
-import { useDispatch, useSelector } from "react-redux";
-import { clearFoods } from "../slices/loggedFoodsSlice";
+import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 
 const ProfileHome = () => {
@@ -14,27 +13,14 @@ const ProfileHome = () => {
   const [selectedDay, setSelectedDay] = useState("today");
   const [recommendedCalories, setRecommendedCalories] = useState(null);
   const [caloriesPop, setCaloriesPop] = useState(false);
-  const [loginStreak, setLoginStreak] = useState(0);
 
-  // temporary demo macros (replace later with backend values)
-  const [macros, setMacros] = useState({
-    protein: 40,
-    carbs: 70,
-    fat: 20,
-  });
+  // ✅ pull logged dishes + totals directly from Redux
+  const { loggedfoods, totals } = useSelector((state) => state.loggedFoods);
+
+  // ✅ provide safe fallback
+  const safeTotals = totals || { calories: 0, protein: 0, carbs: 0, fat: 0 };
+
   const goals = { protein: 100, carbs: 100, fat: 100 };
-
-  // Fake update (for demo) - every 4s increase macros
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMacros((prev) => ({
-        protein: Math.min(prev.protein + 10, goals.protein),
-        carbs: Math.min(prev.carbs + 15, goals.carbs),
-        fat: Math.min(prev.fat + 5, goals.fat),
-      }));
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Fetch the user's name
   useEffect(() => {
@@ -50,7 +36,6 @@ const ProfileHome = () => {
         const data = await res.json();
         if (data.success) {
           setUserName(data.user.name);
-          setLoginStreak(data.user.loginStreak || 0);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -62,7 +47,7 @@ const ProfileHome = () => {
   // calories from local storage
   useEffect(() => {
     const storedCalories = localStorage.getItem("recommendedCalories");
-    if (storedCalories) setRecommendedCalories(storedCalories);
+    if (storedCalories) setRecommendedCalories(Number(storedCalories));
   }, []);
 
   useEffect(() => {
@@ -84,25 +69,19 @@ const ProfileHome = () => {
       ? "Good evening,"
       : "Good night,";
 
-  // logged dishes
-  // use this to clear recent log []
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(clearFoods());
-  // }, []);
-  const loggedDishes = useSelector((state) => state.loggedFoods.loggedfoods);
-  console.log(loggedDishes);
-
-  // total calories consumed = sum of macros (you can replace with backend calc)
-  const totalConsumed = macros.protein * 4 + macros.carbs * 4 + macros.fat * 9; // kcal formula
-  const caloriesLeft = Math.max(recommendedCalories - totalConsumed, 0);
-  const progressCalories = recommendedCalories
-    ? (caloriesLeft / recommendedCalories) * 100
+  // Calories per food (1% of recommendedCalories)
+  const caloriesPerFood = recommendedCalories ? recommendedCalories * 0.01 : 0;
+  const caloriesLeft = recommendedCalories
+    ? Math.max(recommendedCalories - caloriesPerFood * loggedfoods.length, 0)
     : 0;
 
-  // reusable bar
-  const MacroBar = ({ icon, label, value, goal, color }) => {
-    const progress = Math.min((value / goal) * 100, 100);
+  // Calories progress: 1% less per food logged
+  const foodCount = loggedfoods.length;
+  const progressCalories = Math.max(100 - foodCount, 0); // 1% less per food
+
+  // MacroBar: show remaining macro as a shrinking bar (1% per food logged)
+  const MacroBar = ({ icon, label, color }) => {
+    const progress = Math.max(100 - foodCount, 0); // 1% less per food logged
 
     return (
       <div className="flex-1 bg-white p-4 rounded-lg shadow-md text-center">
@@ -111,7 +90,7 @@ const ProfileHome = () => {
         <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden mt-2">
           <motion.div
             className={`h-3 rounded-full ${color}`}
-            initial={{ width: 0 }}
+            initial={{ width: "100%" }}
             animate={{ width: `${progress}%` }}
             transition={{
               type: "spring",
@@ -120,9 +99,7 @@ const ProfileHome = () => {
             }}
           />
         </div>
-        <p className="text-xs text-gray-600 mt-2">
-          {value}/{goal}g
-        </p>
+        <p className="text-xs text-gray-600 mt-2">{progress}%</p>
       </div>
     );
   };
@@ -169,7 +146,7 @@ const ProfileHome = () => {
                   }`}
                   style={{ display: "inline-block" }}
                 >
-                  {caloriesLeft}
+                  {Math.round(caloriesLeft)}
                 </h3>
                 <p className="text-gray-500 text-sm">Calories left</p>
               </div>
@@ -193,7 +170,7 @@ const ProfileHome = () => {
                     strokeWidth="6"
                     fill="transparent"
                     strokeLinecap="round"
-                    initial={{ strokeDasharray: 226, strokeDashoffset: 226 }}
+                    initial={{ strokeDasharray: 226, strokeDashoffset: 0 }}
                     animate={{
                       strokeDasharray: 226,
                       strokeDashoffset: 226 - (226 * progressCalories) / 100,
@@ -211,27 +188,9 @@ const ProfileHome = () => {
 
             {/* Macros */}
             <div className="mt-4 flex gap-3">
-              <MacroBar
-                icon={FishIcon}
-                label="Protein"
-                value={macros.protein}
-                goal={goals.protein}
-                color="bg-blue-500"
-              />
-              <MacroBar
-                icon={CarbIcon}
-                label="Carbs"
-                value={macros.carbs}
-                goal={goals.carbs}
-                color=" bg-green-500"
-              />
-              <MacroBar
-                icon={FatIcon}
-                label="Fat"
-                value={macros.fat}
-                goal={goals.fat}
-                color="bg-red-500"
-              />
+              <MacroBar icon={FishIcon} label="Protein" color="bg-blue-500" />
+              <MacroBar icon={CarbIcon} label="Carbs" color="bg-green-500" />
+              <MacroBar icon={FatIcon} label="Fat" color="bg-red-500" />
             </div>
           </div>
 
@@ -239,9 +198,9 @@ const ProfileHome = () => {
           <div className="mt-8">
             <h3 className="text-xl font-semibold text-center">Recent logged</h3>
             <div className="bg-white p-4 rounded-lg mt-2 text-center text-gray-500 text-sm">
-              {loggedDishes.length <= 0
+              {loggedfoods.length <= 0
                 ? "No food logged yet."
-                : loggedDishes.map((dish) => (
+                : loggedfoods.map((dish) => (
                     <FoodLog dish={dish} key={dish._id} />
                   ))}
             </div>

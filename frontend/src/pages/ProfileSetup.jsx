@@ -29,7 +29,7 @@ function calculateCalories({
 
   // Goal adjustment
   if (goal === "Weight loss") calories -= 500;
-  if (goal === "Weight gain" || goal === "Muscle gain") calories += 300;
+  if (goal === "Weight gain" || goal === "Muscle gain") calories += 800;
 
   return Math.round(calories);
 }
@@ -57,6 +57,7 @@ export default function ProfileSetup() {
 
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL; // make sure you define this in your .env
+  const [backendCalories, setBackendCalories] = useState(null);
 
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 80 }, (_, i) => currentYear - i);
@@ -131,7 +132,7 @@ export default function ProfileSetup() {
     };
 
     try {
-      const response = await fetch(backendUrl + "/api/auth/create-profile", {
+      const response = await fetch(`${backendUrl}/api/auth/create-profile`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -139,7 +140,15 @@ export default function ProfileSetup() {
       });
 
       if (response.ok) {
-        localStorage.setItem("recommendedCalories", calories); // Save calories for HomePage
+        const data = await response.json();
+
+        // Always save a calories value to localStorage (backend or calculated)
+        const caloriesToSave = data.recommendedCalories ?? calories;
+        if (caloriesToSave) {
+          setBackendCalories(data.recommendedCalories);
+          localStorage.setItem("recommendedCalories", String(caloriesToSave));
+        }
+
         setStep(6);
       } else {
         setError("Failed to submit. Try again.");
@@ -404,12 +413,15 @@ export default function ProfileSetup() {
           <h2 className="text-4xl font-medium text-center text-black">
             Profile successfully created!
           </h2>
-          {calories && (
+          {(backendCalories ?? calories) && (
             <div className="mt-4 text-xl text-center text-gray-700">
               Your recommended daily calories:{" "}
-              <span className="font-bold text-yellow-600">{calories} kcal</span>
+              <span className="font-bold text-yellow-600">
+                {backendCalories ?? calories} kcal
+              </span>
             </div>
           )}
+
           <p className="mt-2 text-gray-600 text-sm text-center">
             Redirecting to your dashboard in 10 seconds...
           </p>

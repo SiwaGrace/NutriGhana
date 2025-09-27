@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
     resetOtp: { type: String, default: "" },
     resetOtpExpireAt: { type: Number, default: 0 },
 
-    // Profile information directly inside user
+    // Profile information
     gender: String,
     yearOfBirth: String,
     height: String,
@@ -20,6 +20,9 @@ const userSchema = new mongoose.Schema(
     dietaryGoal: String,
     currentWeight: String,
     currentWeightGoal: String,
+
+    // ✅ match frontend
+    recommendedCalories: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
