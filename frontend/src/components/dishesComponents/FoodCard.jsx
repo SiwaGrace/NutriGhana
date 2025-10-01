@@ -131,9 +131,9 @@ export default function FoodCard() {
   };
 
   return (
-    <Link to="/food">
-      <div className="pt-12">
-        <div className="px-6 py-10 max-w-md mx-auto rounded-lg shadow-sm  relative">
+    <div className="pt-12">
+      <div className="px-6 py-10 max-w-md mx-auto rounded-lg shadow-sm  relative">
+        <Link to={`/food/${selectedDish.name}`}>
           {/* Food Tag in top-left corner */}
           {selectedDish.tags && selectedDish.tags.length > 0 && (
             <div className="absolute top-4 right-2 flex flex-wrap gap-2">
@@ -196,8 +196,8 @@ export default function FoodCard() {
             // baseTotals={baseTotals}
           />
           {/* <MealBuilder /> */}
-        </div>
+        </Link>
       </div>
-    </Link>
+    </div>
   );
 }
