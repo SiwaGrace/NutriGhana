@@ -8,7 +8,7 @@ import cors from "cors";
 
 import foodsRouter from "./routes/foodsRouter.js";
 import DishesRouter from "./routes/DishesRoutes.js";
-import logRoutes from "./routes/LogRoutes.js";
+// import logRoutes from "./routes/LogRoutes.js";
 
 import authRouter from "./routes/authRoute.js";
 import userRouter from "./routes/userRoute.js";
@@ -29,7 +29,6 @@ app.use(express.json());
 
 app.use("/api/foods", foodsRouter);
 app.use("/api/dishes", DishesRouter);
-app.use("/api/logs", logRoutes);
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);

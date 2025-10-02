@@ -1,36 +1,48 @@
-import mongoose from "mongoose";
-// Daily Logs
+// import mongoose from "mongoose";
 
-const logSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+// const logSchema = new mongoose.Schema(
+//   {
+//     userId: {
+//       type: mongoose.Schema.Types.ObjectId,
+//       ref: "User",
+//       required: true,
+//     },
+//     date: { type: Date, required: true },
+//     totals: {
+//       calories: { type: Number, default: 0 },
+//       protein: { type: Number, default: 0 },
+//       carbs: { type: Number, default: 0 },
+//       fat: { type: Number, default: 0 },
+//     },
+//     foods: [
+//       {
+//         dishId: { type: mongoose.Schema.Types.ObjectId, ref: "ghanaiandishes" },
+//         dishName: String,
+//         grams: Number,
+//         addOns: [
+//           {
+//             name: String,
+//             quantity: Number,
+//             perUnit: {
+//               calories: Number,
+//               protein: Number,
+//               carbs: Number,
+//               fat: Number,
+//             },
+//           },
+//         ],
+//         total: {
+//           calories: Number,
+//           protein: Number,
+//           carbs: Number,
+//           fat: Number,
+//         },
+//       },
+//     ],
+//   },
+//   { timestamps: true }
+// );
 
-    date: { type: Date, required: true },
+// const Log = mongoose.model("Log", logSchema);
 
-    totals: {
-      calories: { type: Number, default: 0 },
-      protein: { type: Number, default: 0 },
-      carbs: { type: Number, default: 0 },
-      fat: { type: Number, default: 0 },
-    },
-
-    foods: [
-      {
-        foodName: { type: String, required: true },
-        calories: { type: Number, required: true },
-        protein: { type: Number, required: true },
-        carbs: { type: Number, required: true },
-        fat: { type: Number, required: true },
-      },
-    ],
-  },
-  { timestamps: true }
-);
-
-const Log = mongoose.model("Log", logSchema);
-
-export default Log;
+// export default Log;
