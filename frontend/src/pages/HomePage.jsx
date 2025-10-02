@@ -14,13 +14,11 @@ const ProfileHome = () => {
   const [recommendedCalories, setRecommendedCalories] = useState(null);
   const [caloriesPop, setCaloriesPop] = useState(false);
 
-  // ✅ pull logged dishes + totals directly from Redux
+  // pull logged dishes + totals directly from Redux
   const { loggedfoods, totals } = useSelector((state) => state.loggedFoods);
 
-  // ✅ provide safe fallback
+  // provide safe fallback
   const safeTotals = totals || { calories: 0, protein: 0, carbs: 0, fat: 0 };
-
-  const goals = { protein: 100, carbs: 100, fat: 100 };
 
   // Fetch the user's name
   useEffect(() => {

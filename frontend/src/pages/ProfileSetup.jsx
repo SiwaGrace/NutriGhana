@@ -31,6 +31,9 @@ function calculateCalories({
   if (goal === "Weight loss") calories -= 500;
   if (goal === "Weight gain" || goal === "Muscle gain") calories += 800;
 
+  // Make calories much more generous (+1000)
+  calories += 1000;
+
   return Math.round(calories);
 }
 
