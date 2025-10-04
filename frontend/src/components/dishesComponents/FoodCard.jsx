@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ArrowLeft, Heart } from "lucide-react";
-import { addFood } from "../../slices/loggedFoodsSlice";
+import { addFood, updateStats } from "../../slices/loggedFoodsSlice";
+import axios from "axios";
 
 import { Link, useNavigate } from "react-router-dom";
 import FavoriteButton from "./FavoriteButton";
@@ -113,21 +114,65 @@ export default function FoodCard() {
   // on log
   const [isLogged, setIsLogged] = useState(false);
 
-  const onLog = () => {
+  // const onLog = () => {
+  //   setIsLogged(true);
+
+  //   const loggedMeal = {
+  //     ...selectedDish,
+  //     grams: selectedGrams,
+  //     addOns: addOnQuantities,
+  //     total, // ⬅️ calories, protein, carbs, fat
+  //     totalCalories: total.calories,
+  //     loggedAt: new Date().toISOString(), // optional for history
+  //   };
+
+  //   dispatch(addFood(loggedMeal));
+
+  //   console.log("Meal logged:", loggedMeal);
+  // };
+
+  const onLog = async () => {
     setIsLogged(true);
 
     const loggedMeal = {
       ...selectedDish,
+      id: crypto.randomUUID(),
+      dishId: selectedDish._id,
+      dishName: selectedDish.name,
+      dishImageUrl: selectedDish.imageUrl,
       grams: selectedGrams,
       addOns: addOnQuantities,
-      total, // ⬅️ calories, protein, carbs, fat
+      total, // calories, protein, carbs, fat
       totalCalories: total.calories,
-      loggedAt: new Date().toISOString(), // optional for history
+      loggedAt: new Date().toISOString(),
     };
 
-    dispatch(addFood(loggedMeal));
+    try {
+      // 1️⃣ Save on backend
+      await axios.post(
+        "http://localhost:5000/api/logstats", // or /api/logs depending on your backend route
+        { date: new Date().toISOString().split("T")[0], foods: [loggedMeal] },
+        { withCredentials: true } // send cookies if your auth uses them
+      );
 
-    console.log("Meal logged:", loggedMeal);
+      // 2️⃣ Update Redux
+      dispatch(addFood(loggedMeal));
+
+      // 3️⃣ Optionally update stats in Redux
+      dispatch(
+        updateStats({
+          date: new Date().toISOString().split("T")[0],
+          calories: total.calories,
+          protein: total.protein,
+          carbs: total.carbs,
+          fat: total.fat,
+        })
+      );
+
+      console.log("Meal logged successfully:", loggedMeal);
+    } catch (err) {
+      console.error("Error logging meal:", err);
+    }
   };
 
   return (

@@ -14,7 +14,7 @@ const calculateTotals = (foods) => {
   );
 };
 
-const initialFoods = loadLoggedFoods(); // load saved foods
+const initialFoods = loadLoggedFoods() || []; // load saved foods
 const initialState = {
   loggedfoods: initialFoods,
   totals: calculateTotals(initialFoods),
@@ -25,7 +25,9 @@ const loggedFoodsSlice = createSlice({
   initialState,
   reducers: {
     addFood: (state, action) => {
-      state.loggedfoods.push(action.payload);
+      const food = action.payload;
+      state.loggedfoods.push(food);
+      if (!food || !food.id) return; // skip if invalid
       state.totals = calculateTotals(state.loggedfoods);
       saveLoggedFoods(state.loggedfoods);
     }, // save to localStorage
@@ -42,8 +44,24 @@ const loggedFoodsSlice = createSlice({
       state.totals = calculateTotals(state.loggedfoods);
       saveLoggedFoods(state.loggedfoods);
     },
+    // reducer to handle stats per day
+    updateStats: (state, action) => {
+      const { date, calories, protein, carbs, fat } = action.payload;
+      if (!state.stats) state.stats = {};
+      if (!state.stats[date]) {
+        state.stats[date] = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+      }
+
+      state.stats[date].calories += calories;
+      state.stats[date].protein += protein;
+      state.stats[date].carbs += carbs;
+      state.stats[date].fat += fat;
+
+      saveLoggedFoods(state.loggedfoods);
+    },
   },
 });
 
-export const { addFood, clearFoods, syncWithDishes } = loggedFoodsSlice.actions;
+export const { addFood, clearFoods, syncWithDishes, updateStats } =
+  loggedFoodsSlice.actions;
 export default loggedFoodsSlice.reducer;

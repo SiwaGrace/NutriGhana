@@ -10,17 +10,17 @@ const FoodLogCard = ({ dish }) => {
       <div className="bg-white p-4 rounded-lg shadow-md mt-2">
         <div className="flex items-center gap-3">
           <img
-            src={dish.imageUrl}
-            alt={dish.name}
+            src={dish.dishImageUrl}
+            alt={dish.dishName}
             className="w-12 h-12 rounded-lg"
           />
           <div>
-            <h4 className="text-sm font-semibold">{dish.name}</h4>
+            <h4 className="text-sm font-semibold">{dish.dishName}</h4>
             <div className="flex items-center text-gray-500 text-xs gap-1">
               <img src={StreakIcon} alt="Fire" className="w-4 h-4" />
               <span>
                 {}
-                {dish.total.calories} {calories.unit}
+                {dish.total.calories} kcal
               </span>
             </div>
           </div>
