@@ -174,6 +174,7 @@ export default function FoodCard() {
       console.error("Error logging meal:", err);
     }
   };
+  // stats
 
   return (
     <div className="pt-12">
