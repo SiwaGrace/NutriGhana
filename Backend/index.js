@@ -34,6 +34,23 @@ app.use("/api/logstats", logRoutes);
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 
+app.get("/", (req, res) => {
+  res.send(`
+    <div style="
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #f9fafb;
+    ">
+      <h1 style="color: #16a34a;">🌿 NutriGhana Backend</h1>
+      <p style="font-size: 18px; color: #555;">
+        Your API is running successfully on Render 🚀
+      </p>
+      <p>Try it: <a href="/api/dishes" style="color: #2563eb;">View Dishes API</a></p>
+    </div>
+  `);
+});
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
