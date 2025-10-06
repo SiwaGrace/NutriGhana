@@ -5,7 +5,8 @@
   "author": "missesenam <moneyesenam@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon ."
+    "start": "node index.js",
+    "dev": "nodemon ."
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
