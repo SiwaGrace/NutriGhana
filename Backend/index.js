@@ -34,6 +34,9 @@ app.use("/api/logstats", logRoutes);
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 
+// api look
+// app.use(express.static("public"));
+
 app.get("/", (req, res) => {
   res.send(`
     <div style="
