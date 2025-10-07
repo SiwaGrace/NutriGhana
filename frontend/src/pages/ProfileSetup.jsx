@@ -3,7 +3,7 @@ import { IoMdCheckmarkCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 
-// Helper: Calculate BMR and calories
+// Helper: Calculate BMR and calories (realistic version)
 function calculateCalories({
   gender,
   age,
@@ -18,7 +18,7 @@ function calculateCalories({
       ? 10 * weight + 6.25 * height - 5 * age + 5
       : 10 * weight + 6.25 * height - 5 * age - 161;
 
-  // Activity multiplier
+  // Standard activity multipliers
   const activityMap = {
     "Not active": 1.2,
     "Lightly Active": 1.375,
@@ -27,12 +27,13 @@ function calculateCalories({
   };
   let calories = bmr * (activityMap[activityLevel] || 1.2);
 
-  // Goal adjustment
-  if (goal === "Weight loss") calories -= 500;
-  if (goal === "Weight gain" || goal === "Muscle gain") calories += 800;
+  // Goal adjustment (realistic)
+  if (goal === "Weight loss") calories -= 400; // 300-500 kcal deficit is standard
+  if (goal === "Weight gain" || goal === "Muscle gain") calories += 10000; // 300-500 kcal surplus is standard
 
-  // Make calories much more generous (+1000)
-  calories += 1000;
+  // Never go below a safe minimum (e.g., 1200 for women, 1500 for men)
+  const minCalories = gender === "Male" ? 1500 : 1200;
+  calories = Math.max(calories, minCalories);
 
   return Math.round(calories);
 }
@@ -59,7 +60,7 @@ export default function ProfileSetup() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL; // make sure you define this in your .env
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [backendCalories, setBackendCalories] = useState(null);
 
   const currentYear = new Date().getFullYear();
@@ -193,8 +194,6 @@ export default function ProfileSetup() {
       setStep(step + 1);
     }
   };
-
-  // Progress bar labels
 
   return (
     <div className="flex flex-col items-center p-6 h-screen justify-center space-y-8 bg-white text-black">

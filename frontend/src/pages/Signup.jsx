@@ -53,7 +53,13 @@ const Signup = () => {
         if (data.success) {
           setIsLoggedIn(true);
           localStorage.setItem("isLoggedIn", "true"); // persist login
-          navigate("/home", { replace: true }); // <-- IMPORTANT
+
+          // Check for calories in localStorage, redirect if missing
+          if (!localStorage.getItem("recommendedCalories")) {
+            navigate("/ProfileSetup", { replace: true });
+          } else {
+            navigate("/home", { replace: true });
+          }
         } else {
           toast.error(data.message);
         }
@@ -203,7 +209,6 @@ const Signup = () => {
             <FaFacebookF className="text-xl mr-2" />
             Facebook
           </button>
-          {/* Add OAuth buttons here */}
         </div>
       </div>
 
