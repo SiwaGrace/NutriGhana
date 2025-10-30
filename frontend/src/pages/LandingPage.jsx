@@ -133,7 +133,7 @@ const Home = () => {
           <div className="flex justify-center w-full">
             <button
               onClick={handleNext}
-              className={`bg-yellow-400 text-white px-30 py-8 rounded-full shadow-md font-bold text-lg transition-all duration-150 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 sm:mb-16 cursor-pointer ${
+              className={`bg-yellow-400 text-white px-30 py-3 rounded-full shadow-md font-bold text-lg transition-all duration-150 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 sm:mb-16 cursor-pointer ${
                 isAnimating ? "opacity-50 cursor-not-allowed" : ""
               }`}
               disabled={isAnimating}

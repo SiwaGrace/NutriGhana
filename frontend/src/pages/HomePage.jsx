@@ -24,7 +24,8 @@ const ProfileHome = () => {
   useEffect(() => {
     async function fetchUserData() {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/user-profile", {
+        const apiUrl = import.meta.env.VITE_BACKEND_URL;
+        const res = await fetch(`${apiUrl}/api/auth/user-profile`, {
           method: "GET",
           credentials: "include",
           headers: {

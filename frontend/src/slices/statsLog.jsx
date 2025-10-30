@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 // 1. Async thunk for saving log
 export const saveLog = createAsyncThunk(
@@ -14,7 +15,7 @@ export const saveLog = createAsyncThunk(
         foods: loggedDishes,
       };
 
-      const res = await axios.post("http://localhost:5000/api/logs", logData, {
+      const res = await axios.post(`${apiUrl}/api/logs`, logData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

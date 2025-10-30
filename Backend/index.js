@@ -19,10 +19,9 @@ const PORT = process.env.PORT || 5000;
 const corsOptions = {
   origin: [
     "http://localhost:5173",
-    ,
-    "https://incandescent-gnome-cedb70.netlify.app/",
+    "http://127.0.0.1:5173",
+    "https://nutrighana.netlify.app",
   ],
-  // , "https://your-frontend.com"
   methods: ["GET", "POST", "DELETE", "PUT"],
   credentials: true,
 };
@@ -34,6 +33,7 @@ app.use(express.json());
 app.use("/api/foods", foodsRouter);
 app.use("/api/dishes", DishesRouter);
 app.use("/api/logstats", logRoutes);
+app.get("/test", (req, res) => res.json({ msg: "CORS working" }));
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
