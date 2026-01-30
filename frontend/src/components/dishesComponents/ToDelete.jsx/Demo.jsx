@@ -124,7 +124,7 @@ function sumMacros(items) {
       carbs: acc.carbs + (n.carbs || 0),
       fat: acc.fat + (n.fat || 0),
     }),
-    { calories: 0, protein: 0, carbs: 0, fat: 0 }
+    { calories: 0, protein: 0, carbs: 0, fat: 0 },
   );
 }
 
@@ -157,13 +157,13 @@ export default function NutritionLoggerDemo() {
 
   const base = useMemo(
     () => BASE_FOODS.find((b) => b.id === selectedBaseId),
-    [selectedBaseId]
+    [selectedBaseId],
   );
 
   // Calculate totals
   const baseMacros = useMemo(
     () => calcBaseMacros(selectedBaseId, selectedGrams),
-    [selectedBaseId, selectedGrams]
+    [selectedBaseId, selectedGrams],
   );
 
   const addonMacros = useMemo(() => {
@@ -220,11 +220,11 @@ export default function NutritionLoggerDemo() {
   // Demo daily progress (sum of logged meals in this session)
   const daySums = useMemo(
     () => sumMacros(loggedMeals.map((m) => m.totals)),
-    [loggedMeals]
+    [loggedMeals],
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 text-slate-900">
+    <div className="min-h-screen bg-linear-to-b from-white to-slate-50 text-slate-900">
       <div className="mx-auto max-w-6xl p-6 md:p-10">
         <header className="mb-8 flex flex-col gap-2">
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">

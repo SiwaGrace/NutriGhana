@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ntrighanalogo from "../assets/logo&icons/nutrighanaLogo.svg";
+import ntrighanalogo from "../assets/logoicons/nutrighanaLogo.svg";
 
 const SplashScreen = ({ children }) => {
   const [loading, setLoading] = useState(true);

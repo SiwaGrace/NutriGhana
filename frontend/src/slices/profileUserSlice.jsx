@@ -1,12 +1,13 @@
 // features/profiles/profileSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 // 🔄 Fetch all profiles
 export const getProfiles = createAsyncThunk(
   "profiles/getProfiles",
   async () => {
-    const response = await axios.get("http://localhost:5000/api/profile");
+    const response = await axios.get(`${apiUrl}/api/profile`);
     return response.data;
   }
 );
@@ -15,7 +16,7 @@ export const getProfiles = createAsyncThunk(
 export const getProfileById = createAsyncThunk(
   "profiles/getProfileById",
   async (id) => {
-    const response = await axios.get(`http://localhost:5000/api/profile/${id}`);
+    const response = await axios.get(`${apiUrl}/api/profile/${id}`);
     return response.data;
   }
 );
@@ -25,7 +26,7 @@ export const updateProfile = createAsyncThunk(
   "profiles/updateProfile",
   async (updatedProfile) => {
     const response = await axios.put(
-      `http://localhost:5000/api/profile/${updatedProfile._id}`,
+      `${apiUrl}/api/profile/${updatedProfile._id}`,
       updatedProfile
     );
     return response.data;

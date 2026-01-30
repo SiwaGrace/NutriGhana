@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { syncWithDishes } from "./loggedFoodsSlice";
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
 // LocalStorage helpers
 const loadSavedFromLocalStorage = () => {
@@ -20,7 +21,7 @@ const saveFavorites = (favorites) => {
 
 // Fetch all dishes
 export const getDishes = createAsyncThunk("dishes/getDishes", async () => {
-  const response = await axios.get(`http://localhost:5000/api/dishes`);
+  const response = await axios.get(`${apiUrl}/api/dishes`);
   console.log(response.data.results);
   const sorted = response.data.results.sort((a, b) =>
     a.name.localeCompare(b.name)
@@ -33,7 +34,7 @@ export const getDishesByCategory = createAsyncThunk(
   "dishes/getDishesByCategory",
   async (category) => {
     const response = await axios.get(
-      `http://localhost:5000/api/dishes/category/${category}`
+      `${apiUrl}/api/dishes/category/${category}`
     );
     const sorted = response.data.results.sort((a, b) =>
       a.name.localeCompare(b.name)

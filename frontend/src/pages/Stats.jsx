@@ -25,8 +25,9 @@ export default function ProfileStats() {
 
   useEffect(() => {
     const fetchLogs = async () => {
+      const apiUrl = import.meta.env.VITE_BACKEND_URL;
       try {
-        const res = await axios.get("http://localhost:5000/api/logstats", {
+        const res = await axios.get(`${apiUrl}/api/logstats`, {
           withCredentials: true,
         });
         const logs = res.data;

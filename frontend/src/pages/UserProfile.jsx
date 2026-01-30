@@ -46,7 +46,8 @@ export default function ProfileUser() {
   useEffect(() => {
     async function fetchUserData() {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/user-profile", {
+        const apiUrl = import.meta.env.VITE_BACKEND_URL;
+        const res = await fetch(`${apiUrl}/api/auth/user-profile`, {
           method: "GET",
           credentials: "include", // sends cookie with JWT
           headers: {
@@ -72,7 +73,8 @@ export default function ProfileUser() {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/logout", {
+      const apiUrl = import.meta.env.VITE_BACKEND_URL;
+      const res = await fetch(`${apiUrl}/api/auth/logout`, {
         method: "POST",
         credentials: "include",
         headers: {

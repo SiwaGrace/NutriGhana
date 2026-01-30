@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import SplashScreen from "../components/SplashScreen";
 import { useNavigate } from "react-router-dom";
+import nutrilogo from "../assets/logoicons/nutrighanaLogo.svg";
+("/src/assets/logoicons/nutrighanaLogo.svg");
+import waakye from "../assets/img/waakye.jpg";
+import kenk from "../assets/img/kenk.jpg";
 
 const foodItems = [
   {
-    image: "/src/assets/img/Frame 19 (3).jpg",
+    image: waakye,
     name: "Know Your Food, Feel Your Best!",
     description:
       "NutriGhana helps you understand what’s in your classic Italian pasta dish with a rich and savory meat sauce. Track your meals and eat smarter—starting today!",
   },
   {
-    image: "/src/assets/img/Frame 19 (4).jpg",
+    image: kenk,
     name: "Log It, See It, Love It!",
     description:
       "NutriGhana helps you understand what’s in your flavorful and aromatic curry made with tender chicken and a blend of spices. Track your meals and eat smarter—starting today!",
@@ -92,7 +96,7 @@ const Home = () => {
                     >
                       <div className="bg-black rounded-xl flex items-center justify-center w-14 h-14">
                         <img
-                          src="/src/assets/logo&icons/nutrighanaLogo.svg"
+                          src={nutrilogo}
                           alt="NutriGhana"
                           className="w-8 h-8 object-contain"
                         />
@@ -133,7 +137,7 @@ const Home = () => {
           <div className="flex justify-center w-full">
             <button
               onClick={handleNext}
-              className={`bg-yellow-400 text-white px-30 py-8 rounded-full shadow-md font-bold text-lg transition-all duration-150 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 sm:mb-16 cursor-pointer ${
+              className={`bg-yellow-400 text-white px-30 py-3 rounded-full shadow-md font-bold text-lg transition-all duration-150 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 sm:mb-16 cursor-pointer ${
                 isAnimating ? "opacity-50 cursor-not-allowed" : ""
               }`}
               disabled={isAnimating}

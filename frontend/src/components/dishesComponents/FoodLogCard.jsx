@@ -1,7 +1,6 @@
 import React from "react";
-import Kenkey from "../../assets/img/Kenkey.jpg";
 // StreakBlackIcon
-import StreakIcon from "../../assets/logo&icons/Vector.svg";
+import StreakIcon from "../../assets/logoicons/vector.svg";
 
 const FoodLogCard = ({ dish }) => {
   const calories = dish.nutrients?.find((n) => n.name === "Calories");

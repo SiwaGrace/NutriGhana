@@ -10,7 +10,7 @@ import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 
-import Logo from "../assets/logo&icons/nutrighanaLogo.svg";
+import Logo from "../assets/logoicons/nutrighanaLogo.svg";
 import { AppContent } from "../context/AppContext";
 import Loading from "../components/dishesComponents/Loading";
 

@@ -6,7 +6,6 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
-import foodsRouter from "./routes/foodsRouter.js";
 import DishesRouter from "./routes/DishesRoutes.js";
 import logRoutes from "./routes/LogRoutes.js";
 
@@ -19,10 +18,9 @@ const PORT = process.env.PORT || 5000;
 const corsOptions = {
   origin: [
     "http://localhost:5173",
-    ,
-    "https://incandescent-gnome-cedb70.netlify.app/",
+    "http://127.0.0.1:5173",
+    "https://nutrighana.netlify.app",
   ],
-  // , "https://your-frontend.com"
   methods: ["GET", "POST", "DELETE", "PUT"],
   credentials: true,
 };
@@ -31,7 +29,6 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 
-app.use("/api/foods", foodsRouter);
 app.use("/api/dishes", DishesRouter);
 app.use("/api/logstats", logRoutes);
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import StreakIcon from "../assets/logo&icons/streakIcon.svg";
+import StreakIcon from "../assets/logoicons/streakIcon.svg";
 import { setStreak } from "../slices/streakSlice";
 import { saveStreakToLocal, getStreakFromLocal } from "../utils/streakStorage";
 import toast, { Toaster } from "react-hot-toast";
@@ -50,11 +50,11 @@ const Streaks = () => {
                 borderRadius: "8px",
                 padding: "12px 16px",
               },
-            }
+            },
           );
         } else {
           toast.success(
-            `🔥 You're on a ${updated.count}-day streak! Keep it up!`
+            `🔥 You're on a ${updated.count}-day streak! Keep it up!`,
           );
         }
       } else {

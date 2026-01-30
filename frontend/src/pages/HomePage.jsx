@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import FishIcon from "../assets/logo&icons/fa-solid_fish.svg";
-import CarbIcon from "../assets/logo&icons/fluent_food-grains-20-filled.svg";
-import FatIcon from "../assets/logo&icons/game-icons_fat.svg";
-import StreakIcon from "../assets/logo&icons/streakIcon.svg";
+import FishIcon from "../assets/logoicons/fa-solid_fish.svg";
+import CarbIcon from "../assets/logoicons/fluent_food-grains-20-filled.svg";
+import FatIcon from "../assets/logoicons/game-icons_fat.svg";
+import StreakIcon from "../assets/logoicons/streakIcon.svg";
 import FoodLog from "../components/dishesComponents/FoodLogCard";
 import Streaks from "../components/Streaks";
 import { useSelector } from "react-redux";
@@ -24,7 +24,8 @@ const ProfileHome = () => {
   useEffect(() => {
     async function fetchUserData() {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/user-profile", {
+        const apiUrl = import.meta.env.VITE_BACKEND_URL;
+        const res = await fetch(`${apiUrl}/api/auth/user-profile`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -62,10 +63,10 @@ const ProfileHome = () => {
     hour < 12
       ? "Good morning,"
       : hour < 18
-      ? "Good afternoon,"
-      : hour < 22
-      ? "Good evening,"
-      : "Good night,";
+        ? "Good afternoon,"
+        : hour < 22
+          ? "Good evening,"
+          : "Good night,";
 
   // Calories per food (1% of recommendedCalories)
   const caloriesPerFood = recommendedCalories ? recommendedCalories * 0.01 : 0;
