@@ -20,5 +20,5 @@ createRoot(document.getElementById("root")).render(
     </AppContextProvider>
 
     {/* </PersistGate> */}
-  </Provider>
+  </Provider>,
 );
