@@ -200,22 +200,24 @@ const Signup = () => {
           </div>
 
           {/* Show OAuth buttons for both Sign Up and Login */}
-          <div className="text-center ">
-            <h3 className="text-gray-600">Or continue with</h3>
-            <div className="flex justify-center gap-4 mt-4">
+          <div className="text-center mt-8">
+            <h3 className="text-gray-600 mb-4 text-lg font-medium">
+              Or continue with
+            </h3>
+            <div className="flex justify-center gap-6">
               <button
                 type="button"
-                className="flex items-center justify-center w-full border-gray-300 font-semibold "
+                className="flex items-center justify-center gap-2 px-7 py-3 rounded-2xl bg-yellow-500 border shadow transition font-semibold text-white hover:-translate-y-2 hover:shadow-lg duration-300"
               >
-                <FcGoogle className="text-xl mr-2" />
-                Google
+                <FcGoogle className="text-2xl" />
+                <span className="text-base">Google</span>
               </button>
               <button
                 type="button"
-                className="flex items-center justify-center w-full  border-gray-300  font-semibold "
+                className="flex items-center justify-center gap-2 px-7 py-3 rounded-2xl bg-yellow-500 border shadow transition font-semibold text-white hover:-translate-y-2 hover:shadow-lg duration-300"
               >
-                <FaFacebookF className="text-xl mr-2" />
-                Facebook
+                <FaFacebookF className="text-2xl text-blue-600" />
+                <span className="text-base">Facebook</span>
               </button>
             </div>
           </div>
