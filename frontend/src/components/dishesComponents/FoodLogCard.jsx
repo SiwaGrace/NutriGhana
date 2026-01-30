@@ -1,5 +1,4 @@
 import React from "react";
-import Kenkey from "../../assets/img/Kenkey.jpg";
 // StreakBlackIcon
 import StreakIcon from "../../assets/logo&icons/Vector.svg";
 
