@@ -10,7 +10,7 @@ import DishesRouter from "./routes/DishesRoutes.js";
 import logRoutes from "./routes/LogRoutes.js";
 
 import authRouter from "./routes/authRoute.js";
-import userRouter from "./routes/userRoute.js";
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -33,7 +33,7 @@ app.use("/api/dishes", DishesRouter);
 app.use("/api/logstats", logRoutes);
 
 app.use("/api/auth", authRouter);
-app.use("/api/user", userRouter);
+
 
 // api look
 // app.use(express.static("public"));
