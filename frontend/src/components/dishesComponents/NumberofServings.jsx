@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
-import FishIcon from "../../assets/logo&icons/fa-solid_fish.svg";
-import CarbIcon from "../../assets/logo&icons/fluent_food-grains-20-filled.svg";
-import FatIcon from "../../assets/logo&icons/game-icons_fat.svg";
-import FireIcon from "../../assets/logo&icons/calories-svgrepo-com.svg";
+import FishIcon from "../../assets/logoicons/fa-solid_fish.svg";
+import CarbIcon from "../../assets/logoicons/fluent_food-grains-20-filled.svg";
+import FatIcon from "../../assets/logoicons/game-icons_fat.svg";
+import FireIcon from "../../assets/logoicons/calories-svgrepo-com.svg";
 
 const NumberofServings = ({
   isLogged,
@@ -46,7 +46,7 @@ const NumberofServings = ({
       ADD_ONS.reduce((acc, addOn) => {
         acc[addOn.id] = 0;
         return acc;
-      }, {})
+      }, {}),
     );
   };
 

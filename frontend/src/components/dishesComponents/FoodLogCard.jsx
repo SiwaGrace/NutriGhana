@@ -1,6 +1,6 @@
 import React from "react";
 // StreakBlackIcon
-import StreakIcon from "../../assets/logo&icons/vector.svg";
+import StreakIcon from "../../assets/logoicons/vector.svg";
 
 const FoodLogCard = ({ dish }) => {
   const calories = dish.nutrients?.find((n) => n.name === "Calories");

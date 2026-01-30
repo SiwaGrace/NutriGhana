@@ -1,9 +1,9 @@
 // import { useEffect, useState } from "react";
 // import { useDispatch, useSelector } from "react-redux";
 // import { ArrowLeft, Heart } from "lucide-react";
-// import FishIcon from "../../assets/logo&icons/fa-solid_fish.svg";
-// import CarbIcon from "../../assets/logo&icons/fluent_food-grains-20-filled.svg";
-// import FatIcon from "../../assets/logo&icons/game-icons_fat.svg";
+// import FishIcon from "../../assets/logoicons/fa-solid_fish.svg";
+// import CarbIcon from "../../assets/logoicons/fluent_food-grains-20-filled.svg";
+// import FatIcon from "../../assets/logoicons/game-icons_fat.svg";
 // import { addFood } from "../../slices/loggedFoodsSlice";
 
 // import { Link, useNavigate } from "react-router-dom";
