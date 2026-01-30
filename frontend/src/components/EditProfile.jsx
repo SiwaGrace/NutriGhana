@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import StreakIcon from "../assets/logoicons/vector.svg";
-import fire from "../assets/logoicons/Vector (1).svg";
+import fire from "../assets/logoicons/vector1.svg";
 
 const EditProfile = () => {
   const [profile, setProfile] = useState(null);
