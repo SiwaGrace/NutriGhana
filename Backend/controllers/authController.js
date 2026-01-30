@@ -95,7 +95,13 @@ export const login = async (req, res) => {
     res.status(200).json({
       success: true,
       action: "login",
-      user: { id: user._id, name: user.name, email: user.email, token },
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        recommendedCalories: user.recommendedCalories,
+        token,
+      },
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -119,13 +125,11 @@ export const logout = async (req, res) => {
 // ===== SEND VERIFY OTP =====
 export const sendVerifyOtp = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const userId = req.user.id;
     const user = await userModel.findById(userId);
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
     if (user.isAccountVerified) {
       return res
@@ -158,19 +162,17 @@ The NutriGhana Team`,
 
 // ===== VERIFY EMAIL =====
 export const verifyEmail = async (req, res) => {
-  const { userId, otp } = req.body;
-  if (!userId || !otp) {
-    return res
-      .status(400)
-      .json({ success: false, message: "User ID and OTP are required" });
+  const { otp } = req.body;
+  const userId = req.user.id; // From userAuth middleware
+
+  if (!otp) {
+    return res.status(400).json({ success: false, message: "OTP is required" });
   }
 
   try {
     const user = await userModel.findById(userId);
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
     if (user.verifyOtp === "" || user.verifyOtp !== otp) {
       return res.status(400).json({ success: false, message: "Invalid OTP" });
@@ -195,20 +197,15 @@ export const verifyEmail = async (req, res) => {
 };
 
 // ===== CHECK AUTH =====
-export const isAuthenticated = (req, res) => {
+export const isAuthenticated = async (req, res) => {
   try {
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
-    if (!token) {
-      return res
-        .status(401)
-        .json({ success: false, message: "No token provided" });
+    const user = await userModel.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(401).json({ success: false, message: "User not found" });
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    res.status(200).json({ success: true, user: decoded });
+    res.status(200).json({ success: true, user });
   } catch (error) {
-    res
-      .status(401)
-      .json({ success: false, message: "Invalid or expired token" });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -291,44 +288,22 @@ export const resetPassword = async (req, res) => {
 // ===== GET USER PROFILE =====
 export const getUserProfile = async (req, res) => {
   try {
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
-    if (!token) {
-      return res
-        .status(401)
-        .json({ success: false, message: "No token provided" });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await userModel.findById(decoded.id).select("-password");
+    const user = await userModel.findById(req.user.id).select("-password");
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
     res.status(200).json({ success: true, user });
   } catch (error) {
     console.error("Profile fetch error:", error);
-    res
-      .status(401)
-      .json({ success: false, message: "Invalid or expired token" });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
 // ===== CREATE USER PROFILE =====
 export const createUserProfile = async (req, res) => {
   try {
-    // Extract token from cookies or Authorization header
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
-    if (!token) {
-      return res
-        .status(401)
-        .json({ success: false, message: "No token provided" });
-    }
-
-    // Verify JWT and extract user ID
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.id;
+    const userId = req.user.id; // From userAuth middleware
 
     // Extract profile fields from request body
     const {
@@ -356,7 +331,7 @@ export const createUserProfile = async (req, res) => {
           dietaryGoal,
           currentWeight,
           currentWeightGoal,
-          calories,
+          recommendedCalories: calories,
         },
         { new: true } // Return the updated document
       )

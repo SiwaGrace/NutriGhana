@@ -7,8 +7,8 @@ const PrivateRoute = ({ children }) => {
     typeof window !== "undefined" &&
     localStorage.getItem("isLoggedIn") === "true";
 
-  // If not logged in → send to signup
-  return isLoggedIn ? children : <Navigate to="/signup" replace />;
+  // If not logged in → send to login
+  return isLoggedIn ? children : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;

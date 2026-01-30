@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { AppContent } from "../context/AppContext";
 import "../index.css";
 
 // Helper: Calculate BMR and calories (realistic version)
@@ -59,8 +60,7 @@ export default function ProfileSetup() {
   const [calories, setCalories] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const { backendUrl, setUserData } = useContext(AppContent);
   const [backendCalories, setBackendCalories] = useState(null);
 
   const currentYear = new Date().getFullYear();
@@ -124,12 +124,13 @@ export default function ProfileSetup() {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const userData = {
+    const userDataPayload = {
       gender,
-      year,
+      yearOfBirth: year,
       height,
       activityLevel,
       dietaryGoal,
+      weight: currentWeight,
       currentWeight,
       currentWeightGoal,
       calories,
@@ -140,16 +141,21 @@ export default function ProfileSetup() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify(userData),
+        body: JSON.stringify(userDataPayload),
       });
 
       if (response.ok) {
         const data = await response.json();
+        
+        // Update global user data
+        if (data.user) {
+          setUserData(data.user);
+        }
 
         // Always save a calories value to localStorage (backend or calculated)
-        const caloriesToSave = data.recommendedCalories ?? calories;
+        const caloriesToSave = data.user?.recommendedCalories ?? calories;
         if (caloriesToSave) {
-          setBackendCalories(data.recommendedCalories);
+          setBackendCalories(caloriesToSave);
           localStorage.setItem("recommendedCalories", String(caloriesToSave));
         }
 

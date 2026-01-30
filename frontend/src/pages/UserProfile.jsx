@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import Woman from "../assets/img/woman1.jpg";
-
+import { AppContent } from "../context/AppContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import EditProfile from "../components/EditProfile";
@@ -69,29 +69,12 @@ export default function ProfileUser() {
     fetchUserData();
   }, []);
 
+  const { logout } = useContext(AppContent);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try {
-      const apiUrl = import.meta.env.VITE_BACKEND_URL;
-      const res = await fetch(`${apiUrl}/api/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
-      if (data.success) {
-        toast.success("Logged out successfully!");
-        navigate("/login", { replace: true });
-      } else {
-        toast.error(data.message || "Failed to log out. Please try again.");
-      }
-    } catch (error) {
-      console.error("Logout error:", error);
-      toast.error("Failed to log out. Please try again.");
-    }
+    await logout();
+    navigate("/login", { replace: true });
   };
 
   return (

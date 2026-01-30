@@ -15,35 +15,57 @@ export const AppContextProvider = (props) => {
 
   console.log("Backend URL:", backendUrl);
 
+  const getUserData = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + "/api/auth/user-profile");
+      if (data.success) {
+        setUserData(data.user);
+        if (data.user.recommendedCalories) {
+          localStorage.setItem("recommendedCalories", data.user.recommendedCalories);
+        }
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      // toast.error(error.message);
+      console.log("Not logged in or profile fetch failed");
+    }
+  };
+
   const getAuthState = async () => {
     try {
-      const { data } = await axios.get(backendUrl + "api/auth/is-auth");
+      const { data } = await axios.get(backendUrl + "/api/auth/is-auth");
       if (data.success) {
         setIsLoggedIn(true);
-        setUserData();
+        getUserData();
       } else {
         setIsLoggedIn(false);
+        setUserData(null);
+      }
+    } catch (error) {
+      setIsLoggedIn(false);
+      setUserData(null);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      const { data } = await axios.post(backendUrl + "/api/auth/logout");
+      if (data.success) {
+        setIsLoggedIn(false);
+        setUserData(null);
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("recommendedCalories");
+        toast.success("Logged out successfully");
       }
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-  // const getUserData = async () => {
-  //   try {
-  //     const { data } = await axios.get(backendUrl + "api/auth/user-profile");
-  //     if (data.success) {
-  //       setUserData(data.user);
-  //     } else {
-  //       toast.error(data.message);
-  //       setUserData(null);
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
-
-  // Fetch user data on initial load
+  React.useEffect(() => {
+    getAuthState();
+  }, []);
 
   const value = {
     backendUrl,
@@ -51,8 +73,9 @@ export const AppContextProvider = (props) => {
     setIsLoggedIn,
     userData,
     setUserData,
-    // getUserData,
+    getUserData,
     getAuthState,
+    logout,
   };
 
   return (

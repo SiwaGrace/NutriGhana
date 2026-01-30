@@ -57,13 +57,22 @@ const Signup = () => {
         if (data.success) {
           setIsLoggedIn(true);
           localStorage.setItem("isLoggedIn", "true");
+          
+          // Save recommendedCalories if they exist
+          if (data.user && data.user.recommendedCalories) {
+            localStorage.setItem("recommendedCalories", String(data.user.recommendedCalories));
+          }
+
           setTimeout(() => {
-            if (!localStorage.getItem("recommendedCalories")) {
+            // Check if profile is complete (either in localStorage or response)
+            const hasProfile = localStorage.getItem("recommendedCalories") || (data.user && data.user.recommendedCalories);
+            
+            if (!hasProfile) {
               navigate("/ProfileSetup", { replace: true });
             } else {
               navigate("/home", { replace: true });
             }
-          }, 3000); // 3 seconds delay
+          }, 2000); 
         } else {
           toast.error(data.message);
           setLoading(false);
