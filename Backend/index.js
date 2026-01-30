@@ -6,7 +6,6 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
-import foodsRouter from "./routes/foodsRouter.js";
 import DishesRouter from "./routes/DishesRoutes.js";
 import logRoutes from "./routes/LogRoutes.js";
 
@@ -30,10 +29,8 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 
-app.use("/api/foods", foodsRouter);
 app.use("/api/dishes", DishesRouter);
 app.use("/api/logstats", logRoutes);
-app.get("/test", (req, res) => res.json({ msg: "CORS working" }));
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
