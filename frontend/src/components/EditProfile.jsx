@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-import StreakIcon from "../assets/logo&icons/vector.svg";
-import fire from "../assets/logo&icons/Vector (1).svg";
+import StreakIcon from "../assets/logoicons/vector.svg";
+import fire from "../assets/logoicons/Vector (1).svg";
 
 const EditProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -21,7 +21,7 @@ const EditProfile = () => {
           `${backendUrl}/api/auth/user-profile`,
           {
             withCredentials: true,
-          }
+          },
         );
         if (data.success) {
           setProfile(data.user);
@@ -50,7 +50,7 @@ const EditProfile = () => {
       const { data } = await axios.post(
         `${backendUrl}/api/auth/create-profile`,
         { [field]: value },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       if (data.success) {

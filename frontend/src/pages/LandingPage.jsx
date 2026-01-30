@@ -92,7 +92,7 @@ const Home = () => {
                     >
                       <div className="bg-black rounded-xl flex items-center justify-center w-14 h-14">
                         <img
-                          src="/src/assets/logo&icons/nutrighanaLogo.svg"
+                          src="/src/assets/logoicons/nutrighanaLogo.svg"
                           alt="NutriGhana"
                           className="w-8 h-8 object-contain"
                         />

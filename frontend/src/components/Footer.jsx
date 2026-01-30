@@ -1,5 +1,5 @@
 import React from "react";
-import MyLogo from "../assets/logo&icons/nutrighanaLogo.svg";
+import MyLogo from "../assets/logoicons/nutrighanaLogo.svg";
 
 const Footer = ({ onLogoClick }) => {
   return (
