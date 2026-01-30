@@ -8,13 +8,13 @@ import kenk from "../assets/img/kenk.jpg";
 
 const foodItems = [
   {
-    image: { waakye },
+    image: waakye,
     name: "Know Your Food, Feel Your Best!",
     description:
       "NutriGhana helps you understand what’s in your classic Italian pasta dish with a rich and savory meat sauce. Track your meals and eat smarter—starting today!",
   },
   {
-    image: { kenk },
+    image: kenk,
     name: "Log It, See It, Love It!",
     description:
       "NutriGhana helps you understand what’s in your flavorful and aromatic curry made with tender chicken and a blend of spices. Track your meals and eat smarter—starting today!",
