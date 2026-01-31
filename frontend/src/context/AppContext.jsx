@@ -17,11 +17,16 @@ export const AppContextProvider = (props) => {
 
   const getUserData = async () => {
     try {
-      const { data } = await axios.get(backendUrl + "/api/auth/user-profile");
+      const { data } = await axios.get(backendUrl + "/api/auth/user-profile", {
+        withCredentials: true,
+      });
       if (data.success) {
         setUserData(data.user);
         if (data.user.recommendedCalories) {
-          localStorage.setItem("recommendedCalories", data.user.recommendedCalories);
+          localStorage.setItem(
+            "recommendedCalories",
+            data.user.recommendedCalories,
+          );
         }
       } else {
         toast.error(data.message);
@@ -34,7 +39,9 @@ export const AppContextProvider = (props) => {
 
   const getAuthState = async () => {
     try {
-      const { data } = await axios.get(backendUrl + "/api/auth/is-auth");
+      const { data } = await axios.get(backendUrl + "/api/auth/is-auth", {
+        withCredentials: true,
+      });
       if (data.success) {
         setIsLoggedIn(true);
         getUserData();
