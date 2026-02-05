@@ -48,6 +48,7 @@ function cmToFeetInches(cm) {
 }
 
 export default function ProfileSetup() {
+  const navigate = useNavigate();
   const [gender, setGender] = useState("");
   const [year, setYear] = useState("");
   const [height, setHeight] = useState(""); // in cm
@@ -104,7 +105,7 @@ export default function ProfileSetup() {
           weight: Number(currentWeight),
           activityLevel,
           goal: dietaryGoal,
-        })
+        }),
       );
     }
   }, [gender, year, height, activityLevel, dietaryGoal, currentWeight]);
@@ -146,7 +147,7 @@ export default function ProfileSetup() {
 
       if (response.ok) {
         const data = await response.json();
-        
+
         // Update global user data
         if (data.user) {
           setUserData(data.user);
