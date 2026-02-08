@@ -211,12 +211,12 @@ export default function ProfileSetup() {
       {/* Step 1: Gender + Year */}
       {step === 1 && (
         <>
-          <h2 className="text-3xl font-[300] text-center mb-6 text-black leading-snug tracking-wide">
+          <h2 className="text-3xl font-light text-center mb-6 text-black leading-snug tracking-wide">
             Let’s set <br /> your profile!
           </h2>
 
           <div className="w-full mb-6">
-            <p className="text-xl  font-[500]  mb-6 text-black leading-loose tracking-wide">
+            <p className="text-xl  font-medium  mb-6 text-black leading-loose tracking-wide">
               Gender
             </p>
             <div className="flex gap-6 items-center justify-center">
@@ -236,7 +236,7 @@ export default function ProfileSetup() {
             </div>
           </div>
           <div className="w-full mb-8">
-            <p className="text-lg font-[500]  mb-6 text-black leading-loose tracking-wide">
+            <p className="text-lg font-medium  mb-6 text-black leading-loose tracking-wide">
               Year of Birthday
             </p>
             <div className="scrollable-container font-light tracking-wide  w-full flex flex-col items-center gap-2 max-h-60 overflow-y-auto">
@@ -256,7 +256,7 @@ export default function ProfileSetup() {
             </div>
           </div>
           <button
-            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-[280px]"
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-70"
             onClick={handleNext}
           >
             Next
@@ -267,11 +267,11 @@ export default function ProfileSetup() {
       {/* Step 2: Height */}
       {step === 2 && (
         <>
-          <h2 className="text-3xl font-[300] text-center mb-6 text-black leading-snug tracking-wide">
+          <h2 className="text-3xl font-light text-center mb-6 text-black leading-snug tracking-wide">
             Height
           </h2>
           <div className="w-full mb-6">
-            <p className="text-lg font-[500]  mb-6 text-black leading-loose tracking-wide">
+            <p className="text-lg font-medium  mb-6 text-black leading-loose tracking-wide">
               Height (ft/in)
             </p>
             <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-90 overflow-y-auto">
@@ -291,7 +291,7 @@ export default function ProfileSetup() {
             </div>
           </div>
           <button
-            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-[280px]"
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-70"
             onClick={handleNext}
           >
             Next
@@ -302,14 +302,14 @@ export default function ProfileSetup() {
       {/* Step 3: Activity */}
       {step === 3 && (
         <>
-          <h2 className="text-3xl font-[300] text-center mb-24 text-black leading-snug tracking-wide">
+          <h2 className="text-3xl font-light text-center mb-24 text-black leading-snug tracking-wide">
             How active are you?
           </h2>
           <div className="w-full flex flex-col items-center gap-4">
             {howActive.map((preference) => (
               <button
                 key={preference}
-                className={`w-[284px] h-[68px] py-4 rounded-full text-xl font-light tracking-wide transition bg-white justify-center items-center flex border border-gray-300 cursor-pointer${
+                className={`w-71 h-17 py-4 rounded-full text-xl font-light tracking-wide transition bg-white justify-center items-center flex border border-gray-300 cursor-pointer${
                   activityLevel === preference
                     ? " bg-yellow-500 text-white"
                     : " text-black"
@@ -321,7 +321,7 @@ export default function ProfileSetup() {
             ))}
           </div>
           <button
-            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-[280px]"
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-70"
             onClick={handleNext}
           >
             Next
@@ -332,14 +332,14 @@ export default function ProfileSetup() {
       {/* Step 4: Dietary Goal */}
       {step === 4 && (
         <>
-          <h2 className="text-3xl font-[300] text-center mb-24 text-black leading-snug tracking-wide">
+          <h2 className="text-3xl font-light text-center mb-24 text-black leading-snug tracking-wide">
             What is your dietary goal?
           </h2>
           <div className="w-full flex flex-col items-center gap-4">
             {dietaryGoals.map((preference) => (
               <button
                 key={preference}
-                className={`w-[284px] h-[68px] py-4 rounded-full text-xl font-light tracking-wide transition bg-white justify-center items-center flex border border-gray-300 cursor-pointer ${
+                className={`w-71 h-17 py-4 rounded-full text-xl font-light tracking-wide transition bg-white justify-center items-center flex border border-gray-300 cursor-pointer ${
                   dietaryGoal === preference
                     ? "bg-yellow-500 text-white"
                     : "text-black"
@@ -351,7 +351,7 @@ export default function ProfileSetup() {
             ))}
           </div>
           <button
-            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-[280px]"
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-70"
             onClick={handleNext}
           >
             Next
@@ -362,11 +362,11 @@ export default function ProfileSetup() {
       {/* Step 5: Weight */}
       {step === 5 && (
         <>
-          <h2 className="text-3xl font-[300] text-center mb-6 text-black leading-snug tracking-wide">
+          <h2 className="text-3xl font-light text-center mb-6 text-black leading-snug tracking-wide">
             Current and Goal Weight
           </h2>
           <div className="w-full mb-6">
-            <p className="text-lg font-[500]  mb-6 text-black leading-loose tracking-wide">
+            <p className="text-lg font-medium  mb-6 text-black leading-loose tracking-wide">
               Current Weight (kg)
             </p>
             <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-40 overflow-y-auto">
@@ -386,7 +386,7 @@ export default function ProfileSetup() {
             </div>
           </div>
           <div className="w-full mb-6">
-            <p className="text-lg font-[500]  mb-6 text-black leading-loose tracking-wide">
+            <p className="text-lg font-medium  mb-6 text-black leading-loose tracking-wide">
               Weight Goal (kg)
             </p>
             <div className="scrollable-container w-full flex flex-col items-center gap-2 max-h-40 overflow-y-auto">
@@ -406,7 +406,7 @@ export default function ProfileSetup() {
             </div>
           </div>
           <button
-            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer disabled:opacity-50"
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-70 disabled:opacity-50"
             onClick={handleNext}
             disabled={loading}
           >
@@ -436,7 +436,7 @@ export default function ProfileSetup() {
           </p>
           <button
             onClick={resetForm}
-            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-[280px]"
+            className="bg-yellow-500 px-12 py-6 w-full rounded-full text-lg font-semibold text-white transition duration-200 hover:bg-yellow-600 mt-6 cursor-pointer sm:w-70"
           >
             Start Over
           </button>

@@ -2,3 +2,4 @@
 node_modules
 
 .early.coverage
+*.early.test
